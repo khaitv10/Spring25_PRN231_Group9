@@ -1,0 +1,6 @@
+@CVSTSystem_HostAddress = http://localhost:5189
+
+GET {{CVSTSystem_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
