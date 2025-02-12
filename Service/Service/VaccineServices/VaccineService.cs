@@ -1,6 +1,11 @@
-﻿using BOs.Models;
+﻿using AutoMapper;
+using BOs.Models;
+using BOs.RequestModels.Vaccine;
+using BOs.ResponseModels.Child;
+using BOs.ResponseModels.Vaccine;
 using Repository.Repositories;
 using Repository.Repositories.VaccineRepositories;
+using Service.Mapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +16,38 @@ namespace Service.Service.VaccineServices
 {
     public class VaccineService : IVaccineService
     {
-        private readonly IVaccineRepo _vaccineRepo;
+        private readonly IVaccineRepository _vaccineRepo;
+        private readonly IMapper _mapper;
 
-        public VaccineService(IVaccineRepo vaccineRepo)
+        public VaccineService(IVaccineRepository vaccineRepo, IMapper mapper)
         {
             _vaccineRepo = vaccineRepo;
+            _mapper = mapper;
         }
 
-        public async Task<List<Vaccine>> GetAllVaccines()
+        public async Task<List<VaccineInfoResponseModel>> GetAllVaccines()
         {
-            return await _vaccineRepo.GetAllVaccines();
+            var list = await _vaccineRepo.GetAllVaccines();
+            return _mapper.Map<List<VaccineInfoResponseModel>>(list);
+     
         }
 
-        public async Task<Vaccine?> GetVaccineById(int id)
+        public async Task<VaccineInfoResponseModel> GetVaccineById(int id)
         {
-            return await _vaccineRepo.GetVaccineById(id);
+            var vaccine = await _vaccineRepo.GetVaccineById(id);
+            return _mapper.Map<VaccineInfoResponseModel>(vaccine);
         }
 
-        public async Task<Vaccine?> GetVaccineByName(string name)
+        public async Task<VaccineInfoResponseModel> GetVaccineByName(string name)
         {
-            return await _vaccineRepo.GetVaccineByName(name);
+            var vaccine = await _vaccineRepo.GetVaccineByName(name);
+            return _mapper.Map<VaccineInfoResponseModel>(vaccine);
         }
 
-        public async Task AddVaccine(Vaccine vaccine)
+        public async Task AddVaccine(VaccineCreateModel vaccine)
         {
-            await _vaccineRepo.AddVaccine(vaccine);
+            Vaccine newVaccine = _mapper.Map<Vaccine>(vaccine);
+            await _vaccineRepo.AddVaccine(newVaccine);
 
         }
 
@@ -56,27 +68,30 @@ namespace Service.Service.VaccineServices
             return await _vaccineRepo.IsVaccineNameExists(name);
         }
 
-        public async Task<List<Vaccine>> GetVaccinesByAgeRange(int minAge, int maxAge)
+        public async Task<List<VaccineInfoResponseModel>> GetVaccinesByAgeRange(int minAge, int maxAge)
         {
-            return await _vaccineRepo.GetVaccinesByAgeRange(minAge, maxAge);
+            var list = await _vaccineRepo.GetVaccinesByAgeRange(minAge, maxAge);
+            return _mapper.Map<List<VaccineInfoResponseModel>>(list);
         }
 
-        public async Task<Vaccine?> GetVaccineWithDoseRecords(int id)
+        public async Task<VaccineInfoResponseModel?> GetVaccineWithDoseRecords(int id)
         {
-            return await _vaccineRepo.GetVaccineWithDoseRecords(id);
+            var vaccine =  await _vaccineRepo.GetVaccineWithDoseRecords(id);
+            return _mapper.Map<VaccineInfoResponseModel>(vaccine);
         }
 
-        public async Task<List<Vaccine>> GetActiveVaccines()
+        public async Task<List<VaccineInfoResponseModel>> GetActiveVaccines()
         {
-            return await _vaccineRepo.GetActiveVaccines();
+            var list = await _vaccineRepo.GetActiveVaccines();
+            return _mapper.Map<List<VaccineInfoResponseModel>>(list);
         }
 
 
-        // Example of business logic in the service:
+  
         public async Task<bool> CanVaccinate(int patientAge, int vaccineId)
         {
             var vaccine = await _vaccineRepo.GetVaccineById(vaccineId);
-            if (vaccine == null) return false; // Vaccine doesn't exist
+            if (vaccine == null) return false; 
 
             return patientAge >= vaccine.MinAge && patientAge <= vaccine.MaxAge && vaccine.Status == true;
         }

@@ -1,4 +1,6 @@
 ﻿using BOs.Models;
+using BOs.RequestModels.Vaccine;
+using BOs.ResponseModels.Vaccine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +11,17 @@ namespace Service.Service.VaccineServices
 {
     public interface IVaccineService
     {
-        Task<List<Vaccine>> GetAllVaccines();
-        Task<Vaccine?> GetVaccineById(int id);
-        Task<Vaccine?> GetVaccineByName(string name);
-        Task AddVaccine(Vaccine vaccine);
+        Task<List<VaccineInfoResponseModel>> GetAllVaccines();
+        Task<VaccineInfoResponseModel> GetVaccineById(int id);
+        Task<VaccineInfoResponseModel> GetVaccineByName(string name);
+        Task AddVaccine(VaccineCreateModel vaccine);
         Task UpdateVaccine(Vaccine vaccine);
         Task DeleteVaccine(int id);
         Task<bool> IsVaccineNameExists(string name);
-        Task<List<Vaccine>> GetVaccinesByAgeRange(int minAge, int maxAge);
-        Task<Vaccine?> GetVaccineWithDoseRecords(int id);
-        Task<List<Vaccine>> GetActiveVaccines();
+        Task<List<VaccineInfoResponseModel>> GetVaccinesByAgeRange(int minAge, int maxAge);
+        Task<VaccineInfoResponseModel?> GetVaccineWithDoseRecords(int id);
+        Task<List<VaccineInfoResponseModel>> GetActiveVaccines();
         Task<bool> CanVaccinate(int patientAge, int vaccineId);
     }
 }
+

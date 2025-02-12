@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories.VaccineRepositories
 {
-    public interface IVaccineRepo
+    public interface IVaccineRepository
     {
         Task<List<Vaccine>> GetAllVaccines();
         Task<Vaccine?> GetVaccineById(int id);

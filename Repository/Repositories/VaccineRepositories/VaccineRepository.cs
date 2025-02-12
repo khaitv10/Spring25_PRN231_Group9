@@ -13,66 +13,63 @@ namespace Repository.Repositories.VaccineRepositories
 
 
 
-    public class VaccineRepo : IVaccineRepo
+    public class VaccineRepository : GenericDAO<Vaccine>, IVaccineRepository
     {
-        private readonly VaccineDAO _vaccineDAO;
-        public VaccineRepo(VaccineDAO vaccineDAO)
-        {
-            _vaccineDAO = vaccineDAO;
-        }
 
         public async Task<List<Vaccine>> GetAllVaccines()
         {
-            var list = await _vaccineDAO.Get();
+            var list = await Get();
             return list.ToList();
         }
 
         public async Task<Vaccine?> GetVaccineById(int id)
         {
-            return await _vaccineDAO.GetSingle(x => x.Id == id);
+            return await GetSingle(x => x.Id == id);
         }
 
         public async Task<Vaccine?> GetVaccineByName(string name)
         {
-            return await _vaccineDAO.GetVaccineByName(name);
+            return await GetSingle(x => x.Name == name);
+            
         }
 
         public async Task AddVaccine(Vaccine vaccine)
         {
-            await _vaccineDAO.Insert(vaccine);
+            await Insert(vaccine);
         }
 
         public async Task UpdateVaccine(Vaccine vaccine)
         {
-            await _vaccineDAO.Update(vaccine); 
+            await Update(vaccine); 
         }
 
         public async Task DeleteVaccine(int id)
         {
             var vaccine = await GetVaccineById(id);
             if(vaccine != null)
-            await _vaccineDAO.Delete(vaccine);
+            await Delete(vaccine);
         }
 
         public async Task<bool> IsVaccineNameExists(string name)
         {
-            return await _vaccineDAO.IsVaccineNameExists(name);
+            return await Get(x=>x.Name == name) != null ? true : false;
         }
 
         public async Task<List<Vaccine>> GetVaccinesByAgeRange(int minAge, int maxAge)
         {
-            return await _vaccineDAO.GetVaccinesByAgeRange(minAge, maxAge);
-        }
-
-
-        public async Task<Vaccine?> GetVaccineWithDoseRecords(int id)
-        {
-            return await _vaccineDAO.GetVaccineWithDoseRecords(id);
+            var list = await Get(x=>x.MinAge >= minAge && x.MaxAge <= maxAge);
+            return list.ToList();
         }
 
         public async Task<List<Vaccine>> GetActiveVaccines()
         {
-            return await _vaccineDAO.GetActiveVaccines();
+            var list = await Get(x => x.Status.Equals("Active"));
+            return list.ToList();
+        }
+
+        public Task<Vaccine?> GetVaccineWithDoseRecords(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
