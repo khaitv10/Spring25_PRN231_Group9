@@ -8,23 +8,27 @@ using System.Threading.Tasks;
 
 namespace DAO
 {
-    public class VaccineDAO
+    public class VaccineDAO : GenericDAO<Vaccine>
     {
         private readonly CvstsystemDbContext _context;
 
-        public VaccineDAO(CvstsystemDbContext context)
+        private static VaccineDAO instance = null;
+
+        public static VaccineDAO Instance
         {
-            _context = context;
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new VaccineDAO();
+                }
+                return instance;
+            }
         }
 
-        public async Task<List<Vaccine>> GetAllVaccines()
+        public VaccineDAO()
         {
-            return await _context.Vaccines.ToListAsync();
-        }
-
-        public async Task<Vaccine?> GetVaccineById(int id)
-        {
-            return await _context.Vaccines.FindAsync(id);
+            _context = new CvstsystemDbContext();
         }
 
         public async Task<Vaccine?> GetVaccineByName(string name)
@@ -32,27 +36,6 @@ namespace DAO
             return await _context.Vaccines.FirstOrDefaultAsync(v => v.Name == name);
         }
 
-        public async Task AddVaccine(Vaccine vaccine)
-        {
-            _context.Vaccines.Add(vaccine);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateVaccine(Vaccine vaccine)
-        {
-            _context.Vaccines.Update(vaccine);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteVaccine(int id)
-        {
-            var vaccine = await _context.Vaccines.FindAsync(id);
-            if (vaccine != null)
-            {
-                _context.Vaccines.Remove(vaccine);
-                await _context.SaveChangesAsync();
-            }
-        }
 
         public async Task<bool> IsVaccineNameExists(string name)
         {

@@ -1,6 +1,6 @@
 ﻿using BOs.Models;
-using Repository.IRepositories;
 using Repository.Repositories;
+using Repository.Repositories.VaccineRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

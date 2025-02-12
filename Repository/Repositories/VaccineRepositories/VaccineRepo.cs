@@ -1,7 +1,6 @@
-﻿using BOs.Models; 
-using DAO;       
-using Microsoft.EntityFrameworkCore; 
-using Repository.IRepositories;
+﻿using BOs.Models;
+using DAO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +8,14 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Repositories
+namespace Repository.Repositories.VaccineRepositories
 {
 
 
 
-    public class VaccineRepo : IVaccineRepo 
+    public class VaccineRepo : IVaccineRepo
     {
-        private readonly VaccineDAO _vaccineDAO; 
+        private readonly VaccineDAO _vaccineDAO;
         public VaccineRepo(VaccineDAO vaccineDAO)
         {
             _vaccineDAO = vaccineDAO;
@@ -24,12 +23,13 @@ namespace Repository.Repositories
 
         public async Task<List<Vaccine>> GetAllVaccines()
         {
-            return await _vaccineDAO.GetAllVaccines();
+            var list = await _vaccineDAO.Get();
+            return list.ToList();
         }
 
         public async Task<Vaccine?> GetVaccineById(int id)
         {
-            return await _vaccineDAO.GetVaccineById(id);
+            return await _vaccineDAO.GetSingle(x => x.Id == id);
         }
 
         public async Task<Vaccine?> GetVaccineByName(string name)
@@ -39,17 +39,19 @@ namespace Repository.Repositories
 
         public async Task AddVaccine(Vaccine vaccine)
         {
-            await _vaccineDAO.AddVaccine(vaccine);
+            await _vaccineDAO.Insert(vaccine);
         }
 
         public async Task UpdateVaccine(Vaccine vaccine)
         {
-            await _vaccineDAO.UpdateVaccine(vaccine);
+            await _vaccineDAO.Update(vaccine); 
         }
 
         public async Task DeleteVaccine(int id)
         {
-            await _vaccineDAO.DeleteVaccine(id);
+            var vaccine = await GetVaccineById(id);
+            if(vaccine != null)
+            await _vaccineDAO.Delete(vaccine);
         }
 
         public async Task<bool> IsVaccineNameExists(string name)

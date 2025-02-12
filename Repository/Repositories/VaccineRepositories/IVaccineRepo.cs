@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.IRepositories
+namespace Repository.Repositories.VaccineRepositories
 {
     public interface IVaccineRepo
     {
@@ -17,7 +17,7 @@ namespace Repository.IRepositories
         Task DeleteVaccine(int id);
         Task<bool> IsVaccineNameExists(string name);
         Task<List<Vaccine>> GetVaccinesByAgeRange(int minAge, int maxAge);
-        Task<Vaccine?> GetVaccineWithDoseRecords(int id); 
+        Task<Vaccine?> GetVaccineWithDoseRecords(int id);
         Task<List<Vaccine>> GetActiveVaccines();
     }
 }
