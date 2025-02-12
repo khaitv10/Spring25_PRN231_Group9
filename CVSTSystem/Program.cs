@@ -1,14 +1,27 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using BOs.ResponseModels.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
+using Repository.Repositories.AuthRepositories;
+using Repository.Repositories.ChildRepositories;
+using Repository.Repositories.UserRepositories;
+using Service.Mapper;
+using Service.Service.ChildServices;
+using Service.Services.AuthService;
+using Service.Services.EmailServices;
+using Service.Services.UserServices;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers();
 var modelBuilder = new ODataConventionModelBuilder();
+
+modelBuilder.EntitySet<UserInfoResponseModel>("users");
+modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
@@ -64,6 +77,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
+//builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+
+//========================================== REPOSITORY ===========================================
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IChildRepository, ChildRepository>();
+
+
+
+
+//=========================================== SERVICE =============================================
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IChildService, ChildService>();
+
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>
@@ -87,6 +118,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
+app.UseODataBatching();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,0 +1,56 @@
+﻿@page
+@model CVSTS_FE.Pages.User.ChildManage.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Pages/Shared/_LayoutUser.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Child</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Child.Id" />
+            <div class="form-group">
+                <label asp-for="Child.FullName" class="control-label"></label>
+                <input asp-for="Child.FullName" class="form-control" />
+                <span asp-validation-for="Child.FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Child.Dob" class="control-label"></label>
+                <input asp-for="Child.Dob" class="form-control" />
+                <span asp-validation-for="Child.Dob" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Child.Gender" class="control-label"></label>
+                <input asp-for="Child.Gender" class="form-control" />
+                <span asp-validation-for="Child.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Child.Note" class="control-label"></label>
+                <input asp-for="Child.Note" class="form-control" />
+                <span asp-validation-for="Child.Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Child.ParentId" class="control-label"></label>
+                <select asp-for="Child.ParentId" class="form-control" asp-items="ViewBag.ParentId"></select>
+                <span asp-validation-for="Child.ParentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
