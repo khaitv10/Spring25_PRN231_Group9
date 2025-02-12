@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.IService
+namespace Service.Service.VaccineServices
 {
     public interface IVaccineService
     {

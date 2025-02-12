@@ -1,18 +1,17 @@
 ﻿using BOs.Models;
 using Repository.IRepositories;
-using Repository.Repositories; 
-using Service.IService;
+using Repository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Service
+namespace Service.Service.VaccineServices
 {
-    public class VaccineService : IVaccineService 
+    public class VaccineService : IVaccineService
     {
-        private readonly IVaccineRepo _vaccineRepo; 
+        private readonly IVaccineRepo _vaccineRepo;
 
         public VaccineService(IVaccineRepo vaccineRepo)
         {
@@ -37,19 +36,19 @@ namespace Service.Service
         public async Task AddVaccine(Vaccine vaccine)
         {
             await _vaccineRepo.AddVaccine(vaccine);
-            
+
         }
 
         public async Task UpdateVaccine(Vaccine vaccine)
         {
             await _vaccineRepo.UpdateVaccine(vaccine);
-            
+
         }
 
         public async Task DeleteVaccine(int id)
         {
             await _vaccineRepo.DeleteVaccine(id);
-           
+
         }
 
         public async Task<bool> IsVaccineNameExists(string name)
@@ -79,10 +78,10 @@ namespace Service.Service
             var vaccine = await _vaccineRepo.GetVaccineById(vaccineId);
             if (vaccine == null) return false; // Vaccine doesn't exist
 
-            return patientAge >= vaccine.MinAge && patientAge <= vaccine.MaxAge && vaccine.Status == true; 
+            return patientAge >= vaccine.MinAge && patientAge <= vaccine.MaxAge && vaccine.Status == true;
         }
     }
 
-   
+
 
 }

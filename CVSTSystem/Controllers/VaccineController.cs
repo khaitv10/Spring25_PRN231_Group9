@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Service.IService;
-using Service.Service; 
+using Service.Service;
+using Service.Service.VaccineServices;
 using System.Threading.Tasks;
 
 namespace CVSTSystem.Controllers
