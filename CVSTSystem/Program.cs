@@ -1,4 +1,5 @@
-﻿using BOs.ResponseModels.User;
+﻿using BOs.Models;
+using BOs.ResponseModels.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
@@ -6,9 +7,13 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
+using Repository.Repositories.DoseRecordRepositories;
+using Repository.Repositories.DoseScheduleRepositories;
 using Repository.Repositories.UserRepositories;
 using Service.Mapper;
 using Service.Service.ChildServices;
+using Service.Service.DoseRecordServices;
+using Service.Service.DoseScheduleServices;
 using Service.Services.AuthService;
 using Service.Services.EmailServices;
 using Service.Services.UserServices;
@@ -85,6 +90,8 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
+builder.Services.AddScoped<IDoseScheduleRepository, DoseScheduleRepository>();
+builder.Services.AddScoped<IDoseRecordRepository, DoseReordRepository>();
 
 
 
@@ -94,6 +101,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IChildService, ChildService>();
+builder.Services.AddScoped<IDoseScheduleService, DoseScheduleService>();
+builder.Services.AddScoped<IDoseRecordService, DoseRecordService>();
 
 
 // Cấu hình CORS
