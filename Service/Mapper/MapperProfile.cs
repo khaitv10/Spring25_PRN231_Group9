@@ -12,6 +12,8 @@ using System.Text;
 using System.Threading.Tasks;
 using BOs.ResponseModels.VaccineStock;
 using BOs.RequestModels.VaccineStock;
+using BOs.ResponseModels.Service;
+using BOs.RequestModels.Service;
 
 namespace Service.Mapper
 {
@@ -28,7 +30,22 @@ namespace Service.Mapper
             CreateMap<VaccineStockUpdateModel, Vaccine>();
             CreateMap<Vaccine, VaccineInfoResponseModel>();
             CreateMap<VaccineCreateModel, Vaccine>();
-
+            CreateMap<BOs.Models.Service, ServiceResponseModel>()
+                .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
+                    .Select(sv => new ServiceVaccineResponseModel {
+            NumberOfDose = sv.NumberOfDose,
+            VaccineInfo = new VaccineInfoResponseModel
+            {
+                Id = sv.Vaccine.Id,
+                Name = sv.Vaccine.Name,
+                Description = sv.Vaccine.Description,
+                Origin = sv.Vaccine.Origin,
+                MinAge = sv.Vaccine.MinAge,
+                MaxAge = sv.Vaccine.MaxAge,
+                Status = sv.Vaccine.Status
+            }
+        }).ToList()));
+            CreateMap<ServiceCreateModel, BOs.Models.Service>();
         }
     }
 }
