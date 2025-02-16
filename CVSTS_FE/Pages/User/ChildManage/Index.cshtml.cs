@@ -48,7 +48,6 @@ namespace CVSTS_FE.Pages.User.ChildManage
         }
 
 
-
         private HttpClient CreateAuthorizedClient()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");

@@ -60,5 +60,11 @@ namespace Service.Service.ChildServices
             var child = await _childRepository.GetById(id);
             return _mapper.Map<ChildResponseModel>(child);
         }
+
+        public async Task<ChildDetailResModel> GetDetailChild(int id)
+        {
+            var child = await _childRepository.GetDetailChild(id);
+            return _mapper.Map<ChildDetailResModel>(child);
+        }
     }
 }

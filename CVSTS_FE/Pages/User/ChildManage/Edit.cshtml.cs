@@ -7,40 +7,48 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
+using BOs.RequestModels.Child;
 
 namespace CVSTS_FE.Pages.User.ChildManage
 {
     public class EditModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public EditModel(BOs.Models.CvstsystemDbContext context)
+        public EditModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         [BindProperty]
         public Child Child { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
+            if (id == 0)
+            {
+                return BadRequest("Invalid child ID.");
+            }
+
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/info/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            var child =  await _context.Children.FirstOrDefaultAsync(m => m.Id == id);
-            if (child == null)
+            Child = await response.Content.ReadFromJsonAsync<Child>();
+
+            if (Child == null)
             {
                 return NotFound();
             }
-            Child = child;
-           ViewData["ParentId"] = new SelectList(_context.Users, "Id", "Email");
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -48,30 +56,38 @@ namespace CVSTS_FE.Pages.User.ChildManage
                 return Page();
             }
 
-            _context.Attach(Child).State = EntityState.Modified;
-
-            try
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
-                await _context.SaveChangesAsync();
+                return RedirectToPage("/403Page");
             }
-            catch (DbUpdateConcurrencyException)
+            Child.ParentId = userId;    
+            var id = Child.Id;
+            var client = CreateAuthorizedClient();
+            var response = await client.PutAsJsonAsync($"/api/child/{id}", Child);
+
+            if (!response.IsSuccessStatusCode)
             {
-                if (!ChildExists(Child.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "Error updating child.");
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool ChildExists(int id)
+        private HttpClient CreateAuthorizedClient()
         {
-            return _context.Children.Any(e => e.Id == id);
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
+
+
     }
 }

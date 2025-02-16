@@ -63,7 +63,7 @@ namespace CVSTS_FE.Pages.User.ChildManage
                 return Page();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index");   
         }
 
 
