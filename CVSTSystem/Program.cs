@@ -78,6 +78,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
+
+
+
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 //builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);

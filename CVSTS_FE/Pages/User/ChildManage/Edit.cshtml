@@ -2,55 +2,65 @@
 @model CVSTS_FE.Pages.User.ChildManage.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Child";
     Layout = "~/Pages/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="card shadow-lg rounded-3">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="mb-0">Edit Child Information</h2>
+        </div>
+        <div class="card-body p-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="Child.Id" />
 
-<h4>Child</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Child.Id" />
-            <div class="form-group">
-                <label asp-for="Child.FullName" class="control-label"></label>
-                <input asp-for="Child.FullName" class="form-control" />
-                <span asp-validation-for="Child.FullName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Child.Dob" class="control-label"></label>
-                <input asp-for="Child.Dob" class="form-control" />
-                <span asp-validation-for="Child.Dob" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Child.Gender" class="control-label"></label>
-                <input asp-for="Child.Gender" class="form-control" />
-                <span asp-validation-for="Child.Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Child.Note" class="control-label"></label>
-                <input asp-for="Child.Note" class="form-control" />
-                <span asp-validation-for="Child.Note" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Child.ParentId" class="control-label"></label>
-                <select asp-for="Child.ParentId" class="form-control" asp-items="ViewBag.ParentId"></select>
-                <span asp-validation-for="Child.ParentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label asp-for="Child.FullName" class="form-label fw-bold">Full Name</label>
+                    <input asp-for="Child.FullName" class="form-control rounded-3" placeholder="Enter full name..." />
+                    <span asp-validation-for="Child.FullName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Child.Dob" class="form-label fw-bold">Date of Birth</label>
+                    <input asp-for="Child.Dob" type="date" class="form-control rounded-3" />
+                    <span asp-validation-for="Child.Dob" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Child.Gender" class="form-label fw-bold">Gender</label>
+                    <select asp-for="Child.Gender" class="form-select rounded-3">
+                        <option value="M" selected="@((Model.Child.Gender == "M") ? "selected" : null)">Male</option>
+                        <option value="F" selected="@((Model.Child.Gender == "F") ? "selected" : null)">Female</option>
+                    </select>
+                    <span asp-validation-for="Child.Gender" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Child.Note" class="form-label fw-bold">Notes</label>
+                    <textarea asp-for="Child.Note" class="form-control rounded-3" rows="3" placeholder="Enter additional notes..."></textarea>
+                    <span asp-validation-for="Child.Note" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg rounded-3">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a asp-page="./Index" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

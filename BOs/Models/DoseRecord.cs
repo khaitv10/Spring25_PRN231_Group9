@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace BOs.Models;
 
@@ -26,4 +27,5 @@ public partial class DoseRecord
     public virtual Service? Service { get; set; }
 
     public virtual Vaccine? Vaccine { get; set; }
+
 }
