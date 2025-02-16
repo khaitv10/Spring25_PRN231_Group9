@@ -6,24 +6,61 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
+using Service;
+using BOs.ResponseModels.Child;
 
 namespace CVSTS_FE.Pages.User.ChildManage
 {
     public class IndexModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public IndexModel(BOs.Models.CvstsystemDbContext context)
+        public IndexModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
-        public IList<Child> Child { get;set; } = default!;
+        public IList<ChildResponseModel> Childs { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            Child = await _context.Children
-                .Include(c => c.Parent).ToListAsync();
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                return RedirectToPage("/403Page");
+            }
+
+            var client = CreateAuthorizedClient();
+            var url = $"/byParentId/{userId}";
+
+            var response = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(client, url);
+
+            if (response != null)
+            {
+                Childs = response;
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/403Page");
+            }
+        }
+
+
+
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
     }
 }

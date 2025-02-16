@@ -24,11 +24,20 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("/info/{id}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetChildById(int id)
         {
-            var response = await _childService.GetChildById(id);
+            var response = await _childService.GetChildDetail(id);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("/byParentId/{id}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetAllChildByParentId(int id)
+        {
+            var response = await _childService.GetAllChildByParentId(id);
             return Ok(response);
         }
 

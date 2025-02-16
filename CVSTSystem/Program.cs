@@ -1,4 +1,5 @@
-﻿using BOs.ResponseModels.User;
+﻿using BOs.RequestModels.Child;
+using BOs.ResponseModels.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
@@ -22,6 +23,8 @@ var modelBuilder = new ODataConventionModelBuilder();
 
 modelBuilder.EntitySet<UserInfoResponseModel>("users");
 modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
+
+
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>

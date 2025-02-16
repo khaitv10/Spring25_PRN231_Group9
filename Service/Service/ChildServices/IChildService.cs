@@ -12,8 +12,9 @@ namespace Service.Service.ChildServices
 {
     public interface IChildService
     {
+        Task<ChildResponseModel> GetChildDetail(int id);
         Task<List<ChildResponseModel>> GetAllChilds();
-        Task<ChildResponseModel> GetChildById(int id);
+        Task<List<ChildResponseModel>> GetAllChildByParentId(int id);
         Task CreateChild(ChildCreateModel request, int userId);
         Task UpdateChild(int id, ChildUpdateModel request);
         Task DeleteChild(int id);
