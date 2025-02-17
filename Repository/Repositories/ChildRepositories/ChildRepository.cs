@@ -1,3 +1,4 @@
+using BOs.Models;
 using DAO;
 using System;
 using System.Collections.Generic;
