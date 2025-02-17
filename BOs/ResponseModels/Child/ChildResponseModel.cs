@@ -17,7 +17,7 @@ namespace BOs.ResponseModels.Child
 
         public string Gender { get; set; }
 
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
 
     }

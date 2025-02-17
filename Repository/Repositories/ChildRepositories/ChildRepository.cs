@@ -24,6 +24,7 @@ namespace Repository.Repositories.ChildRepositories
             return list.ToList();
         }
 
+
         public async Task<Child> GetById(int id)
         {
             return await GetSingle(a => a.Id == id);

@@ -1,4 +1,6 @@
-﻿using BOs.RequestModels.Child;
+﻿using BOs.Models;
+using BOs.RequestModels.Child;
+using BOs.ResponseModels.Child;
 using BOs.ResponseModels.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
@@ -24,11 +26,14 @@ var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EntitySet<UserInfoResponseModel>("users");
 modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 
+modelBuilder.EntitySet<ChildResponseModel>("children");
+modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
+
 
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
-    options.Select().Filter().OrderBy().Expand().SetMaxTop(100)
+    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100)
            .AddRouteComponents("odata", modelBuilder.GetEdmModel()));
 
 builder.Services.AddEndpointsApiExplorer();
