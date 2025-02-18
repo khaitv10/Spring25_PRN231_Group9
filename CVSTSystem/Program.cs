@@ -11,11 +11,19 @@ using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
 using Repository.Repositories.DoseRecordRepositories;
 using Repository.Repositories.DoseScheduleRepositories;
+using Repository.Repositories.ServiceRepository;
 using Repository.Repositories.UserRepositories;
+using Repository.Repositories.VaccineRepositories;
+using Repository.Repositories.VaccineStockRepositories;
+using Repository.ServiceVaccine;
+using Repository.ServiceVaccineRepository;
 using Service.Mapper;
 using Service.Service.ChildServices;
 using Service.Service.DoseRecordServices;
 using Service.Service.DoseScheduleServices;
+using Service.Service.ServiceService;
+using Service.Service.VaccineServices;
+using Service.Service.VaccineStockServices;
 using Service.Services.AuthService;
 using Service.Services.EmailServices;
 using Service.Services.UserServices;
@@ -108,6 +116,10 @@ builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IDoseScheduleRepository, DoseScheduleRepository>();
 builder.Services.AddScoped<IDoseRecordRepository, DoseReordRepository>();
 
+builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
+builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
+builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
 
 
 
@@ -119,6 +131,9 @@ builder.Services.AddScoped<IChildService, ChildService>();
 builder.Services.AddScoped<IDoseScheduleService, DoseScheduleService>();
 builder.Services.AddScoped<IDoseRecordService, DoseRecordService>();
 
+builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
+builder.Services.AddScoped<IVaccineService, VaccineService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>
