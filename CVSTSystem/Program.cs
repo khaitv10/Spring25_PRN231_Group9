@@ -9,9 +9,17 @@ using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
+using Repository.Repositories.ServiceRepository;
 using Repository.Repositories.UserRepositories;
+using Repository.Repositories.VaccineRepositories;
+using Repository.Repositories.VaccineStockRepositories;
+using Repository.ServiceVaccine;
+using Repository.ServiceVaccineRepository;
 using Service.Mapper;
 using Service.Service.ChildServices;
+using Service.Service.ServiceService;
+using Service.Service.VaccineServices;
+using Service.Service.VaccineStockServices;
 using Service.Services.AuthService;
 using Service.Services.EmailServices;
 using Service.Services.UserServices;
@@ -101,7 +109,10 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
-
+builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
+builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
+builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
+builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
 
 
 
@@ -110,7 +121,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IChildService, ChildService>();
-
+builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
+builder.Services.AddScoped<IVaccineService, VaccineService>();
+builder.Services.AddScoped<IServiceService, ServiceService>();
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>
