@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 
-namespace CVSTS_FE.Pages.DoseManagement
+namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class DeleteModel : PageModel
     {
@@ -19,7 +19,7 @@ namespace CVSTS_FE.Pages.DoseManagement
         }
 
         [BindProperty]
-        public DoseSchedule DoseSchedule { get; set; } = default!;
+        public DoseRecord DoseRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -28,15 +28,15 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return NotFound();
             }
 
-            var doseschedule = await _context.DoseSchedules.FirstOrDefaultAsync(m => m.Id == id);
+            var doserecord = await _context.DoseRecords.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (doseschedule == null)
+            if (doserecord == null)
             {
                 return NotFound();
             }
             else
             {
-                DoseSchedule = doseschedule;
+                DoseRecord = doserecord;
             }
             return Page();
         }
@@ -48,11 +48,11 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return NotFound();
             }
 
-            var doseschedule = await _context.DoseSchedules.FindAsync(id);
-            if (doseschedule != null)
+            var doserecord = await _context.DoseRecords.FindAsync(id);
+            if (doserecord != null)
             {
-                DoseSchedule = doseschedule;
-                _context.DoseSchedules.Remove(DoseSchedule);
+                DoseRecord = doserecord;
+                _context.DoseRecords.Remove(DoseRecord);
                 await _context.SaveChangesAsync();
             }
 

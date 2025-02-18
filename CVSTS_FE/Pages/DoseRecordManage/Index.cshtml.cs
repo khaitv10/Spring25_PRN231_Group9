@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 
-namespace CVSTS_FE.Pages.DoseManagement
+namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class IndexModel : PageModel
     {
@@ -18,11 +18,11 @@ namespace CVSTS_FE.Pages.DoseManagement
             _context = context;
         }
 
-        public IList<DoseSchedule> DoseSchedule { get;set; } = default!;
+        public IList<DoseRecord> DoseRecord { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            DoseSchedule = await _context.DoseSchedules
+            DoseRecord = await _context.DoseRecords
                 .Include(d => d.Child)
                 .Include(d => d.Service)
                 .Include(d => d.Vaccine).ToListAsync();

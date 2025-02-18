@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 
-namespace CVSTS_FE.Pages.DoseManagement
+namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class DetailsModel : PageModel
     {
@@ -18,7 +18,7 @@ namespace CVSTS_FE.Pages.DoseManagement
             _context = context;
         }
 
-        public DoseSchedule DoseSchedule { get; set; } = default!;
+        public DoseRecord DoseRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,14 +27,14 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return NotFound();
             }
 
-            var doseschedule = await _context.DoseSchedules.FirstOrDefaultAsync(m => m.Id == id);
-            if (doseschedule == null)
+            var doserecord = await _context.DoseRecords.FirstOrDefaultAsync(m => m.Id == id);
+            if (doserecord == null)
             {
                 return NotFound();
             }
             else
             {
-                DoseSchedule = doseschedule;
+                DoseRecord = doserecord;
             }
             return Page();
         }

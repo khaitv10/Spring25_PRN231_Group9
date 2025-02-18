@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 
-namespace CVSTS_FE.Pages.DoseManagement
+namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class EditModel : PageModel
     {
@@ -20,7 +20,7 @@ namespace CVSTS_FE.Pages.DoseManagement
         }
 
         [BindProperty]
-        public DoseSchedule DoseSchedule { get; set; } = default!;
+        public DoseRecord DoseRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -29,12 +29,12 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return NotFound();
             }
 
-            var doseschedule =  await _context.DoseSchedules.FirstOrDefaultAsync(m => m.Id == id);
-            if (doseschedule == null)
+            var doserecord =  await _context.DoseRecords.FirstOrDefaultAsync(m => m.Id == id);
+            if (doserecord == null)
             {
                 return NotFound();
             }
-            DoseSchedule = doseschedule;
+            DoseRecord = doserecord;
            ViewData["ChildId"] = new SelectList(_context.Children, "Id", "FullName");
            ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name");
            ViewData["VaccineId"] = new SelectList(_context.Vaccines, "Id", "Name");
@@ -50,7 +50,7 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return Page();
             }
 
-            _context.Attach(DoseSchedule).State = EntityState.Modified;
+            _context.Attach(DoseRecord).State = EntityState.Modified;
 
             try
             {
@@ -58,7 +58,7 @@ namespace CVSTS_FE.Pages.DoseManagement
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DoseScheduleExists(DoseSchedule.Id))
+                if (!DoseRecordExists(DoseRecord.Id))
                 {
                     return NotFound();
                 }
@@ -71,9 +71,9 @@ namespace CVSTS_FE.Pages.DoseManagement
             return RedirectToPage("./Index");
         }
 
-        private bool DoseScheduleExists(int id)
+        private bool DoseRecordExists(int id)
         {
-            return _context.DoseSchedules.Any(e => e.Id == id);
+            return _context.DoseRecords.Any(e => e.Id == id);
         }
     }
 }

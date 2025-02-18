@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
 
-namespace CVSTS_FE.Pages.DoseManagement
+namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class CreateModel : PageModel
     {
@@ -27,7 +27,7 @@ namespace CVSTS_FE.Pages.DoseManagement
         }
 
         [BindProperty]
-        public DoseSchedule DoseSchedule { get; set; } = default!;
+        public DoseRecord DoseRecord { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -37,7 +37,7 @@ namespace CVSTS_FE.Pages.DoseManagement
                 return Page();
             }
 
-            _context.DoseSchedules.Add(DoseSchedule);
+            _context.DoseRecords.Add(DoseRecord);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
