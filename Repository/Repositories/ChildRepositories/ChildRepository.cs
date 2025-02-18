@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories.ChildRepositories
 {
-    public class ChildRepository : GenericDAO<Child>, IChildRepository
+    public class ChildRepository: GenericDAO<Child>, IChildRepository
     {
         public async Task<List<Child>> GetAllChild()
         {
