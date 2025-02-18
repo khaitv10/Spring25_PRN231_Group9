@@ -5,6 +5,7 @@ using BOs.RequestModels.Service;
 using BOs.RequestModels.User;
 using BOs.RequestModels.Vaccine;
 using BOs.RequestModels.VaccineStock;
+using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
 using BOs.ResponseModels.Service;
 using BOs.ResponseModels.User;
@@ -46,6 +47,8 @@ namespace Service.Mapper
             CreateMap<VaccineStockUpdateModel, Vaccine>();
             CreateMap<Vaccine, VaccineInfoResponseModel>();
             CreateMap<VaccineCreateModel, Vaccine>();
+
+            //Service
             CreateMap<BOs.Models.Service, ServiceResponseModel>()
                 .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
                     .Select(sv => new ServiceVaccineResponseModel
@@ -62,6 +65,7 @@ namespace Service.Mapper
                             Status = sv.Vaccine.Status
                         }
                     }).ToList()));
+
             CreateMap<ServiceCreateModel, BOs.Models.Service>();
 
 
@@ -79,6 +83,34 @@ namespace Service.Mapper
             CreateMap<DoseSchedule, DoseSchedulesRes>()
             .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
+
+            // Appointment
+            CreateMap<Appointment, AppointmentResModel>()
+                .ForMember(dest => dest.Child, opt => opt.MapFrom(src =>
+                    src.Child != null
+                    ? new ChildResponse
+                    {
+                        Id = src.Child.Id,
+                        FullName = src.Child.FullName,
+                        Gender = src.Child.Gender
+                    }
+                    : null)) 
+                .ForMember(dest => dest.Services, opt => opt.MapFrom(src =>
+                    src.AppointmentServices != null
+                    ? src.AppointmentServices
+                        .Where(asv => asv.Service != null)
+                        .Select(asv => new ServiceResponse
+                        {
+                            Id = asv.Service.Id,
+                            Name = asv.Service.Name,
+                            Description = asv.Service.Description,
+                            Price = asv.Service.Price,
+                            TotalDoses = asv.Service.TotalDoses
+                        }).ToList()
+                    : new List<ServiceResponse>() 
+                ));
+
+
 
         }
 

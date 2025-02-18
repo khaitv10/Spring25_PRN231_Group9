@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
+using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
 using Repository.Repositories.ServiceRepository;
@@ -16,6 +17,8 @@ using Repository.Repositories.VaccineStockRepositories;
 using Repository.ServiceVaccine;
 using Repository.ServiceVaccineRepository;
 using Service.Mapper;
+using Service.Service.AppointmentService;
+using Service.Service.AppointmentServices;
 using Service.Service.ChildServices;
 using Service.Service.ServiceService;
 using Service.Service.VaccineServices;
@@ -113,6 +116,8 @@ builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
 builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
 
 
 
@@ -124,6 +129,7 @@ builder.Services.AddScoped<IChildService, ChildService>();
 builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
 builder.Services.AddScoped<IVaccineService, VaccineService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAppointmentServices, AppointmentServices>();
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>

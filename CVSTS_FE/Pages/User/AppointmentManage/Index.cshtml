@@ -1,0 +1,64 @@
+﻿@page
+@model CVSTS_FE.Pages.User.AppointmentManage.IndexModel
+
+@{
+    ViewData["Title"] = "Appointment List";
+    Layout = "~/Pages/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Appointment Management</h1>
+        <p class="lead text-muted">Manage your appointments efficiently.</p>
+        <a class="btn btn-success btn-lg shadow" asp-page="Create">
+            <i class="fas fa-calendar-plus"></i> Create New Appointment
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle shadow-lg rounded overflow-hidden">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].AppointmentDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].Type)</th>
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].TotalPrice)</th>
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].PaymentStatus)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Appoints)
+                {
+                    <tr class="text-center">
+                        <td>@Html.DisplayFor(modelItem => item.AppointmentDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                        <td>
+                            <span class="badge @(item.Status == "Confirmed" ? "bg-success" : "bg-warning")">
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge @(item.PaymentStatus == "Paid" ? "bg-primary" : "bg-danger")">
+                                @Html.DisplayFor(modelItem => item.PaymentStatus)
+                            </span>
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-info btn-sm" asp-page="./Edit" asp-route-id="@item.Id">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a class="btn btn-outline-primary btn-sm" asp-page="./Details" asp-route-id="@item.Id">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+}
