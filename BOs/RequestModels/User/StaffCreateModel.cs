@@ -14,5 +14,7 @@ namespace BOs.RequestModels.User
 
         public string Password { get; set; } = null!;
 
+        public string Role = "Staff";
+
     }
 }

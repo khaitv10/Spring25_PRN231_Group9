@@ -14,5 +14,8 @@ namespace Repository.Repositories.ChildRepositories
         Task<List<Child>> GetAllChild();
         Task<Child> GetById(int id);
         Task<List<Child>> GetAllChildByParentId(int ParentId);
+        Task<Child> GetDetailChild(int id);
+       // IQueryable<Child> GetAllChildren();
     }
+
 }

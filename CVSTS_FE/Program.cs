@@ -1,5 +1,8 @@
+using BOs.Models;
+using BOs.RequestModels.Child;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Net.Http.Headers;
 using System.Text;
@@ -59,6 +62,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 
 
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,7 +76,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
+app.UseAuthentication();
 
 app.UseSession();
 

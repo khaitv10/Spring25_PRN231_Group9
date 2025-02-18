@@ -6,39 +6,66 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
+using BOs.RequestModels.Child;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace CVSTS_FE.Pages.User.ChildManage
 {
     public class CreateModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreateModel(BOs.Models.CvstsystemDbContext context)
+        public CreateModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         public IActionResult OnGet()
         {
-        ViewData["ParentId"] = new SelectList(_context.Users, "Id", "Email");
             return Page();
         }
 
         [BindProperty]
-        public Child Child { get; set; } = default!;
+        public ChildCreateModel Child { get; set; } = new ChildCreateModel();
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
+
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
+                ModelState.AddModelError("", "User is not authenticated.");
                 return Page();
             }
 
-            _context.Children.Add(Child);
-            await _context.SaveChangesAsync();
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
 
-            return RedirectToPage("./Index");
+            //Child.Dob = DateOnly.FromDateTime(Child.Dob);
+            Child.ParentId = userId;
+            var jsonContent = new StringContent(JsonSerializer.Serialize(Child), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("/api/child", jsonContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToPage("./Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to create child.");
+                return Page();
+            }
         }
     }
 }
