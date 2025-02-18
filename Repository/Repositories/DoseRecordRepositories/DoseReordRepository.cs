@@ -33,7 +33,7 @@ namespace Repository.Repositories.DoseRecordRepositories
             return await GetSingle(x => x.Id == id);
         }
 
-        public async Task UpdateDoseRecord(DoseRecord doseRecord)
+        public async Task UpdateDoseRecord(int id,DoseRecord doseRecord)
         {
             await Update(doseRecord);
         }

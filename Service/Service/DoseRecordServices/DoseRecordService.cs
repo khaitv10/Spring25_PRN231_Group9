@@ -45,10 +45,11 @@ namespace Service.Service.DoseRecordServices
             return _mapper.Map<DoseRecordResponseModel>(doseSchedule);
         }
 
-        public async Task UpdateDoseRecord(DoseRecordUpdateModel doseRecord)
+        public async Task UpdateDoseRecord(int id, DoseRecordUpdateModel doseRecord)
         {
-            DoseRecord dose = _mapper.Map<DoseRecord>(doseRecord);
-            await _doseRecordRepo.UpdateDoseRecord(dose);
+            var dose = await _doseRecordRepo.GetByDoseRecordId(id);
+            _mapper.Map(doseRecord, id);
+            await _doseRecordRepo.Update(dose);
         }
     }
 }

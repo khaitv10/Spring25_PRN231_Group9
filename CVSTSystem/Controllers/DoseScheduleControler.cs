@@ -12,27 +12,30 @@ using Service.Service.DoseScheduleServices;
 
 namespace CVSTSystem.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/doseSchedule")]
     [ApiController]
-    public class DoseScheduleControler : ODataController
+    public class DoseScheduleControler : Controller
     {
         private readonly IDoseScheduleService _doseScheduleService;
-        private readonly IDoseRecordService _doseRecordService;
+        
 
         public DoseScheduleControler(IDoseScheduleService doseScheduleservice, IDoseRecordService doseRecordservice)
         {
             _doseScheduleService = doseScheduleservice;
-            _doseRecordService = doseRecordservice;
+            
         }
 
-        [HttpGet("schedule")]
+        [HttpGet("dose_schedules")]
+        // [Authorize(Roles = "Staff")]
         public async Task<ActionResult<List<DoseScheduleResponseModel>>> GetAllDoseSchedule()
         {
             var doseSchedules = await _doseScheduleService.GetAllDoseSchedule();
             return Ok(doseSchedules);
         }
 
-        [HttpGet("schedule/{id}")]
+        [HttpGet]
+        [Route("schedule/{id}")]
+        // [Authorize(Roles = "Staff")]
         public async Task<ActionResult<DoseScheduleResponseModel>> GetDoseScheduleById(int id)
         {
             var doseSchedule = await _doseScheduleService.GetDoseScheduleById(id);
@@ -40,10 +43,11 @@ namespace CVSTSystem.Controllers
             return Ok(doseSchedule);
         }
 
-        [HttpPost("schedule")]
-        [Authorize(Roles = "Staff")]
+        [HttpPost]
+        [Route("add")]
+       //[Authorize(Roles = "Staff")]
 
-        public async Task<ActionResult<DoseScheduleCreateModel>> CreateVaccine(DoseScheduleCreateModel doseSchedule)
+        public async Task<ActionResult<DoseScheduleCreateModel>> CreateVaccine([FromBody] DoseScheduleCreateModel doseSchedule)
         {
             if (!ModelState.IsValid)
             {
@@ -59,10 +63,11 @@ namespace CVSTSystem.Controllers
             return _doseScheduleService.GetDoseScheduleById(id) != null;
         }
 
-        [HttpPut("schedule/{id}")]
-        [Authorize(Roles = "Staff")]
+        [HttpPut]
+        [Route("{id}")]
+        //[Authorize(Roles = "Staff")]
 
-        public async Task<IActionResult> UpdateDoseSchedule(int id, DoseScheduleUpdateModel doseSchedule)
+        public async Task<ActionResult<DoseScheduleUpdateModel>> UpdateDoseSchedule(int id, DoseScheduleUpdateModel doseSchedule)
         {
             if (id != doseSchedule.Id)
             {
@@ -90,26 +95,20 @@ namespace CVSTSystem.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok("Update dose schedule successfully");
         }
 
-        [HttpDelete("{id}")]
-        [Authorize(Roles = "Staff")]
+        [HttpDelete]
+        [Route("schedule/{id}")]
+        //[Authorize(Roles = "Staff")]
         public async Task<IActionResult> DeleteVaccine(int id)
         {
-            var vaccine = await _doseScheduleService.GetDoseScheduleById(id);
-            if (vaccine == null)
-            {
-                return NotFound();
-            }
+            
 
             await _doseScheduleService.DeleteDoseSchedule(id);
-            return NoContent();
+            return Ok("Delete dose schedule successfully");
         }
 
-        private bool VaccineExists(int id)
-        {
-            return _doseScheduleService.GetDoseScheduleById(id) != null;
-        }
+        
     }
 }

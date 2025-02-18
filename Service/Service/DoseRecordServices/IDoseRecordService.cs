@@ -17,7 +17,7 @@ namespace Service.Service.DoseRecordServices
         Task<List<DoseRecordResponseModel>> GetAllDoseRecord();
         Task<DoseRecordResponseModel> GetByDoseRecordId(int id);
         Task AddDoseRecord(DoseRecordCreateModel doseRecord);
-        Task UpdateDoseRecord(DoseRecordUpdateModel doseRecord);
+        Task UpdateDoseRecord(int id ,DoseRecordUpdateModel doseRecord);
         Task DeleteDoseRecord(int id);
         
     }

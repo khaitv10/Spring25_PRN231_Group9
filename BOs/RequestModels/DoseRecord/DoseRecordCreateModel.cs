@@ -8,7 +8,7 @@ namespace BOs.RequestModels.DoseRecord
 {
     public class DoseRecordCreateModel
     {
-        public DateOnly DoseDate { get; set; }
+    public DateOnly DoseDate { get; set; }
 
     public int? DoseNumber { get; set; }
 

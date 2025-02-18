@@ -8,6 +8,7 @@ namespace BOs.RequestModels.DoseRecord
 {
     public class DoseRecordUpdateModel
     {
+        
         public DateOnly DoseDate { get; set; }
 
         public int? DoseNumber { get; set; }

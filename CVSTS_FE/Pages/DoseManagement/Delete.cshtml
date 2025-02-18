@@ -1,0 +1,64 @@
+﻿@page
+@model CVSTS_FE.Pages.DoseManagement.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>DoseSchedule</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.NextDoseDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.NextDoseDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.DoseNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.DoseNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.Status)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.CreateAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.CreateAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.Child)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.Child.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.Service)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.Service.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DoseSchedule.Vaccine)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DoseSchedule.Vaccine.Name)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="DoseSchedule.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>
