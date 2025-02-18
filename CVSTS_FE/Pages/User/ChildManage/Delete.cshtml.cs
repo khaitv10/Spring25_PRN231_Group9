@@ -1,62 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.User.ChildManage
 {
     public class DeleteModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public DeleteModel(BOs.Models.CvstsystemDbContext context)
+        public DeleteModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         [BindProperty]
         public Child Child { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
+            if (id == 0)
+            {
+                return BadRequest("Invalid child ID.");
+            }
+
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/info/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            var child = await _context.Children.FirstOrDefaultAsync(m => m.Id == id);
+            Child = await response.Content.ReadFromJsonAsync<Child>();
 
-            if (child == null)
+            if (Child == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Child = child;
-            }
+
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (id == null)
+            if (Child == null || Child.Id == 0)
             {
                 return NotFound();
             }
 
-            var child = await _context.Children.FindAsync(id);
-            if (child != null)
+            var id = Child.Id;
+            var client = CreateAuthorizedClient();
+            var response = await client.DeleteAsync($"/api/child/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
-                Child = child;
-                _context.Children.Remove(Child);
-                await _context.SaveChangesAsync();
+                ModelState.AddModelError(string.Empty, "Error deleting child.");
+                return Page();
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Index");   
         }
+
+
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
+        }
+
     }
 }

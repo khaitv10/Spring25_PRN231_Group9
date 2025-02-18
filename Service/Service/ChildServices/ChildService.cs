@@ -42,10 +42,10 @@ namespace Service.Service.ChildServices
             return _mapper.Map<List<ChildResponseModel>>(list);
         }
 
-        public async Task<ChildResponseModel> GetChildById(int id)
+        public async Task<List<ChildResponseModel>> GetAllChildByParentId(int id)
         {
-            var child = await _childRepository.GetById(id);
-            return _mapper.Map<ChildResponseModel>(child);
+            var child = await _childRepository.GetAllChildByParentId(id);
+            return _mapper.Map<List<ChildResponseModel>>(child);
         }
 
         public async Task UpdateChild(int id, ChildUpdateModel request)
@@ -53,6 +53,18 @@ namespace Service.Service.ChildServices
             var child = await _childRepository.GetById(id);
             _mapper.Map(request, child);
             await _childRepository.Update(child);
+        }
+
+        public async Task<ChildResponseModel> GetChildDetail(int id)
+        {
+            var child = await _childRepository.GetById(id);
+            return _mapper.Map<ChildResponseModel>(child);
+        }
+
+        public async Task<ChildDetailResModel> GetDetailChild(int id)
+        {
+            var child = await _childRepository.GetDetailChild(id);
+            return _mapper.Map<ChildDetailResModel>(child);
         }
     }
 }

@@ -2,49 +2,130 @@
 @model CVSTS_FE.Pages.User.ChildManage.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Child Details";
     Layout = "~/Pages/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <!-- Header -->
+        <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #007bff, #6610f2);">
+            <h2 class="mb-0 fw-bold"><i class="bi bi-person-circle"></i> Child Details</h2>
+        </div>
 
-<div>
-    <h4>Child</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Child.FullName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Child.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Child.Dob)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Child.Dob)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Child.Gender)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Child.Gender)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Child.Note)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Child.Note)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Child.Parent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Child.Parent.Email)
-        </dd>
-    </dl>
+        <!-- Body -->
+        <div class="card-body p-5">
+            <dl class="row g-3">
+                <dt class="col-md-4 text-muted fw-semibold"><i class="bi bi-person"></i> Full Name</dt>
+                <dd class="col-md-8 fs-5 fw-bold">@Model.Child.FullName</dd>
+
+                <dt class="col-md-4 text-muted fw-semibold"><i class="bi bi-calendar"></i> Date of Birth</dt>
+                <dd class="col-md-8 fs-5">@Model.Child.Dob.ToString("dd MMM yyyy")</dd>
+
+                <dt class="col-md-4 text-muted fw-semibold"><i class="bi bi-gender-ambiguous"></i> Gender</dt>
+                <dd class="col-md-8">
+                    @if (Model.Child.Gender == "M")
+                    {
+                        <span class="badge rounded-pill text-bg-primary px-3 py-2">Male</span>
+                    }
+                    else if (Model.Child.Gender == "F")
+                    {
+                        <span >Female</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill text-bg-secondary px-3 py-2">Other</span>
+                    }
+                </dd>
+
+                <dt class="col-md-4 text-muted fw-semibold"><i class="bi bi-chat-left-text"></i> Notes</dt>
+                <dd class="col-md-8 text-muted">@Model.Child.Note</dd>
+            </dl>
+
+            <!-- Dose Records Section -->
+            <div class="mt-5">
+                <h4 class="text-primary fw-bold"><i class="bi bi-capsule"></i> Dose Records</h4>
+                @if (Model.Child.DoseRecords.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-3 rounded shadow-sm">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Vaccine Name</th>
+                                    <th>Description</th>
+                                    <th>Dose Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var record in Model.Child.DoseRecords)
+                                {
+                                    <tr>
+                                        <td>@record.Id</td>
+                                        <td>@record.DoseDate.ToString("dd MMM yyyy")</td>
+                                        <td class="fw-semibold">@record.VaccineName</td>
+                                        <td>@record.Description</td>
+                                        <td><span class="badge bg-success rounded-pill px-3">@record.DoseNumber</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted fst-italic">No dose records available.</p>
+                }
+            </div>
+
+            <!-- Dose Schedules Section -->
+            <div class="mt-5">
+                <h4 class="text-success fw-bold"><i class="bi bi-calendar-check"></i> Upcoming Dose Schedules</h4>
+                @if (Model.Child.DoseSchedules.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover mt-3 rounded shadow-sm">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Next Dose Date</th>
+                                    <th>Vaccine Name</th>
+                                    <th>Description</th>
+                                    <th>Dose Number</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var schedule in Model.Child.DoseSchedules)
+                                {
+                                    <tr>
+                                        <td>@schedule.Id</td>
+                                        <td>@schedule.NextDoseDate.ToString("dd MMM yyyy")</td>
+                                        <td class="fw-semibold">@schedule.VaccineName</td>
+                                        <td>@schedule.Description</td>
+                                        <td><span class="badge bg-info rounded-pill px-3">@schedule.DoseNumber</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted fst-italic">No upcoming dose schedules.</p>
+                }
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-center mt-5 gap-3">
+                <a asp-page="./Edit" asp-route-id="@Model.Child.Id" class="btn btn-warning btn-lg rounded-pill shadow-sm px-4">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+                <a asp-page="./Index" class="btn btn-outline-secondary btn-lg rounded-pill shadow-sm px-4">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Child.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+

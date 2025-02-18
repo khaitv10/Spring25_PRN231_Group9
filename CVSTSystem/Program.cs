@@ -1,4 +1,6 @@
 ﻿using BOs.Models;
+using BOs.RequestModels.Child;
+using BOs.ResponseModels.Child;
 using BOs.ResponseModels.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
@@ -28,9 +30,14 @@ var modelBuilder = new ODataConventionModelBuilder();
 modelBuilder.EntitySet<UserInfoResponseModel>("users");
 modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 
+modelBuilder.EntitySet<ChildResponseModel>("children");
+modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
+
+
+
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
-    options.Select().Filter().OrderBy().Expand().SetMaxTop(100)
+    options.Select().Filter().OrderBy().Expand().Count().SetMaxTop(100)
            .AddRouteComponents("odata", modelBuilder.GetEdmModel()));
 
 builder.Services.AddEndpointsApiExplorer();
@@ -79,6 +86,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+});
+
+
+
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
