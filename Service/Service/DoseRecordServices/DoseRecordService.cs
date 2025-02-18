@@ -48,7 +48,7 @@ namespace Service.Service.DoseRecordServices
         public async Task UpdateDoseRecord(int id, DoseRecordUpdateModel doseRecord)
         {
             var dose = await _doseRecordRepo.GetByDoseRecordId(id);
-            _mapper.Map(doseRecord, id);
+            _mapper.Map(doseRecord, dose);
             await _doseRecordRepo.Update(dose);
         }
     }

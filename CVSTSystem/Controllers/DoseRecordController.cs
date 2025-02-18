@@ -48,7 +48,7 @@ namespace CVSTSystem.Controllers
         [Route("{id}")]
         public async Task<ActionResult<DoseRecordUpdateModel>> UpdateRecord(int id,DoseRecordUpdateModel doseRecord) 
         {
-            _recordService.UpdateDoseRecord(id, doseRecord);
+            await _recordService.UpdateDoseRecord(id, doseRecord);
 
             return Ok("Update dose record successfully");
         }
