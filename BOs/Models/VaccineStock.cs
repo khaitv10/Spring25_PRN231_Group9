@@ -13,7 +13,7 @@ public partial class VaccineStock
 
     public DateTime? UpdateAt { get; set; }
 
-    public int? VaccineId { get; set; }
+    public int VaccineId { get; set; }
 
-    public virtual Vaccine? Vaccine { get; set; }
+    public virtual Vaccine Vaccine { get; set; } = null!;
 }

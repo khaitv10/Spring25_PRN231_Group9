@@ -48,6 +48,7 @@ namespace Service.Mapper
             CreateMap<Vaccine, VaccineInfoResponseModel>();
             CreateMap<VaccineCreateModel, Vaccine>();
             CreateMap<VaccineInfoResponseModel, Vaccine>();
+            CreateMap<Vaccine, VaccineShortInfoResponseModel>();
             //Service
             CreateMap<BOs.Models.Service, ServiceResponseModel>()
                 .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
