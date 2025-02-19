@@ -10,6 +10,9 @@ using FFilms.Application.Shared.Response;
 using Repository.Enums;
 using System.Security.Claims;
 using BOs.ResponseModels.Vaccine;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using NuGet.Common;
 
 namespace CVSTS_FE.Pages.VaccineManage
 {
@@ -29,7 +32,15 @@ namespace CVSTS_FE.Pages.VaccineManage
         public async Task<IActionResult> OnGetAsync()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
-            
+            string jwt = HttpContext.Session.GetString("JWToken");
+            if (string.IsNullOrEmpty(jwt))
+            {
+                // Handle the case where the JWT isn't available (e.g., redirect to login)
+                return Redirect("/Login"); // Or appropriate action
+            }
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+
             var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(client, "/api/Vaccine");
 
             if (response != null)

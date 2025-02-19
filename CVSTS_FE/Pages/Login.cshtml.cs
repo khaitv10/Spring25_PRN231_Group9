@@ -3,6 +3,7 @@ using FFilms.Application.Shared.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository.Enums;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 
 namespace CVSTS_FE.Pages
