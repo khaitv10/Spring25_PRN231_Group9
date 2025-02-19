@@ -7,70 +7,83 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using BOs.ResponseModels.Vaccine;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace CVSTS_FE.Pages.VaccineManage
 {
     public class EditModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
-
-        public EditModel(BOs.Models.CvstsystemDbContext context)
-        {
-            _context = context;
-        }
-
         [BindProperty]
-        public Vaccine Vaccine { get; set; } = default!;
+        public VaccineInfoResponseModel Vaccine { get; set; } = default!;
+        private readonly IHttpClientFactory _httpClientFactory;
 
+        public EditModel(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
+            var client = CreateAuthorizedClient();
 
-            var vaccine =  await _context.Vaccines.FirstOrDefaultAsync(m => m.Id == id);
-            if (vaccine == null)
+            var response = await APIHelper.GetAsJsonAsync<VaccineInfoResponseModel>(client, $"/api/Vaccine/stock/{id}");
+
+            if (response != null)
             {
-                return NotFound();
+                Vaccine = response;
+                return Page();
             }
-            Vaccine = vaccine;
-            return Page();
+            return Redirect("./Index");
         }
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(Vaccine).State = EntityState.Modified;
-
-            try
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
-                await _context.SaveChangesAsync();
+                return RedirectToPage("/403Page");
             }
-            catch (DbUpdateConcurrencyException)
+            
+            var id = Vaccine.Id;
+            var client = CreateAuthorizedClient();
+            var response = await client.PutAsJsonAsync($"/api/stock/{id}", Vaccine);
+
+            if (!response.IsSuccessStatusCode)
             {
-                if (!VaccineExists(Vaccine.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "Error updating stock.");
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool VaccineExists(int id)
+        private HttpClient CreateAuthorizedClient()
         {
-            return _context.Vaccines.Any(e => e.Id == id);
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
+
+
     }
 }
+

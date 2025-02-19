@@ -35,8 +35,8 @@ namespace CVSTS_FE.Pages.VaccineManage
             string jwt = HttpContext.Session.GetString("JWToken");
             if (string.IsNullOrEmpty(jwt))
             {
-                // Handle the case where the JWT isn't available (e.g., redirect to login)
-                return Redirect("/Login"); // Or appropriate action
+
+                return Redirect("/Login");
             }
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
