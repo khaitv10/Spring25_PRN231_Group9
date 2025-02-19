@@ -31,7 +31,7 @@ namespace CVSTS_FE.Pages.VaccineManage
             }
             var client = CreateAuthorizedClient();
 
-            var response = await APIHelper.GetAsJsonAsync<VaccineInfoResponseModel>(client, $"/api/Vaccine/stock/{id}");
+            var response = await APIHelper.GetAsJsonAsync<VaccineInfoResponseModel>(client, $"/api/Vaccine/{id}");
 
             if (response != null)
             {
@@ -59,11 +59,11 @@ namespace CVSTS_FE.Pages.VaccineManage
             
             var id = Vaccine.Id;
             var client = CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync($"/api/stock/{id}", Vaccine);
+            var response = await client.PutAsJsonAsync($"/api/vaccine/{id}", Vaccine);
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error updating stock.");
+                ModelState.AddModelError(string.Empty, "Error updating vaccine.");
                 return Page();
             }
 

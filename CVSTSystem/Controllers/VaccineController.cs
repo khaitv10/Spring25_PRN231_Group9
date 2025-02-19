@@ -75,7 +75,7 @@ namespace CVSTSystem.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> UpdateVaccine(int id, Vaccine vaccine)
+        public async Task<IActionResult> UpdateVaccine(int id, VaccineInfoResponseModel vaccine)
         {
             if (id != vaccine.Id)
             {
