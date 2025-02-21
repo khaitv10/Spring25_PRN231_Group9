@@ -38,7 +38,7 @@ namespace CVSTSystem.Controllers
             return Ok(response);
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("/delete/{id}")]
         public async Task<IActionResult> UpdateServiceStatus(int id)
         {
             await _serviceService.UpateServiceStatus(id);
