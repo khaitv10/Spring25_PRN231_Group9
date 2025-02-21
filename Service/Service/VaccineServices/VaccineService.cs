@@ -51,8 +51,9 @@ namespace Service.Service.VaccineServices
 
         }
 
-        public async Task UpdateVaccine(Vaccine vaccine)
+        public async Task UpdateVaccine(VaccineInfoResponseModel update)
         {
+            var vaccine = _mapper.Map<Vaccine>(update);
             await _vaccineRepo.UpdateVaccine(vaccine);
 
         }

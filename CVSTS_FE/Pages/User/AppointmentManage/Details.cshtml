@@ -1,0 +1,91 @@
+﻿@page
+@model CVSTS_FE.Pages.User.AppointmentManage.DetailsModel
+
+@{
+    ViewData["Title"] = "Appointment Details";
+    Layout = "~/Pages/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="fw-bold">Appointment Details</h2>
+        </div>
+        <div class="card-body">
+            <h4 class="text-muted mb-3">General Information</h4>
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">Appointment Date:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.AppointmentDate)</dd>
+
+                <dt class="col-sm-4 fw-bold">Type:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.Type)</dd>
+
+                <dt class="col-sm-4 fw-bold">Total Price:</dt>
+                <dd class="col-sm-8 text-success fw-bold">$@Html.DisplayFor(model => model.Appointment.TotalPrice)</dd>
+
+                <dt class="col-sm-4 fw-bold">Status:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge @(Model.Appointment.Status == "Confirmed" ? "bg-success" : "bg-warning")">
+                        @Html.DisplayFor(model => model.Appointment.Status)
+                    </span>
+                </dd>
+
+                <dt class="col-sm-4 fw-bold">Payment Status:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge @(Model.Appointment.PaymentStatus == "Paid" ? "bg-primary" : "bg-danger")">
+                        @Html.DisplayFor(model => model.Appointment.PaymentStatus)
+                    </span>
+                </dd>
+            </dl>
+
+            <h4 class="text-muted mt-4 mb-3">Child Information</h4>
+            <dl class="row">
+                <dt class="col-sm-4 fw-bold">Full Name:</dt>
+                <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.Child.FullName)</dd>
+
+                <dt class="col-sm-4 fw-bold">Gender:</dt>
+                <dd class="col-sm-8">
+                    @(Model.Appointment.Child.Gender == "F" ? "Female" : Model.Appointment.Child.Gender == "M" ? "Male" : "Other")
+                </dd>
+            </dl>
+
+            <h4 class="text-muted mt-4 mb-3">Services</h4>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle shadow-sm rounded">
+                    <thead class="table-dark">
+                        <tr class="text-center">
+                            <th>Service Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Total Doses</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var service in Model.Appointment.Services)
+                        {
+                            <tr class="text-center">
+                                <td>@Html.DisplayFor(modelItem => service.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => service.Description)</td>
+                                <td class="text-success fw-bold">$@Html.DisplayFor(modelItem => service.Price)</td>
+                                <td>@Html.DisplayFor(modelItem => service.TotalDoses)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer text-center">
+            <a class="btn btn-outline-warning btn-lg me-3" asp-page="./Edit" asp-route-id="@Model.Appointment.Id">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+}
