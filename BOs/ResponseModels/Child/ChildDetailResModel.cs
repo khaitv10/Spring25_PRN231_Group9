@@ -33,6 +33,7 @@ namespace BOs.ResponseModels.Child
         public int Id { get; set; }
         public DateOnly DoseDate { get; set; }
         public int? DoseNumber { get; set; }
+        public string Status { get; set; }
         public string VaccineName { get; set; } = null!;
         public string Description { get; set; } = null!;
 
