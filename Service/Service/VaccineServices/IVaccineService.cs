@@ -15,7 +15,7 @@ namespace Service.Service.VaccineServices
         Task<VaccineInfoResponseModel> GetVaccineById(int id);
         Task<VaccineInfoResponseModel> GetVaccineByName(string name);
         Task AddVaccine(VaccineCreateModel vaccine);
-        Task UpdateVaccine(Vaccine vaccine);
+        Task UpdateVaccine(VaccineInfoResponseModel vaccine);
         Task DeleteVaccine(int id);
         Task<bool> IsVaccineNameExists(string name);
         Task<List<VaccineInfoResponseModel>> GetVaccinesByAgeRange(int minAge, int maxAge);

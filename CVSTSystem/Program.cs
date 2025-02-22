@@ -3,11 +3,14 @@ using BOs.RequestModels.Child;
 using BOs.ResponseModels.Child;
 using BOs.ResponseModels.DoseRecord;
 using BOs.ResponseModels.User;
+using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.VaccineStock;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
+using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
 using Repository.Repositories.DoseRecordRepositories;
@@ -19,6 +22,8 @@ using Repository.Repositories.VaccineStockRepositories;
 using Repository.ServiceVaccine;
 using Repository.ServiceVaccineRepository;
 using Service.Mapper;
+using Service.Service.AppointmentService;
+using Service.Service.AppointmentServices;
 using Service.Service.ChildServices;
 using Service.Service.DoseRecordServices;
 using Service.Service.DoseScheduleServices;
@@ -45,7 +50,11 @@ modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
 modelBuilder.EntitySet<DoseRecordResponseModel>("records");
 modelBuilder.EntityType<DoseRecordResponseModel>().HasKey(c => c.Id);
 
+modelBuilder.EntitySet<VaccineInfoResponseModel>("vaccine");
+modelBuilder.EntityType<VaccineInfoResponseModel>().HasKey(n => n.Id);
 
+modelBuilder.EntitySet<VaccineStockResponseModel>("vaccine-stock");
+modelBuilder.EntityType<VaccineStockResponseModel>().HasKey(c => c.Id);
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
@@ -123,6 +132,8 @@ builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
 builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+
 
 
 
@@ -136,6 +147,7 @@ builder.Services.AddScoped<IDoseRecordService, DoseRecordService>();
 builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
 builder.Services.AddScoped<IVaccineService, VaccineService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
+builder.Services.AddScoped<IAppointmentServices, AppointmentServices>();
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>

@@ -17,7 +17,7 @@ namespace CVSTSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VaccineController : ODataController
+    public class VaccineController : ControllerBase
     {
         private readonly IVaccineService _vaccineService;
         private readonly IVaccineStockService _vaccineStockService;
@@ -75,7 +75,7 @@ namespace CVSTSystem.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Staff")]
-        public async Task<IActionResult> UpdateVaccine(int id, Vaccine vaccine)
+        public async Task<IActionResult> UpdateVaccine(int id, VaccineInfoResponseModel vaccine)
         {
             if (id != vaccine.Id)
             {
