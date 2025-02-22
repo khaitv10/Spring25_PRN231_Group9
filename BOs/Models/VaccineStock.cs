@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BOs.Models;
 
@@ -8,7 +9,7 @@ public partial class VaccineStock
     public int Id { get; set; }
 
     public int Quantity { get; set; }
-
+    [DataType(DataType.Date)]
     public DateOnly ExpiryDate { get; set; }
 
     public DateTime? UpdateAt { get; set; }

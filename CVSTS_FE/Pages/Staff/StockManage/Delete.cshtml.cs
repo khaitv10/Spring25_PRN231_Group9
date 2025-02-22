@@ -6,20 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using BOs.ResponseModels.VaccineStock;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace CVSTS_FE.Pages.Staff.StockManage
 {
     public class DeleteModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public DeleteModel(BOs.Models.CvstsystemDbContext context)
+        public DeleteModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         [BindProperty]
-        public VaccineStock VaccineStock { get; set; } = default!;
+        public VaccineStockResponseModel VaccineStock { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -27,16 +30,11 @@ namespace CVSTS_FE.Pages.Staff.StockManage
             {
                 return NotFound();
             }
-
-            var vaccinestock = await _context.VaccineStocks.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (vaccinestock == null)
+            var client = CreateAuthorizedClient();
+            var response = await APIHelper.GetAsJsonAsync<VaccineStockResponseModel>(client, $"/api/vaccine/stock/{id}");
+            if(response != null)
             {
-                return NotFound();
-            }
-            else
-            {
-                VaccineStock = vaccinestock;
+                VaccineStock = response;
             }
             return Page();
         }
@@ -47,16 +45,26 @@ namespace CVSTS_FE.Pages.Staff.StockManage
             {
                 return NotFound();
             }
-
-            var vaccinestock = await _context.VaccineStocks.FindAsync(id);
-            if (vaccinestock != null)
+            var client = CreateAuthorizedClient();
+            var response = await APIHelper.DeleteAsync(client, $"/api/vaccine/stock/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                VaccineStock = vaccinestock;
-                _context.VaccineStocks.Remove(VaccineStock);
-                await _context.SaveChangesAsync();
+                ModelState.AddModelError(string.Empty, "Delete unsuccessfully");
+                return Page();
+            }
+            return RedirectToPage("./Index");
+        }
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 
-            return RedirectToPage("./Index");
+            return client;
         }
     }
 }

@@ -6,22 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
+using System.Net.Http.Headers;
+using BOs.ResponseModels.Vaccine;
 
 namespace CVSTS_FE.Pages.Staff.StockManage
 {
     public class CreateModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreateModel(BOs.Models.CvstsystemDbContext context)
+        public CreateModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
-
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-        ViewData["VaccineId"] = new SelectList(_context.Vaccines, "Id", "Name");
-            return Page();
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            if (response != null)
+            {
+                ViewData["VaccineId"] = new SelectList(response, "Id", "Name");
+                return Page();
+            }
+            return RedirectToPage("./Index");
         }
 
         [BindProperty]
@@ -30,15 +36,27 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+
+            var client = CreateAuthorizedClient();
+            var response = await APIHelper.PostAsJson<VaccineStock>(client, "/api/vaccine/stock", VaccineStock);
+            if (!response.IsSuccessStatusCode)
             {
+                ModelState.AddModelError(string.Empty, "Stock couldn't be added");
                 return Page();
             }
-
-            _context.VaccineStocks.Add(VaccineStock);
-            await _context.SaveChangesAsync();
-
+            
             return RedirectToPage("./Index");
+        }
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return client;
         }
     }
 }
