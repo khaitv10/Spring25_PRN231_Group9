@@ -17,7 +17,7 @@ namespace CVSTSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VaccineController : ODataController
+    public class VaccineController : ControllerBase
     {
         private readonly IVaccineService _vaccineService;
         private readonly IVaccineStockService _vaccineStockService;

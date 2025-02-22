@@ -9,11 +9,12 @@ namespace BOs.ResponseModels.VaccineStock
 {
     public class VaccineStockResponseModel
     {
+        public int Id { get; set; }
         public int Quantity { get; set; }
 
         public DateOnly ExpiryDate { get; set; }
 
         public DateTime? UpdateAt { get; set; }
-        public VaccineInfoResponseModel Vaccine { get; set; } = null!;
+        public VaccineShortInfoResponseModel Vaccine { get; set; } = null!;
     }
 }

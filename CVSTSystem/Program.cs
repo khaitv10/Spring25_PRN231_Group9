@@ -2,6 +2,8 @@
 using BOs.RequestModels.Child;
 using BOs.ResponseModels.Child;
 using BOs.ResponseModels.User;
+using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.VaccineStock;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
@@ -40,7 +42,11 @@ modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 modelBuilder.EntitySet<ChildResponseModel>("children");
 modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
 
+modelBuilder.EntitySet<VaccineInfoResponseModel>("vaccine");
+modelBuilder.EntityType<VaccineInfoResponseModel>().HasKey(n => n.Id);
 
+modelBuilder.EntitySet<VaccineStockResponseModel>("vaccine-stock");
+modelBuilder.EntityType<VaccineStockResponseModel>().HasKey(c => c.Id);
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
