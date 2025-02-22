@@ -17,5 +17,8 @@ namespace BOs.ResponseModels.DoseSchedule
         public string? Status { get; set; }
 
         public DateTime? CreateAt { get; set; }
+
+        public string VaccineName { get; set; } = null!;
+        public string Description { get; set; } = null!;
     }
 }

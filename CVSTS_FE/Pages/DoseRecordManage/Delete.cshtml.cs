@@ -6,17 +6,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class DeleteModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public DeleteModel(BOs.Models.CvstsystemDbContext context)
+        public DeleteModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
+
 
         [BindProperty]
         public DoseRecord DoseRecord { get; set; } = default!;
@@ -25,38 +27,54 @@ namespace CVSTS_FE.Pages.DoseRecordManage
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest("Invalid dose record id");
             }
 
-            var doserecord = await _context.DoseRecords.FirstOrDefaultAsync(m => m.Id == id);
+            var client = CreateAuthorizedClient();
+            var response =await client.GetAsync($"/info/{id}");
 
-            if (doserecord == null)
+            if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
-            else
-            {
-                DoseRecord = doserecord;
-            }
+
+            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecord>();
+
+            if (DoseRecord == null) { return NotFound(); };
+           
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
+        public async Task<IActionResult> OnPostAsync()
         {
-            if (id == null)
+            if (DoseRecord == null)
             {
                 return NotFound();
             }
 
-            var doserecord = await _context.DoseRecords.FindAsync(id);
-            if (doserecord != null)
+            var id = DoseRecord.Id;
+            var client = CreateAuthorizedClient();
+            var response = await client.DeleteAsync($"/api/dose-record/{id}");
+            if (!response.IsSuccessStatusCode)
             {
-                DoseRecord = doserecord;
-                _context.DoseRecords.Remove(DoseRecord);
-                await _context.SaveChangesAsync();
+                ModelState.AddModelError(string.Empty, "Error deleting dose record");
             }
 
             return RedirectToPage("./Index");
         }
+
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
+        }
+
     }
 }

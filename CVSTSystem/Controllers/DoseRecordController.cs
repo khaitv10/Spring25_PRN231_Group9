@@ -8,7 +8,7 @@ using Service.Service.DoseRecordServices;
 
 namespace CVSTSystem.Controllers
 {
-    [Route("api/doseRecord")]
+    [Route("api/dose-record")]
     [ApiController]
     public class DoseRecordController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet]
-        [Route("dose_records")]
+        [Route("dose-records")]
         public async Task<ActionResult<List<DoseRecordResponseModel>>> GetAllDoseRecrd()
         {
             var doseRecords = await _recordService.GetAllDoseRecord();
@@ -28,7 +28,7 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("info/{id}")]
         public async Task<ActionResult<DoseRecordResponseModel>> GetDoseRecord(int id)
         {
             var doseRecord = await _recordService.GetByDoseRecordId(id);
@@ -59,7 +59,6 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
         public async Task<ActionResult<DoseRecordCreateModel>> CreateDoseRecord(DoseRecordCreateModel doseRecord) 
         {
             if(!ModelState.IsValid)

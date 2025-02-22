@@ -17,27 +17,23 @@
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].DoseDate)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].DoseNumber)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].CreateAt)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].Child)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].Service)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecord[0].Vaccine)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].DoseDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].DoseNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].CreateAt)</th>
+                    
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.DoseRecord)
+                @foreach (var item in Model.DoseRecords)
                 {
                     <tr>
                         <td>@Html.DisplayFor(modelItem => item.DoseDate)</td>
                         <td>@Html.DisplayFor(modelItem => item.DoseNumber)</td>
                         <td>@Html.DisplayFor(modelItem => item.Status)</td>
                         <td>@Html.DisplayFor(modelItem => item.CreateAt)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Child.FullName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Service.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Vaccine.Name)</td>
+                        
                         <td>
                             <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
                                 <i class="bi bi-pencil-square"></i> Edit

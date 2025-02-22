@@ -1,6 +1,7 @@
 ﻿using BOs.Models;
 using BOs.RequestModels.Child;
 using BOs.ResponseModels.Child;
+using BOs.ResponseModels.DoseRecord;
 using BOs.ResponseModels.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
@@ -40,6 +41,9 @@ modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 
 modelBuilder.EntitySet<ChildResponseModel>("children");
 modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
+
+modelBuilder.EntitySet<DoseRecordResponseModel>("records");
+modelBuilder.EntityType<DoseRecordResponseModel>().HasKey(c => c.Id);
 
 
 
@@ -115,7 +119,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IDoseScheduleRepository, DoseScheduleRepository>();
 builder.Services.AddScoped<IDoseRecordRepository, DoseReordRepository>();
-
 builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
@@ -130,7 +133,6 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IChildService, ChildService>();
 builder.Services.AddScoped<IDoseScheduleService, DoseScheduleService>();
 builder.Services.AddScoped<IDoseRecordService, DoseRecordService>();
-
 builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
 builder.Services.AddScoped<IVaccineService, VaccineService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();

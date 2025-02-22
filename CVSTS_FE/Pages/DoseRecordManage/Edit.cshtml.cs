@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class EditModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public EditModel(BOs.Models.CvstsystemDbContext context)
+        public EditModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         [BindProperty]
@@ -24,56 +25,70 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == 0)
+            {
+                return BadRequest("Invalid child ID.");
+            }
+
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/info/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            var doserecord =  await _context.DoseRecords.FirstOrDefaultAsync(m => m.Id == id);
-            if (doserecord == null)
+            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecord>();
+
+            if (DoseRecord == null)
             {
                 return NotFound();
             }
-            DoseRecord = doserecord;
-           ViewData["ChildId"] = new SelectList(_context.Children, "Id", "FullName");
-           ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name");
-           ViewData["VaccineId"] = new SelectList(_context.Vaccines, "Id", "Name");
+
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+           if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            _context.Attach(DoseRecord).State = EntityState.Modified;
-
-            try
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
-                await _context.SaveChangesAsync();
+                return RedirectToPage("/403Page");
             }
-            catch (DbUpdateConcurrencyException)
+
+              
+            var id = DoseRecord.Id;
+            var client = CreateAuthorizedClient();
+            var response = await client.PutAsJsonAsync($"/api/dose-record/{id}", DoseRecord);
+
+            if (!response.IsSuccessStatusCode)
             {
-                if (!DoseRecordExists(DoseRecord.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                ModelState.AddModelError(string.Empty, "Error updating dose record.");
+                return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool DoseRecordExists(int id)
+        
+
+        private HttpClient CreateAuthorizedClient()
         {
-            return _context.DoseRecords.Any(e => e.Id == id);
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
     }
 }

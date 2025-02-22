@@ -6,26 +6,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using BOs.ResponseModels.Child;
+using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.Vaccine;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class IndexModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public IndexModel(BOs.Models.CvstsystemDbContext context)
+        public IndexModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
-        public IList<DoseRecord> DoseRecord { get;set; } = default!;
+        public IList<DoseRecordResponseModel> DoseRecords { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
-            DoseRecord = await _context.DoseRecords
-                .Include(d => d.Child)
-                .Include(d => d.Service)
-                .Include(d => d.Vaccine).ToListAsync();
+            var client = CreateAuthorizedClient();
+            var response = await APIHelper.GetAsJsonAsync<List<DoseRecordResponseModel>>(client, "/api/dose-record");
+
+            if (response != null)
+            {
+                DoseRecords = response;
+                return Page();
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error occurred while logging in");
+                return Redirect("/Login");
+            }
+        }
+
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
     }
 }

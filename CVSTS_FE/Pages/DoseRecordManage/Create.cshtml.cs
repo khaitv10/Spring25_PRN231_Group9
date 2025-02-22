@@ -6,41 +6,56 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
+using BOs.RequestModels.DoseRecord;
+using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
     public class CreateModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public CreateModel(BOs.Models.CvstsystemDbContext context)
+        public CreateModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         public IActionResult OnGet()
         {
-        ViewData["ChildId"] = new SelectList(_context.Children, "Id", "FullName");
-        ViewData["ServiceId"] = new SelectList(_context.Services, "Id", "Name");
-        ViewData["VaccineId"] = new SelectList(_context.Vaccines, "Id", "Name");
             return Page();
         }
 
         [BindProperty]
-        public DoseRecord DoseRecord { get; set; } = default!;
+        public DoseRecordCreateModel DoseRecord { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-
-            _context.DoseRecords.Add(DoseRecord);
-            await _context.SaveChangesAsync();
+            var client = CreateAuthorizedClient();
+            var response = await client.PostAsJsonAsync<DoseRecordCreateModel>($"/api/dose-record", DoseRecord);
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Error create dose record");
+            }
 
             return RedirectToPage("./Index");
+        }
+
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
     }
 }
