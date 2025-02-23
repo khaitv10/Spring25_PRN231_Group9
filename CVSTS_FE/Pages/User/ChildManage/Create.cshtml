@@ -1,0 +1,64 @@
+﻿@page
+@model CVSTS_FE.Pages.User.ChildManage.CreateModel
+
+@{
+    ViewData["Title"] = "Create Child Profile";
+    Layout = "~/Pages/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white text-center">
+            <h3><i class="fas fa-child"></i> Create Child Profile</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" class="needs-validation" >
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Child.FullName"><i class="fas fa-user"></i> Full Name</label>
+                    <input asp-for="Child.FullName" class="form-control" autocomplete="off" placeholder="Enter child's full name" />
+                    <span asp-validation-for="Child.FullName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Child.Dob"><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+                    <input asp-for="Child.Dob" type="date" class="form-control" value="@Model.Child.Dob.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="Child.Dob" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Child.Gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                    <select asp-for="Child.Gender" class="form-control">
+                        <option value="">Select Gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                    </select>
+                    <span asp-validation-for="Child.Gender" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Child.Note"><i class="fas fa-sticky-note"></i> Additional Notes</label>
+                    <textarea asp-for="Child.Note" class="form-control" placeholder="Enter any additional notes (optional)" rows="3"></textarea>
+                    <span asp-validation-for="Child.Note" class="text-danger"></span>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a asp-page="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check-circle"></i> Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
