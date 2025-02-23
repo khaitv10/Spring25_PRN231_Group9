@@ -39,9 +39,25 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-           return Page();
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
+            var client = CreateAuthorizedClient();
+            var response = await client.PostAsJsonAsync("/api/Service", Service);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToPage("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while creating the service.");
+                return Page();
+            }
         }
+
 
         private HttpClient CreateAuthorizedClient()
         {
