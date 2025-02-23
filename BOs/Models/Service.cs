@@ -23,8 +23,6 @@ public partial class Service
 
     public virtual ICollection<AppointmentService> AppointmentServices { get; set; } = new List<AppointmentService>();
 
-    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-
     public virtual ICollection<DoseRecord> DoseRecords { get; set; } = new List<DoseRecord>();
 
     public virtual ICollection<DoseSchedule> DoseSchedules { get; set; } = new List<DoseSchedule>();

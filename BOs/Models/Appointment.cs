@@ -17,8 +17,6 @@ public partial class Appointment
 
     public string? PaymentStatus { get; set; }
 
-    public int? ServiceId { get; set; }
-
     public int? ParentId { get; set; }
 
     public int? ChildId { get; set; }
@@ -32,6 +30,4 @@ public partial class Appointment
     public virtual User? Parent { get; set; }
 
     public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
-
-    public virtual Service? Service { get; set; }
 }

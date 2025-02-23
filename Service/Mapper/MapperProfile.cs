@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using BOs.Models;
 using BOs.RequestModels.Child;
+using BOs.RequestModels.DoseRecord;
+using BOs.RequestModels.DoseSchedule;
 using BOs.RequestModels.User;
 using BOs.RequestModels.Vaccine;
 using BOs.RequestModels.VaccineStock;
 using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
+using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.DoseSchedule;
 using BOs.ResponseModels.User;
 using BOs.ResponseModels.Vaccine;
 using BOs.ResponseModels.VaccineStock;
