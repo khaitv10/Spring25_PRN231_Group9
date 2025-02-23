@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using BOs.Models;
 using BOs.RequestModels.Child;
-using BOs.RequestModels.Service;
+using BOs.RequestModels.DoseRecord;
+using BOs.RequestModels.DoseSchedule;
 using BOs.RequestModels.User;
 using BOs.RequestModels.Vaccine;
 using BOs.RequestModels.VaccineStock;
 using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
-using BOs.ResponseModels.Service;
+using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.DoseSchedule;
 using BOs.ResponseModels.User;
 using BOs.ResponseModels.Vaccine;
 using BOs.ResponseModels.VaccineStock;
@@ -34,52 +36,38 @@ namespace Service.Mapper
             .ForMember(dest => dest.DoseSchedules, opt => opt.MapFrom(src => src.DoseSchedules.ToList()));
 
             CreateMap<ChildCreateModel, Child>()
-                    .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Dob)))
-                    .ForMember(dest => dest.ParentId, opt => opt.Ignore());
+                .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Dob)))
+                .ForMember(dest => dest.ParentId, opt => opt.Ignore());
             CreateMap<ChildUpdateModel, Child>()
                 .ForMember(dest => dest.Dob, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.Dob)))
                 .ForMember(dest => dest.ParentId, opt => opt.Ignore());
 
 
-            //Vaccine
-            CreateMap<VaccineStock, VaccineStockResponseModel>();
-            CreateMap<VaccineStockCreateModel, Vaccine>();
-            CreateMap<VaccineStockUpdateModel, Vaccine>();
-            CreateMap<Vaccine, VaccineInfoResponseModel>();
-            CreateMap<VaccineCreateModel, Vaccine>();
-            CreateMap<VaccineInfoResponseModel, Vaccine>();
-            //Service
-            CreateMap<BOs.Models.Service, ServiceResponseModel>()
-                .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
-                    .Select(sv => new ServiceVaccineResponseModel
-                    {
-                        NumberOfDose = sv.NumberOfDose,
-                        VaccineInfo = new VaccineInfoResponseModel
-                        {
-                            Id = sv.Vaccine.Id,
-                            Name = sv.Vaccine.Name,
-                            Description = sv.Vaccine.Description,
-                            Origin = sv.Vaccine.Origin,
-                            MinAge = sv.Vaccine.MinAge,
-                            MaxAge = sv.Vaccine.MaxAge,
-                            Status = sv.Vaccine.Status
-                        }
-                    }).ToList()));
-
-            CreateMap<ServiceCreateModel, BOs.Models.Service>();
-
-
             //User
             CreateMap<User, UserInfoResponseModel>();
-
             CreateMap<StaffCreateModel, User>();
 
             // DoseRecord 
-            CreateMap<DoseRecord, DoseRecordRes>()
-            .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
+            CreateMap<DoseRecordCreateModel, DoseRecord>()
+                .ForMember(dest => dest.DoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DoseDate)));
+
+
+            CreateMap<DoseRecordUpdateModel, DoseRecord>()
+                .ForMember(dest => dest.DoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.DoseDate)));
+
+
+            CreateMap<DoseRecord, DoseRecordResponseModel>()
+                .ForMember(dest => dest.DoseDate, opt => opt.MapFrom(src => src.DoseDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? ""))
+                .ForMember(dest => dest.DoseNumber, opt => opt.MapFrom(src => src.DoseNumber))
+                .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
+
 
             // DoseSchedule 
+            CreateMap<DoseSchedule, DoseScheduleResponseModel>();
+            CreateMap<DoseScheduleCreateModel, DoseSchedule>();
+            CreateMap<DoseScheduleUpdateModel, DoseSchedule>();
             CreateMap<DoseSchedule, DoseSchedulesRes>()
             .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
@@ -109,6 +97,7 @@ namespace Service.Mapper
                         }).ToList()
                     : new List<ServiceResponse>() 
                 ));
+
 
 
 

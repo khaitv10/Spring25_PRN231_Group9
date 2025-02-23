@@ -1,7 +1,10 @@
 ﻿using BOs.Models;
 using BOs.RequestModels.Child;
 using BOs.ResponseModels.Child;
+using BOs.ResponseModels.DoseRecord;
 using BOs.ResponseModels.User;
+using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.VaccineStock;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +13,8 @@ using Microsoft.OpenApi.Models;
 using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
+using Repository.Repositories.DoseRecordRepositories;
+using Repository.Repositories.DoseScheduleRepositories;
 using Repository.Repositories.ServiceRepository;
 using Repository.Repositories.UserRepositories;
 using Repository.Repositories.VaccineRepositories;
@@ -20,6 +25,8 @@ using Service.Mapper;
 using Service.Service.AppointmentService;
 using Service.Service.AppointmentServices;
 using Service.Service.ChildServices;
+using Service.Service.DoseRecordServices;
+using Service.Service.DoseScheduleServices;
 using Service.Service.ServiceService;
 using Service.Service.VaccineServices;
 using Service.Service.VaccineStockServices;
@@ -40,7 +47,14 @@ modelBuilder.EntityType<UserInfoResponseModel>().HasKey(n => n.Id);
 modelBuilder.EntitySet<ChildResponseModel>("children");
 modelBuilder.EntityType<ChildResponseModel>().HasKey(c => c.Id);
 
+modelBuilder.EntitySet<DoseRecordResponseModel>("records");
+modelBuilder.EntityType<DoseRecordResponseModel>().HasKey(c => c.Id);
 
+modelBuilder.EntitySet<VaccineInfoResponseModel>("vaccine");
+modelBuilder.EntityType<VaccineInfoResponseModel>().HasKey(n => n.Id);
+
+modelBuilder.EntitySet<VaccineStockResponseModel>("vaccine-stock");
+modelBuilder.EntityType<VaccineStockResponseModel>().HasKey(c => c.Id);
 
 // Thêm cấu hình OData
 builder.Services.AddControllers().AddOData(options =>
@@ -112,6 +126,8 @@ builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
+builder.Services.AddScoped<IDoseScheduleRepository, DoseScheduleRepository>();
+builder.Services.AddScoped<IDoseRecordRepository, DoseReordRepository>();
 builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
@@ -126,6 +142,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IChildService, ChildService>();
+builder.Services.AddScoped<IDoseScheduleService, DoseScheduleService>();
+builder.Services.AddScoped<IDoseRecordService, DoseRecordService>();
 builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
 builder.Services.AddScoped<IVaccineService, VaccineService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
