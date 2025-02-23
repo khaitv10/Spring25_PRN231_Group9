@@ -1,4 +1,4 @@
-﻿@* @page
+﻿@page
 @model CVSTS_FE.Pages.Staff.ServiceManage.CreateModel
 
 @{
@@ -30,6 +30,10 @@
                 <span asp-validation-for="Service.Price" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Service.Vaccines" class="control-label"></label>
+                <select asp-for="Service.Vaccines" class="form-control" asp-items="ViewBag.Vaccine"></select>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
@@ -43,4 +47,3 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
- *@

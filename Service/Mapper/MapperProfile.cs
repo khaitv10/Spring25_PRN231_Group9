@@ -3,6 +3,7 @@ using BOs.Models;
 using BOs.RequestModels.Child;
 using BOs.RequestModels.DoseRecord;
 using BOs.RequestModels.DoseSchedule;
+using BOs.RequestModels.Service;
 using BOs.RequestModels.User;
 using BOs.RequestModels.Vaccine;
 using BOs.RequestModels.VaccineStock;
@@ -10,6 +11,7 @@ using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
 using BOs.ResponseModels.DoseRecord;
 using BOs.ResponseModels.DoseSchedule;
+using BOs.ResponseModels.Service;
 using BOs.ResponseModels.User;
 using BOs.ResponseModels.Vaccine;
 using BOs.ResponseModels.VaccineStock;
@@ -98,8 +100,32 @@ namespace Service.Mapper
                     : new List<ServiceResponse>() 
                 ));
 
-
-
+            //Service
+            CreateMap<BOs.Models.Service, ServiceResponseModel>()
+        .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
+            .Select(sv => new ServiceVaccineResponseModel
+            {
+                NumberOfDose = sv.NumberOfDose,
+                VaccineInfo = new VaccineInfoResponseModel
+                {
+                    Id = sv.Vaccine.Id,
+                    Name = sv.Vaccine.Name,
+                    Description = sv.Vaccine.Description,
+                    Origin = sv.Vaccine.Origin,
+                    MinAge = sv.Vaccine.MinAge,
+                    MaxAge = sv.Vaccine.MaxAge,
+                    Status = sv.Vaccine.Status
+                }
+            }).ToList()));
+            CreateMap<ServiceCreateModel, BOs.Models.Service>();
+            //Vaccine
+            CreateMap<VaccineStock, VaccineStockResponseModel>();
+            CreateMap<VaccineStockCreateModel, Vaccine>();
+            CreateMap<VaccineStockUpdateModel, Vaccine>();
+            CreateMap<Vaccine, VaccineInfoResponseModel>();
+            CreateMap<VaccineCreateModel, Vaccine>();
+            CreateMap<VaccineInfoResponseModel, Vaccine>();
+            CreateMap<Vaccine, VaccineShortInfoResponseModel>();
 
         }
 
