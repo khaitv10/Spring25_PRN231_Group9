@@ -7,6 +7,7 @@
 //using Microsoft.AspNetCore.Mvc.Rendering;
 //using BOs.Models;
 //using BOs.RequestModels.Service;
+//using System.Net.Http.Headers;
 
 //namespace CVSTS_FE.Pages.Staff.ServiceManage
 //{
@@ -22,6 +23,7 @@
 
 //        public IActionResult OnGet()
 //        {
+//            var client = CreateAuthorizedClient();
 //            return Page();
 //        }
 
@@ -42,6 +44,20 @@
 //                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 //            }
 
+//        }
+
+//        private HttpClient CreateAuthorizedClient()
+//        {
+//            var client = _httpClientFactory.CreateClient("ApiClient");
+//            var token = HttpContext.Session.GetString("JWToken");
+
+
+//            if (!string.IsNullOrEmpty(token))
+//            {
+//                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+//            }
+
+//            return client;
 //        }
 //    }
 //}
