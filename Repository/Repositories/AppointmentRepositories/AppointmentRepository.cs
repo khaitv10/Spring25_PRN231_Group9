@@ -21,9 +21,13 @@ namespace Repository.Repositories.AppointmentRepositories
 
         public async Task<List<Appointment>> GetAllByParentId(int ParentId)
         {
-            var list = await Get(b => b.ParentId == ParentId);
+            var list = await Get(
+                filter: b => b.ParentId == ParentId,
+                includeProperties: "Child" 
+            );
             return list.ToList();
         }
+
 
         public async Task<Appointment> GetById(int id)
         {
