@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using BOs.Models;
+using BOs.RequestModels.Appointment;
 using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
 using Repository.Repositories.AppointmentRepositories;
@@ -24,6 +26,29 @@ namespace Service.Service.AppointmentService
             _appointmentRepository = appointmentRepository;
             _mapper = mapper;
         }
+
+        public async Task CreateAppointment(AppointCreateModel request, int userId)
+        {
+            Appointment app = _mapper.Map<Appointment>(request);
+            app.ParentId = userId;
+            app.Status = "Scheduled";
+            app.PaymentStatus = "Unpaid";
+
+            if (request.SelectedServiceIds != null && request.SelectedServiceIds.Any())
+            {
+                app.AppointmentServices = request.SelectedServiceIds
+                    .Select(serviceId => new BOs.Models.AppointmentService
+                    {
+                        ServiceId = serviceId,
+                        Appointment = app,  
+                        Status = "Pending", 
+                        DoseDate = request.AppointmentDate
+                    }).ToList();
+            }
+
+            await _appointmentRepository.Insert(app);
+        }
+
         public async Task<List<AppointmentResModel>> GetAllAppointments()
         {
             var list = await _appointmentRepository.GetAllAppointments();
