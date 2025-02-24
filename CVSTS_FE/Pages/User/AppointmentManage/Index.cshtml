@@ -19,8 +19,8 @@
         <table class="table table-hover table-striped align-middle shadow-lg rounded overflow-hidden">
             <thead class="table-dark">
                 <tr class="text-center">
+                    <th>@Html.DisplayNameFor(model => model.Appoints[0].Child)</th>
                     <th>@Html.DisplayNameFor(model => model.Appoints[0].AppointmentDate)</th>
-                    <th>@Html.DisplayNameFor(model => model.Appoints[0].Type)</th>
                     <th>@Html.DisplayNameFor(model => model.Appoints[0].TotalPrice)</th>
                     <th>@Html.DisplayNameFor(model => model.Appoints[0].Status)</th>
                     <th>@Html.DisplayNameFor(model => model.Appoints[0].PaymentStatus)</th>
@@ -31,8 +31,8 @@
                 @foreach (var item in Model.Appoints)
                 {
                     <tr class="text-center">
-                        <td>@Html.DisplayFor(modelItem => item.AppointmentDate)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                        <td>@(item.Child != null ? item.Child.FullName : "No Name")</td>
+                        <td>@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
                         <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
                         <td>
                             <span class="badge @(item.Status == "Confirmed" ? "bg-success" : "bg-warning")">

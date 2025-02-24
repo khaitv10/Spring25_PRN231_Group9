@@ -1,4 +1,5 @@
 ﻿using BOs.Models;
+using BOs.RequestModels.Appointment;
 using BOs.RequestModels.Child;
 using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
@@ -16,9 +17,10 @@ namespace Service.Service.AppointmentServices
         Task<AppointmentResModel> GetAppointmentDetail(int id);
         Task<List<AppointmentResModel>> GetAllAppointments();
         Task<List<AppointmentResModel>> GetAllByParentId(int id);
-        //Task CreateAppointment(AppointmentReqModel request, int userId, int serviceId);
+        Task CreateAppointment(AppointCreateModel request, int userId);
         //Task UpdateAppointment(int id, ChildUpdateModel request);
         //Task DeleteAppointment(int id);
 
     }
+
 }
