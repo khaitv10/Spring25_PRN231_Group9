@@ -1,4 +1,5 @@
-﻿using BOs.RequestModels.Child;
+﻿using BOs.RequestModels.Appointment;
+using BOs.RequestModels.Child;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Service.AppointmentServices;
@@ -40,6 +41,20 @@ namespace CVSTSystem.Controllers
             return Ok(response);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment([FromBody] AppointCreateModel request)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            if (userId == 0)
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            await _appService.CreateAppointment(request, userId);
+            return Ok("Create new appointment successfully");
+        }
+
+
+
     }
 }
