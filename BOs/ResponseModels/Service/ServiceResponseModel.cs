@@ -23,6 +23,7 @@ namespace BOs.ResponseModels.Service
         public DateTime? UpdateAt { get; set; }
 
         public bool? Status { get; set; }
+        public bool Status { get; set; }
         public List<ServiceVaccineResponseModel> Vaccine { get; set; }
     }
 }

@@ -93,11 +93,15 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToPage("Index");
+                ViewData["SuccessMessage"] = $"Service {id} updated successfully!";
+                return Page();
             }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the service.");
 
-            ModelState.AddModelError(string.Empty, "An error occurred while updating the service.");
-            return Page();
+                return Page();
+            }
         }
 
         private HttpClient CreateAuthorizedClient()

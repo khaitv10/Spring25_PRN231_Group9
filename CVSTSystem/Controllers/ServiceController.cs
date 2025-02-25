@@ -38,7 +38,8 @@ namespace CVSTSystem.Controllers
             return Ok(response);
         }
 
-        [HttpPut("/delete/{id}")]
+        [Authorize(Roles = "Staff")]
+        [HttpPut("delete/{id}")]
         public async Task<IActionResult> UpdateServiceStatus(int id)
         {
             await _serviceService.UpateServiceStatus(id);

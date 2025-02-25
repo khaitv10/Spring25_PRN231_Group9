@@ -49,6 +49,11 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
             if (response.IsSuccessStatusCode)
             {
+                if (response.IsSuccessStatusCode)
+                {
+                    ViewData["SuccessMessage"] = $"Service created successfully!";
+                    return Page();
+                }
                 return RedirectToPage("Index");
             }
             else
@@ -56,6 +61,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
                 ModelState.AddModelError(string.Empty, "An error occurred while creating the service.");
                 return Page();
             }
+
         }
 
 

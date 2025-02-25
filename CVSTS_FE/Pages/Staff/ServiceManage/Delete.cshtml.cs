@@ -1,62 +1,104 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.AspNetCore.Mvc.RazorPages;
-//using Microsoft.EntityFrameworkCore;
-//using BOs.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using BOs.Models;
+using BOs.ResponseModels.Service;
+using System.Net.Http.Headers;
 
-//namespace CVSTS_FE.Pages.Staff.ServiceManage
-//{
-//    public class DeleteModel : PageModel
-//    {
-//        private readonly BOs.Models.CvstsystemDbContext _context;
+namespace CVSTS_FE.Pages.Staff.ServiceManage
+{
+    public class DeleteModel : PageModel
+    {
+        private readonly IHttpClientFactory _httpClientFactory;
 
-//        public DeleteModel(BOs.Models.CvstsystemDbContext context)
-//        {
-//            _context = context;
-//        }
+        public DeleteModel(IHttpClientFactory httpClientFactory)
+        {
+            _httpClientFactory = httpClientFactory;
+        }
 
-//        [BindProperty]
-//        public Service Service { get; set; } = default!;
+        [BindProperty]
+        public ServiceResponseModel Service { get; set; } = default!;
 
-//        public async Task<IActionResult> OnGetAsync(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
+        public async Task<IActionResult> OnGetAsync(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-//            var service = await _context.Services.FirstOrDefaultAsync(m => m.Id == id);
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/api/Service/{id}");
 
-//            if (service == null)
-//            {
-//                return NotFound();
-//            }
-//            else
-//            {
-//                Service = service;
-//            }
-//            return Page();
-//        }
+            if (!response.IsSuccessStatusCode)
+            {
+                return NotFound();
+            }
 
-//        public async Task<IActionResult> OnPostAsync(int? id)
-//        {
-//            if (id == null)
-//            {
-//                return NotFound();
-//            }
+            Service = await response.Content.ReadFromJsonAsync<ServiceResponseModel>();
 
-//            var service = await _context.Services.FindAsync(id);
-//            if (service != null)
-//            {
-//                Service = service;
-//                _context.Services.Remove(Service);
-//                await _context.SaveChangesAsync();
-//            }
 
-//            return RedirectToPage("./Index");
-//        }
-//    }
-//}
+            if (Service == null)
+            {
+                return NotFound();
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            if (Service == null || id == null)
+            {
+                return NotFound();
+            }
+
+            var client = CreateAuthorizedClient();
+
+            // Send the update request to the API
+            var response = await client.PutAsJsonAsync($"/api/Service/delete/{id}", Service);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Error deleting service.");
+                return Page();
+            }
+
+            var updatedServiceResponse = await client.GetAsync($"/api/Service/{id}");
+
+            if (!updatedServiceResponse.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Error fetching updated service details.");
+                return Page();
+            }
+
+            Service = await updatedServiceResponse.Content.ReadFromJsonAsync<ServiceResponseModel>();
+
+            if (Service == null)
+            {
+                ModelState.AddModelError(string.Empty, "Failed to fetch updated service details.");
+                return Page();
+            }
+
+            ViewData["SuccessMessage"] = $"Service {id} updated successfully!";
+
+            return Page();
+        }
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
+        }
+    }
+}
