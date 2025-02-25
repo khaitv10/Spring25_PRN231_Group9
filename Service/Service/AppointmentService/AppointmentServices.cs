@@ -3,6 +3,8 @@ using BOs.Models;
 using BOs.RequestModels.Appointment;
 using BOs.ResponseModels.Appointment;
 using BOs.ResponseModels.Child;
+using BOs.ResponseModels.Service;
+using FFilms.Application.Shared.Response;
 using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.ChildRepositories;
 using Service.Service.AppointmentServices;
@@ -49,6 +51,53 @@ namespace Service.Service.AppointmentService
             await _appointmentRepository.Insert(app);
         }
 
+        public async Task<Result<Task>> DeleteAppointment(int appointId, int userId)
+        {
+            var app = await _appointmentRepository.GetDetailAppointment(appointId);
+            if (app == null)
+            {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "Appointment does not exist"
+                };
+            }
+            if (app.Parent.Id != userId) {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "You do not have right to delete this appointment"
+                };
+            }
+            if(app.Status == "Completed")
+            {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "You can not delete completed appointment"
+                };
+            }
+            app.Status = "Canceled";
+            try
+            {
+                await _appointmentRepository.Update(app);
+                return new Result<Task>
+                {
+                    Success = true,
+                    Message = "Update Appointment status successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "An exception: " + ex.Message
+                };
+            }
+
+        }
+
         public async Task<List<AppointmentResModel>> GetAllAppointments()
         {
             var list = await _appointmentRepository.GetAllAppointments();
@@ -65,6 +114,41 @@ namespace Service.Service.AppointmentService
         {
             var app = await _appointmentRepository.GetDetailAppointment(id);
             return _mapper.Map<AppointmentResModel>(app);
+        }
+
+        public Task<Result<AppointmentResModel>> UpdateAppointment(AppointUpdateModel request, int userId, int appointId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Result<Task>> UpdateAppointmentStatus(int appointId, string status)
+        {
+           var app = await _appointmentRepository.GetDetailAppointment(appointId);
+            if(app == null)
+            {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "Appointment does not exist"
+                };
+            }
+            app.Status = status;
+            try
+            {
+                await _appointmentRepository.Update(app);
+                return new Result<Task>
+                {
+                    Success = true,
+                    Message = "Update Appointment status successfully"
+                };
+            }
+            catch (Exception ex) {
+                return new Result<Task>
+                {
+                    Success = false,
+                    Message = "An exception: " + ex.Message
+                };
+            }
         }
     }
 }
