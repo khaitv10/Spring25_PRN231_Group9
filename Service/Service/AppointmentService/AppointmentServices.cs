@@ -69,7 +69,7 @@ namespace Service.Service.AppointmentService
                     Message = "Appointment does not exist"
                 };
             }
-            if (app.Parent.Id != userId) {
+            if (app.ParentId != userId) {
                 return new Result<Task>
                 {
                     Success = false,
@@ -84,6 +84,7 @@ namespace Service.Service.AppointmentService
                     Message = "You can not delete completed appointment"
                 };
             }
+            
             app.Status = "Canceled";
             try
             {
@@ -167,12 +168,24 @@ namespace Service.Service.AppointmentService
             }
             app.AppointmentDate = (DateTime)(request.AppointmentDate != null ? request.AppointmentDate : app.AppointmentDate);
             app.Type = "Vacciation";
-            app.TotalPrice = totalPrice;
+            
             app.ChildId = request.ChildId != null ? request.ChildId : app.ChildId;
-           
+            if (app.PaymentStatus == "Paid")
+            {
+                await _appointmentRepository.Update(app);
+                return new Result<AppointmentResModel>
+                {
+                    Success = true,
+                    Message = "Appointment Date updated successfully. You can not update services in paid appointment",
+                    Data = _mapper.Map<AppointmentResModel>(app)
+
+                };
+            }
             if (app.PaymentStatus != "Paid" || request.SelectedServiceIds.Count > 0) 
             {
                 var appServiceRes = await _appointmentServiceRepository.Get(x => x.AppointmentId == appointId);
+                app.TotalPrice = totalPrice;
+
                 appService = appServiceRes.ToList();
                 app.AppointmentServices = request.SelectedServiceIds
                   .Select(serviceId => new BOs.Models.AppointmentService

@@ -111,6 +111,7 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
                     AppointmentDate = appointment.AppointmentDate,
                     ChildId = appointment.Child.Id,
                     SelectedServiceIds = appointment.Services.Select(x => x.Id).ToList(),
+                    PaymentStatus = appointment.PaymentStatus
                 };
                 
 

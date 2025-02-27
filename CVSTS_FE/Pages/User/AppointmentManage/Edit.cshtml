@@ -9,8 +9,17 @@
 <div class="container mt-5">
     <div class="card shadow-lg rounded">
         <div class="card-header bg-primary text-white text-center">
-            <h2 class="fw-bold">Create New Appointment</h2>
+            <h2 class="fw-bold">Edit Appointment</h2>
         </div>
+        @if (Model.Appointment.PaymentStatus == "Paid")
+        {
+            <div class="alert alert-warning d-flex align-items-center shadow-sm border-0 rounded">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <div>
+                    <strong>Notice:</strong> You cannot modify services for a paid appointment.
+                </div>
+            </div>
+        }
         <div class="card-body">
             <form method="post">
                 <div class="mb-3">
@@ -43,7 +52,8 @@
                                        name="Appointment.SelectedServiceIds"
                                        value="@service.Id"
                                        data-price="@service.Price"
-                                @(Model.Appointment.SelectedServiceIds.Contains(service.Id) ? "checked" : "") />
+                                @(Model.Appointment.SelectedServiceIds.Contains(service.Id) ? "checked" : "")
+                                @(Model.Appointment.PaymentStatus == "Paid" ? "disabled" : "") />
 
                                 <label class="form-check-label">
                                     <strong>@service.Name</strong> - $@service.Price (Total Doses: @service.TotalDoses)
@@ -52,8 +62,7 @@
                         }
                     </div>
                     <span asp-validation-for="Appointment.SelectedServiceIds" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
+                </div>                <div class="mb-3">
                     <label class="form-label fw-bold">Total Price</label>
                     <input type="text" id="totalPrice" class="form-control" readonly />
                     <input type="hidden"  id="totalPriceHidden" />
