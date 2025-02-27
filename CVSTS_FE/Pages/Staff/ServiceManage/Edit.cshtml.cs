@@ -87,17 +87,18 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
             // Convert VaccineList to a dictionary
             Service.Vaccines = VaccineList.ToDictionary(v => v.VaccineId, v => v.DoseCount);
-
+            
             var client = CreateAuthorizedClient();
             var response = await client.PutAsJsonAsync($"/api/Service/{id}", Service);
 
             if (response.IsSuccessStatusCode)
             {
                 ViewData["SuccessMessage"] = $"Service {id} updated successfully!";
-                return Page();
+                return Redirect("./Index");
             }
             else
             {
+                
                 ModelState.AddModelError(string.Empty, "An error occurred while updating the service.");
 
                 return Page();

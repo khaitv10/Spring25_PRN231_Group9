@@ -79,5 +79,18 @@ namespace CVSTSystem.Controllers
             return Ok("Delete appointment successfully");
         }
 
+        [Authorize(Roles = "User")]
+        [HttpPut("info/{id}")]
+        public async Task<IActionResult> UpdateAppointment(int id, AppointUpdateModel request)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            var result = await _appService.UpdateAppointment(request,userId,id);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok("Update appointment successfully");
+        }
+
     }
 }

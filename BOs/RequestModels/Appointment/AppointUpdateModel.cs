@@ -10,26 +10,14 @@ namespace BOs.RequestModels.Appointment
     public class AppointUpdateModel
     {
         [Required(ErrorMessage = "Appointment date is required.")]
-        public DateTime AppointmentDate { get; set; }
+        public DateTime? AppointmentDate { get; set; }
 
         [Required(ErrorMessage = "Child selection is required.")]
-        public int ChildId { get; set; }
+        public int?  ChildId { get; set; }
 
-        public List<int> SelectedServiceIds { get; set; } = new List<int>();
+        public List<int>? SelectedServiceIds { get; set; } = new List<int>();
 
-        // Custom Validation
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (AppointmentDate.Date <= DateTime.Today.AddDays(2))
-            {
-                yield return new ValidationResult("Appointment date must be at least 2 days from today.", new[] { nameof(AppointmentDate) });
-            }
-
-            if (SelectedServiceIds == null || SelectedServiceIds.Count == 0)
-            {
-                yield return new ValidationResult("At least one service must be selected.", new[] { nameof(SelectedServiceIds) });
-            }
-        }
+        
 
       
 
