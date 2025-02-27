@@ -196,6 +196,7 @@ namespace Service.Service.AppointmentService
                     Data = _mapper.Map<AppointmentResModel>(app)
 
                 };
+
             }
             catch (Exception ex) 
             {
