@@ -12,6 +12,37 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+<div class="container mt-4">
+    <form method="get" asp-page="./Index" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="Name" class="form-label">Service Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" value="@Request.Query["Name"]" />
+            </div>
+            <div class="col-md-3">
+                <label for="Status" class="form-label">Status</label>
+               <select class="form-control" id="Status" name="Status">
+                    <option value="">All</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+
+            </div>
+            <div class="col-md-2">
+                <label for="FromPrice" class="form-label">From Price</label>
+                <input type="number" class="form-control" id="FromPrice" name="FromPrice" value="@Request.Query["FromPrice"]" step="0.01" />
+            </div>
+            <div class="col-md-2">
+                <label for="ToPrice" class="form-label">To Price</label>
+                <input type="number" class="form-control" id="ToPrice" name="ToPrice" value="@Request.Query["ToPrice"]" step="0.01" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" style="visibility: hidden;">Search</label>
+                <button type="submit" class="btn btn-primary form-control">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div class="container mt-">
     <div class="d-flex justify-content-between align-items-center mb-4">
