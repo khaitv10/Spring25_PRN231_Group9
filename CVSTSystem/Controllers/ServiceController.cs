@@ -38,13 +38,15 @@ namespace CVSTSystem.Controllers
             return Ok(response);
         }
 
-        [HttpPatch("{id}")]
+        [Authorize(Roles = "Staff")]
+        [HttpPut("delete/{id}")]
         public async Task<IActionResult> UpdateServiceStatus(int id)
         {
             await _serviceService.UpateServiceStatus(id);
             return Ok("Update successfully");
         }
 
+        [Authorize(Roles = "Staff")]
         [HttpPost]
         public async Task<IActionResult> CreateService([FromBody]ServiceCreateModel model)
         {
@@ -55,6 +57,8 @@ namespace CVSTSystem.Controllers
             }
             return CreatedAtAction(nameof(GetServiceById), new { id = result.Data.Id }, result.Data); ;
         }
+
+        [Authorize(Roles = "Staff")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateService([FromBody] ServiceUpdateModel model, int id)
         {

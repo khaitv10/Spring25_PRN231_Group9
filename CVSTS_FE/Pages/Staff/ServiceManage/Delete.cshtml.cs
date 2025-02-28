@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
-using BOs.ResponseModels.Appointment;
+using BOs.ResponseModels.Service;
 using System.Net.Http.Headers;
 
-namespace CVSTS_FE.Pages.User.AppointmentManage
+namespace CVSTS_FE.Pages.Staff.ServiceManage
 {
     public class DeleteModel : PageModel
     {
@@ -21,26 +21,27 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
         }
 
         [BindProperty]
-        public AppointmentResModel Appointment { get; set; } = default!;
+        public ServiceResponseModel Service { get; set; } = default!;
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == 0)
+            if (id == null)
             {
-                return BadRequest("Invalid child ID.");
+                return NotFound();
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/getDetail/{id}");
+            var response = await client.GetAsync($"/api/Service/{id}");
 
             if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            Appointment = await response.Content.ReadFromJsonAsync<AppointmentResModel>();
+            Service = await response.Content.ReadFromJsonAsync<ServiceResponseModel>();
 
 
-            if (Appointment == null)
+            if (Service == null)
             {
                 return NotFound();
             }
@@ -50,22 +51,41 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (Appointment == null || Appointment.Id == 0)
+            if (Service == null || id == null)
             {
                 return NotFound();
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.DeleteAsync($"/api/appointment/{id}");
+
+            // Send the update request to the API
+            var response = await client.PutAsJsonAsync($"/api/Service/delete/{id}", Service);
 
             if (!response.IsSuccessStatusCode)
             {
-                var responseMessage = await response.Content.ReadAsStringAsync();
-                ModelState.AddModelError(string.Empty, responseMessage);
+                ModelState.AddModelError(string.Empty, "Error deleting service.");
                 return Page();
             }
 
-            return RedirectToPage("./Index");
+            var updatedServiceResponse = await client.GetAsync($"/api/Service/{id}");
+
+            if (!updatedServiceResponse.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Error fetching updated service details.");
+                return Page();
+            }
+
+            Service = await updatedServiceResponse.Content.ReadFromJsonAsync<ServiceResponseModel>();
+
+            if (Service == null)
+            {
+                ModelState.AddModelError(string.Empty, "Failed to fetch updated service details.");
+                return Page();
+            }
+
+            ViewData["SuccessMessage"] = $"Service {id} updated successfully!";
+
+            return Page();
         }
         private HttpClient CreateAuthorizedClient()
         {

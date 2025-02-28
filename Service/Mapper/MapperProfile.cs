@@ -133,8 +133,32 @@ namespace Service.Mapper
 
             CreateMap<ServiceCreateModel, BOs.Models.Service>();
 
-
-
+            //Service
+            CreateMap<BOs.Models.Service, ServiceResponseModel>()
+        .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
+            .Select(sv => new ServiceVaccineResponseModel
+            {
+                NumberOfDose = sv.NumberOfDose,
+                VaccineInfo = new VaccineInfoResponseModel
+                {
+                    Id = sv.Vaccine.Id,
+                    Name = sv.Vaccine.Name,
+                    Description = sv.Vaccine.Description,
+                    Origin = sv.Vaccine.Origin,
+                    MinAge = sv.Vaccine.MinAge,
+                    MaxAge = sv.Vaccine.MaxAge,
+                    Status = sv.Vaccine.Status
+                }
+            }).ToList()));
+            CreateMap<ServiceCreateModel, BOs.Models.Service>();
+            //Vaccine
+            CreateMap<VaccineStock, VaccineStockResponseModel>();
+            CreateMap<VaccineStockCreateModel, Vaccine>();
+            CreateMap<VaccineStockUpdateModel, Vaccine>();
+            CreateMap<Vaccine, VaccineInfoResponseModel>();
+            CreateMap<VaccineCreateModel, Vaccine>();
+            CreateMap<VaccineInfoResponseModel, Vaccine>();
+            CreateMap<Vaccine, VaccineShortInfoResponseModel>();
 
         }
 
