@@ -73,10 +73,17 @@ namespace Service.Mapper
 
 
             // DoseSchedule 
-            CreateMap<DoseSchedule, DoseScheduleResponseModel>();
-            CreateMap<DoseScheduleCreateModel, DoseSchedule>();
-            CreateMap<DoseScheduleUpdateModel, DoseSchedule>();
-            CreateMap<DoseSchedule, DoseSchedulesRes>()
+            
+            CreateMap<DoseScheduleCreateModel, DoseSchedule>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.NextDoseDate)));
+
+            CreateMap<DoseScheduleUpdateModel, DoseSchedule>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.NextDoseDate)));
+
+            CreateMap<DoseSchedule, DoseScheduleResponseModel>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => src.NextDoseDate))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? ""))
+            .ForMember(dest => dest.DoseNumber, opt => opt.MapFrom(src => src.DoseNumber))
             .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
 

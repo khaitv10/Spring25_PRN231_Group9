@@ -1,6 +1,7 @@
 ﻿using BOs.Models;
 using BOs.RequestModels.DoseRecord;
 using BOs.ResponseModels.DoseRecord;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +39,8 @@ namespace CVSTSystem.Controllers
 
         [HttpDelete]
         [Route("{id}")]
+        [Authorize(Roles = "Staff")]
+
         public async Task<ActionResult> DeleteDoseRecord(int id)
         {
             await _recordService.DeleteDoseRecord(id);
@@ -46,6 +49,8 @@ namespace CVSTSystem.Controllers
 
         [HttpPut]
         [Route("{id}")]
+        [Authorize(Roles = "Staff")]
+
         public async Task<ActionResult<DoseRecordUpdateModel>> UpdateRecord(int id,DoseRecordUpdateModel doseRecord) 
         {
             await _recordService.UpdateDoseRecord(id, doseRecord);
@@ -59,7 +64,9 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<DoseRecordCreateModel>> CreateDoseRecord(DoseRecordCreateModel doseRecord) 
+        [Authorize(Roles = "Staff")]
+
+        public async Task<ActionResult<DoseRecordCreateModel>> CreateDoseRecord([FromBody] DoseRecordCreateModel doseRecord) 
         {
             if(!ModelState.IsValid)
             {

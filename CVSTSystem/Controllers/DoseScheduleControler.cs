@@ -12,7 +12,7 @@ using Service.Service.DoseScheduleServices;
 
 namespace CVSTSystem.Controllers
 {
-    [Route("api/doseSchedule")]
+    [Route("api/dose-schedule")]
     [ApiController]
     public class DoseScheduleControler : Controller
     {
@@ -25,7 +25,7 @@ namespace CVSTSystem.Controllers
             
         }
 
-        [HttpGet("dose_schedules")]
+        [HttpGet("dose-schedules")]
         // [Authorize(Roles = "Staff")]
         public async Task<ActionResult<List<DoseScheduleResponseModel>>> GetAllDoseSchedule()
         {
@@ -34,8 +34,8 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet]
-        [Route("schedule/{id}")]
-        // [Authorize(Roles = "Staff")]
+        [Route("info/{id}")]
+        //[Authorize(Roles = "Staff")]
         public async Task<ActionResult<DoseScheduleResponseModel>> GetDoseScheduleById(int id)
         {
             var doseSchedule = await _doseScheduleService.GetDoseScheduleById(id);
@@ -44,18 +44,17 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
-       //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff")]
 
-        public async Task<ActionResult<DoseScheduleCreateModel>> CreateVaccine([FromBody] DoseScheduleCreateModel doseSchedule)
+        public async Task<ActionResult<DoseScheduleCreateModel>> CreateDoseShedule([FromBody] DoseScheduleCreateModel doseSchedule)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                BadRequest();
             }
 
             await _doseScheduleService.AddDoseSchedule(doseSchedule);
-            return Ok(new { Message = "Vaccine has been created", DoseSchedule = doseSchedule });
+            return Ok("schedule has been created");
         }
 
         private bool DoseScheduleExists(int id)
@@ -65,46 +64,20 @@ namespace CVSTSystem.Controllers
 
         [HttpPut]
         [Route("{id}")]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff")]
 
         public async Task<ActionResult<DoseScheduleUpdateModel>> UpdateDoseSchedule(int id, DoseScheduleUpdateModel doseSchedule)
         {
-            if (id != doseSchedule.Id)
-            {
-                return BadRequest();
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                await _doseScheduleService.UpdateDoseSchedule(doseSchedule);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DoseScheduleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _doseScheduleService.UpdateDoseSchedule(id, doseSchedule);
 
             return Ok("Update dose schedule successfully");
         }
 
         [HttpDelete]
-        [Route("schedule/{id}")]
-        //[Authorize(Roles = "Staff")]
+        [Route("{id}")]
+        [Authorize(Roles = "Staff")]
         public async Task<IActionResult> DeleteVaccine(int id)
         {
-            
-
             await _doseScheduleService.DeleteDoseSchedule(id);
             return Ok("Delete dose schedule successfully");
         }

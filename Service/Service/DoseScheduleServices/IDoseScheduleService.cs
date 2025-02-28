@@ -16,7 +16,7 @@ namespace Service.Service.DoseScheduleServices
         Task<List<DoseScheduleResponseModel>> GetAllDoseSchedule();
         Task<DoseScheduleResponseModel> GetDoseScheduleById(int id);
         Task AddDoseSchedule(DoseScheduleCreateModel doseSchedule);
-        Task UpdateDoseSchedule(DoseScheduleUpdateModel doseSchedule);
+        Task UpdateDoseSchedule(int id,DoseScheduleUpdateModel doseSchedule);
         Task DeleteDoseSchedule(int id);
     }
 }
