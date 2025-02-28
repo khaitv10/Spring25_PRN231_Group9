@@ -8,11 +8,15 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using System.Net.Http.Headers;
+using BOs.ResponseModels.DoseRecord;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
+
     public class EditModel : PageModel
     {
+        [BindProperty]
+        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public EditModel(IHttpClientFactory httpClientFactory)
@@ -20,35 +24,26 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             _httpClientFactory = httpClientFactory;
         }
 
-        [BindProperty]
-        public DoseRecord DoseRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == 0)
+            if (id == null)
             {
-                return BadRequest("Invalid child ID.");
+                return NotFound();
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/info/{id}");
+            var response = await APIHelper.GetAsJsonAsync<DoseRecordResponseModel>(client, $"/api/dose-record/info/{id}");
 
-            if (!response.IsSuccessStatusCode)
+            if (response != null)
             {
-                return NotFound();
+                DoseRecord = response;
+                return Page();
+
             }
-
-            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecord>();
-
-            if (DoseRecord == null)
-            {
-                return NotFound();
-            }
-
-            return Page();
+            return Redirect("./Index");
         }
 
-        
         public async Task<IActionResult> OnPostAsync()
         {
            if (!ModelState.IsValid)
@@ -69,7 +64,7 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error updating dose record.");
+                ModelState.AddModelError(string.Empty, "Error updating record.");
                 return Page();
             }
 

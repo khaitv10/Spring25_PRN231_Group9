@@ -21,7 +21,7 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet]
-        [Route("dose-records")]
+        
         public async Task<ActionResult<List<DoseRecordResponseModel>>> GetAllDoseRecrd()
         {
             var doseRecords = await _recordService.GetAllDoseRecord();
@@ -55,7 +55,7 @@ namespace CVSTSystem.Controllers
         {
             await _recordService.UpdateDoseRecord(id, doseRecord);
 
-            return Ok("Update dose record successfully");
+            return Ok("Update record successfully");
         }
 
         private bool DoseRecordExists(int id)

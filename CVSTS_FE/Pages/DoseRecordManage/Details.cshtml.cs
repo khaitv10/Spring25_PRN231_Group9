@@ -31,7 +31,7 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/api/dose-record/{id}"); 
+            var response = await client.GetAsync($"/api/dose-record/info/{id}"); 
             if (response != null)
                 if (!response.IsSuccessStatusCode)
                 {

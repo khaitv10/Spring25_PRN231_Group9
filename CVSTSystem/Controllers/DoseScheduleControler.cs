@@ -25,8 +25,8 @@ namespace CVSTSystem.Controllers
             
         }
 
-        [HttpGet("dose-schedules")]
-        // [Authorize(Roles = "Staff")]
+        [HttpGet]
+        
         public async Task<ActionResult<List<DoseScheduleResponseModel>>> GetAllDoseSchedule()
         {
             var doseSchedules = await _doseScheduleService.GetAllDoseSchedule();
@@ -35,7 +35,7 @@ namespace CVSTSystem.Controllers
 
         [HttpGet]
         [Route("info/{id}")]
-        //[Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff")]
         public async Task<ActionResult<DoseScheduleResponseModel>> GetDoseScheduleById(int id)
         {
             var doseSchedule = await _doseScheduleService.GetDoseScheduleById(id);
