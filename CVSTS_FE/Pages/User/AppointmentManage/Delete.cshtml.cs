@@ -6,57 +6,79 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using BOs.ResponseModels.Appointment;
+using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.User.AppointmentManage
 {
     public class DeleteModel : PageModel
     {
-        private readonly BOs.Models.CvstsystemDbContext _context;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public DeleteModel(BOs.Models.CvstsystemDbContext context)
+        public DeleteModel(IHttpClientFactory httpClientFactory)
         {
-            _context = context;
+            _httpClientFactory = httpClientFactory;
         }
 
         [BindProperty]
-        public Appointment Appointment { get; set; } = default!;
-
+        public AppointmentResModel Appointment { get; set; } = default!;
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
+            if (id == 0)
+            {
+                return BadRequest("Invalid child ID.");
+            }
+
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/getDetail/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FirstOrDefaultAsync(m => m.Id == id);
+            Appointment = await response.Content.ReadFromJsonAsync<AppointmentResModel>();
 
-            if (appointment == null)
+
+            if (Appointment == null)
             {
                 return NotFound();
             }
-            else
-            {
-                Appointment = appointment;
-            }
+
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null)
+            if (Appointment == null || Appointment.Id == 0)
             {
                 return NotFound();
             }
 
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment != null)
+            var client = CreateAuthorizedClient();
+            var response = await client.DeleteAsync($"/api/appointment/{id}");
+
+            if (!response.IsSuccessStatusCode)
             {
-                Appointment = appointment;
-                _context.Appointments.Remove(Appointment);
-                await _context.SaveChangesAsync();
+                var responseMessage = await response.Content.ReadAsStringAsync();
+                ModelState.AddModelError(string.Empty, responseMessage);
+                return Page();
             }
 
             return RedirectToPage("./Index");
+        }
+        private HttpClient CreateAuthorizedClient()
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+
+
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return client;
         }
     }
 }

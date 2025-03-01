@@ -2,70 +2,95 @@
 @model CVSTS_FE.Pages.User.AppointmentManage.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Appointment";
     Layout = "~/Pages/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded">
+                <div class="card-header bg-danger text-white d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <h4 class="mb-0">Confirm Deletion</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-danger fw-bold">Are you sure you want to delete this appointment?</h5>
+                    <p class="text-muted">This action cannot be undone.</p>
+                    <hr />
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Appointment</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.AppointmentDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.AppointmentDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Type)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.TotalPrice)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.TotalPrice)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Status)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.PaymentStatus)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.PaymentStatus)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.Child)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Child.FullName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.Parent)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Parent.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Appointment.Service)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Appointment.Service.Name)
-        </dd>
-    </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="Appointment.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
+                    <h4 class="text-muted mb-3">General Information</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4 fw-bold">Appointment Date:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.AppointmentDate)</dd>
+
+                        <dt class="col-sm-4 fw-bold">Total Price:</dt>
+                        <dd class="col-sm-8 text-success fw-bold">$@Html.DisplayFor(model => model.Appointment.TotalPrice)</dd>
+
+                        <dt class="col-sm-4 fw-bold">Status:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @(Model.Appointment.Status == "Confirmed" ? "bg-success" : "bg-warning")">
+                                @Html.DisplayFor(model => model.Appointment.Status)
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-4 fw-bold">Payment Status:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @(Model.Appointment.PaymentStatus == "Paid" ? "bg-primary" : "bg-danger")">
+                                @Html.DisplayFor(model => model.Appointment.PaymentStatus)
+                            </span>
+                        </dd>
+                    </dl>
+
+                    <h4 class="text-muted mt-4 mb-3">Child Information</h4>
+                    <dl class="row">
+                        <dt class="col-sm-4 fw-bold">Full Name:</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.Child.FullName)</dd>
+                        <dt class="col-sm-4 fw-bold">Gender:</dt>
+                        <dd class="col-sm-8">
+                            @(Model.Appointment.Child.Gender == "F" ? "Female" : Model.Appointment.Child.Gender == "M" ? "Male" : "Other")
+                        </dd>
+                    </dl>
+
+                    <h4 class="text-muted mt-4 mb-3">Services</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle shadow-sm rounded border">
+                            <thead class="table-dark text-center">
+                                <tr>
+                                    <th>Service Name</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Total Doses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var service in Model.Appointment.Services)
+                                {
+                                    <tr class="text-center">
+                                        <td>@Html.DisplayFor(modelItem => service.Name)</td>
+                                        <td>@Html.DisplayFor(modelItem => service.Description)</td>
+                                        <td class="text-success fw-bold">$@Html.DisplayFor(modelItem => service.Price)</td>
+                                        <td>@Html.DisplayFor(modelItem => service.TotalDoses)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer d-flex justify-content-between">
+                    <a asp-page="./Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </a>
+
+                    <form method="post">
+                        <input type="hidden" asp-for="Appointment.Id" />
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -113,6 +113,7 @@ namespace Service.Service.ServiceService
         public async Task<Result<ServiceResponseModel>> UpdateService(int id, ServiceUpdateModel model)
         {
             var service = await _serviceRepository.GetServiceById(id);
+            var serviceVaccine = new List<ServiceVaccine>();
             if(service == null)
             {
                 return new Result<ServiceResponseModel>
@@ -131,8 +132,7 @@ namespace Service.Service.ServiceService
             }
             if(model.Vaccines != null)
             {
-                var serviceVaccine = await _serviceVaccineRepository.GetServiceVaccineByServiceId(service.Id);
-                await _serviceVaccineRepository.DeleteRange(serviceVaccine);
+                 serviceVaccine = await _serviceVaccineRepository.GetServiceVaccineByServiceId(service.Id);
 
                 List<ServiceVaccine> serviceVaccineList = new List<ServiceVaccine>();
                 var totalDose = 0;
@@ -171,7 +171,9 @@ namespace Service.Service.ServiceService
             service.UpdateAt = DateTime.Now;
             try
             {
+
                 await _serviceRepository.Update(service);
+                await _serviceVaccineRepository.DeleteRange(serviceVaccine);
                 var res = await _serviceRepository.GetServiceById(service.Id);
                 return new Result<ServiceResponseModel>
                 {

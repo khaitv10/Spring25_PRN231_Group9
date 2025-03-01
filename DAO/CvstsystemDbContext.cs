@@ -42,9 +42,9 @@ public partial class CvstsystemDbContext : DbContext
 
     public virtual DbSet<VaccineStock> VaccineStocks { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=(local);Database=CVSTSystemDB;Uid=sa;Pwd=123456;TrustServerCertificate=true");
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+    //        => optionsBuilder.UseSqlServer("Server=(local);Database=CVSTSystemDB;Uid=sa;Pwd=123456;TrustServerCertificate=true");
 
     private string GetConnectionString()
     {
@@ -63,7 +63,7 @@ public partial class CvstsystemDbContext : DbContext
     {
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Appointm__3214EC077EB87031");
+            entity.HasKey(e => e.Id).HasName("PK__Appointm__3214EC071D535606");
 
             entity.ToTable("Appointment");
 
@@ -81,20 +81,16 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Child).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.ChildId)
-                .HasConstraintName("FK__Appointme__Child__398D8EEE");
+                .HasConstraintName("FK__Appointme__Child__59063A47");
 
             entity.HasOne(d => d.Parent).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.ParentId)
-                .HasConstraintName("FK__Appointme__Paren__38996AB5");
-
-            entity.HasOne(d => d.Service).WithMany(p => p.Appointments)
-                .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Appointme__Servi__37A5467C");
+                .HasConstraintName("FK__Appointme__Paren__59FA5E80");
         });
 
         modelBuilder.Entity<AppointmentService>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Appointm__3214EC07E1D1D191");
+            entity.HasKey(e => e.Id).HasName("PK__Appointm__3214EC0798B5904A");
 
             entity.ToTable("AppointmentService");
 
@@ -105,16 +101,16 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.AppointmentServices)
                 .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__Appointme__Appoi__45F365D3");
+                .HasConstraintName("FK__Appointme__Appoi__5AEE82B9");
 
             entity.HasOne(d => d.Service).WithMany(p => p.AppointmentServices)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__Appointme__Servi__46E78A0C");
+                .HasConstraintName("FK__Appointme__Servi__5BE2A6F2");
         });
 
         modelBuilder.Entity<Child>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Child__3214EC0757A07105");
+            entity.HasKey(e => e.Id).HasName("PK__Child__3214EC075A02603A");
 
             entity.ToTable("Child");
 
@@ -130,12 +126,12 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Parent).WithMany(p => p.Children)
                 .HasForeignKey(d => d.ParentId)
-                .HasConstraintName("FK__Child__ParentId__30F848ED");
+                .HasConstraintName("FK__Child__ParentId__5CD6CB2B");
         });
 
         modelBuilder.Entity<DoseRecord>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DoseReco__3214EC0798A28CDF");
+            entity.HasKey(e => e.Id).HasName("PK__DoseReco__3214EC07789998E8");
 
             entity.ToTable("DoseRecord");
 
@@ -148,20 +144,20 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Child).WithMany(p => p.DoseRecords)
                 .HasForeignKey(d => d.ChildId)
-                .HasConstraintName("FK__DoseRecor__Child__59063A47");
+                .HasConstraintName("FK__DoseRecor__Child__5DCAEF64");
 
             entity.HasOne(d => d.Service).WithMany(p => p.DoseRecords)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__DoseRecor__Servi__5812160E");
+                .HasConstraintName("FK__DoseRecor__Servi__5EBF139D");
 
             entity.HasOne(d => d.Vaccine).WithMany(p => p.DoseRecords)
                 .HasForeignKey(d => d.VaccineId)
-                .HasConstraintName("FK__DoseRecor__Vacci__59FA5E80");
+                .HasConstraintName("FK__DoseRecor__Vacci__5FB337D6");
         });
 
         modelBuilder.Entity<DoseSchedule>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__DoseSche__3214EC077521598D");
+            entity.HasKey(e => e.Id).HasName("PK__DoseSche__3214EC07047871F9");
 
             entity.ToTable("DoseSchedule");
 
@@ -174,20 +170,20 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Child).WithMany(p => p.DoseSchedules)
                 .HasForeignKey(d => d.ChildId)
-                .HasConstraintName("FK__DoseSched__Child__534D60F1");
+                .HasConstraintName("FK__DoseSched__Child__60A75C0F");
 
             entity.HasOne(d => d.Service).WithMany(p => p.DoseSchedules)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__DoseSched__Servi__52593CB8");
+                .HasConstraintName("FK__DoseSched__Servi__619B8048");
 
             entity.HasOne(d => d.Vaccine).WithMany(p => p.DoseSchedules)
                 .HasForeignKey(d => d.VaccineId)
-                .HasConstraintName("FK__DoseSched__Vacci__5441852A");
+                .HasConstraintName("FK__DoseSched__Vacci__628FA481");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC077FD93CE0");
+            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC0731993B14");
 
             entity.ToTable("Feedback");
 
@@ -201,16 +197,16 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__Feedback__Appoin__4222D4EF");
+                .HasConstraintName("FK__Feedback__Appoin__6383C8BA");
 
             entity.HasOne(d => d.Parent).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.ParentId)
-                .HasConstraintName("FK__Feedback__Parent__4316F928");
+                .HasConstraintName("FK__Feedback__Parent__6477ECF3");
         });
 
         modelBuilder.Entity<Notification>(entity =>
         {
-            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E12E2A69829");
+            entity.HasKey(e => e.NotificationId).HasName("PK__Notifica__20CF2E12AAFB9F15");
 
             entity.ToTable("Notification");
 
@@ -221,12 +217,12 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Notifications)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Notificat__UserI__34C8D9D1");
+                .HasConstraintName("FK__Notificat__UserI__656C112C");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC0727999C0F");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07B26BE8E1");
 
             entity.ToTable("Payment");
 
@@ -246,12 +242,12 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.AppointmentId)
-                .HasConstraintName("FK__Payment__Appoint__3D5E1FD2");
+                .HasConstraintName("FK__Payment__Appoint__66603565");
         });
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Service__3214EC07EB7FC747");
+            entity.HasKey(e => e.Id).HasName("PK__Service__3214EC0713ACA610");
 
             entity.ToTable("Service");
 
@@ -269,26 +265,26 @@ public partial class CvstsystemDbContext : DbContext
 
         modelBuilder.Entity<ServiceVaccine>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ServiceV__3214EC076B53D510");
+            entity.HasKey(e => e.Id).HasName("PK__ServiceV__3214EC079926E7A4");
 
             entity.ToTable("ServiceVaccine");
 
             entity.HasOne(d => d.Service).WithMany(p => p.ServiceVaccines)
                 .HasForeignKey(d => d.ServiceId)
-                .HasConstraintName("FK__ServiceVa__Servi__4E88ABD4");
+                .HasConstraintName("FK__ServiceVa__Servi__6754599E");
 
             entity.HasOne(d => d.Vaccine).WithMany(p => p.ServiceVaccines)
                 .HasForeignKey(d => d.VaccineId)
-                .HasConstraintName("FK__ServiceVa__Vacci__4D94879B");
+                .HasConstraintName("FK__ServiceVa__Vacci__68487DD7");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07A011351D");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07A68A44DD");
 
             entity.ToTable("User");
 
-            entity.HasIndex(e => e.Email, "UQ__User__A9D10534D9070BEB").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__User__A9D10534E3B264EC").IsUnique();
 
             entity.Property(e => e.CreateAt)
                 .HasDefaultValueSql("(getdate())")
@@ -314,7 +310,7 @@ public partial class CvstsystemDbContext : DbContext
 
         modelBuilder.Entity<Vaccine>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Vaccine__3214EC070CA876F2");
+            entity.HasKey(e => e.Id).HasName("PK__Vaccine__3214EC07DA4763A9");
 
             entity.ToTable("Vaccine");
 
@@ -330,7 +326,7 @@ public partial class CvstsystemDbContext : DbContext
 
         modelBuilder.Entity<VaccineStock>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__VaccineS__3214EC0760673CA6");
+            entity.HasKey(e => e.Id).HasName("PK__VaccineS__3214EC07F4B6E47D");
 
             entity.ToTable("VaccineStock");
 
@@ -340,7 +336,7 @@ public partial class CvstsystemDbContext : DbContext
 
             entity.HasOne(d => d.Vaccine).WithMany(p => p.VaccineStocks)
                 .HasForeignKey(d => d.VaccineId)
-                .HasConstraintName("FK__VaccineSt__Vacci__4AB81AF0");
+                .HasConstraintName("FK__VaccineSt__Vacci__693CA210");
         });
 
         OnModelCreatingPartial(modelBuilder);

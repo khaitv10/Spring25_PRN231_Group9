@@ -2,66 +2,96 @@
 @model CVSTS_FE.Pages.User.AppointmentManage.CreateModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Appointment";
     Layout = "~/Pages/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Create</h1>
+<div class="container mt-5">
+    <div class="card shadow-lg rounded">
+        <div class="card-header bg-primary text-white text-center">
+            <h2 class="fw-bold">Create New Appointment</h2>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Select Child</label>
+                    <select asp-for="Appointment.ChildId" class="form-select" required>
+                        <option value="">-- Select Child --</option>
+                        @foreach (var child in Model.Children)
+                        {
+                            <option value="@child.Id">
+                                @child.FullName (@(child.Gender == "F" ? "Female" : child.Gender == "M" ? "Male" : "Other"))
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="Appointment.ChildId" class="text-danger"></span>
+                </div>
 
-<h4>Appointment</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Appointment.AppointmentDate" class="control-label"></label>
-                <input asp-for="Appointment.AppointmentDate" class="form-control" />
-                <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.Type" class="control-label"></label>
-                <input asp-for="Appointment.Type" class="form-control" />
-                <span asp-validation-for="Appointment.Type" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.TotalPrice" class="control-label"></label>
-                <input asp-for="Appointment.TotalPrice" class="form-control" />
-                <span asp-validation-for="Appointment.TotalPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.Status" class="control-label"></label>
-                <input asp-for="Appointment.Status" class="form-control" />
-                <span asp-validation-for="Appointment.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.PaymentStatus" class="control-label"></label>
-                <input asp-for="Appointment.PaymentStatus" class="form-control" />
-                <span asp-validation-for="Appointment.PaymentStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.ServiceId" class="control-label"></label>
-                <select asp-for="Appointment.ServiceId" class ="form-control" asp-items="ViewBag.ServiceId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.ParentId" class="control-label"></label>
-                <select asp-for="Appointment.ParentId" class ="form-control" asp-items="ViewBag.ParentId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Appointment.ChildId" class="control-label"></label>
-                <select asp-for="Appointment.ChildId" class ="form-control" asp-items="ViewBag.ChildId"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Appointment Date</label>
+                    <input type="date" asp-for="Appointment.AppointmentDate" class="form-control" required />
+                    <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Select Services</label>
+                    <div class="border p-3 rounded">
+                        @foreach (var service in Model.Services)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="Appointment.SelectedServiceIds" value="@service.Id" data-price="@service.Price" />
+                                <label class="form-check-label" data-price="@service.Price">
+                                    <strong>@service.Name</strong> - $@service.Price (Total Doses: @service.TotalDoses)
+                                </label>
+                            </div>
+
+                        }
+                    </div>
+                    <span asp-validation-for="Appointment.SelectedServiceIds" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Total Price</label>
+                    <input type="text" id="totalPrice" class="form-control" readonly />
+                    <input type="hidden" asp-for="Appointment.TotalPrice" id="totalPriceHidden" />
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-check"></i> Confirm Appointment
+                    </button>
+                    <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let checkboxes = document.querySelectorAll("input[name='Appointment.SelectedServiceIds']");
+        let totalPriceField = document.getElementById("totalPrice");
+        let totalPriceHidden = document.getElementById("totalPriceHidden");
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        function updateTotalPrice() {
+            let total = 0;
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    let price = parseFloat(cb.dataset.price);
+                    total += price;
+                }
+            });
+            totalPriceField.value = `$${total.toFixed(2)}`;
+            totalPriceHidden.value = total.toFixed(2); 
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", updateTotalPrice);
+        });
+
+        updateTotalPrice();
+    });
+</script>
+
+

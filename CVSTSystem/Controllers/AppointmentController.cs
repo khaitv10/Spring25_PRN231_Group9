@@ -1,4 +1,5 @@
-﻿using BOs.RequestModels.Child;
+﻿using BOs.RequestModels.Appointment;
+using BOs.RequestModels.Child;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Service.AppointmentServices;
@@ -40,6 +41,56 @@ namespace CVSTSystem.Controllers
             return Ok(response);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> CreateAppointment([FromBody] AppointCreateModel request)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            if (userId == 0)
+            {
+                return Unauthorized("User is not authenticated.");
+            }
+
+            await _appService.CreateAppointment(request, userId);
+            return Ok("Create new appointment successfully");
+        }
+
+        [Authorize(Roles = "Staff")]
+        [HttpPut("status/{id}")]
+        public async Task<IActionResult> UpdateAppointmentStatus(int id, string status)
+        {
+            var result = await _appService.UpdateAppointmentStatus(id, status);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok("Update appointment status successfully"); 
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAppointment(int id)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            var result = await _appService.DeleteAppointment(id, userId);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok("Delete appointment successfully");
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPut("info/{id}")]
+        public async Task<IActionResult> UpdateAppointment(int id, AppointUpdateModel request)
+        {
+            var userId = int.Parse(User.FindFirst("UserId")?.Value ?? "0");
+            var result = await _appService.UpdateAppointment(request,userId,id);
+            if (result.Success == false)
+            {
+                return BadRequest(result.Message);
+            }
+            return Ok("Update appointment successfully");
+        }
+
     }
 }

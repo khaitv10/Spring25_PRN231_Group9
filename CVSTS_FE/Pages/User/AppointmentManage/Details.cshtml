@@ -17,9 +17,6 @@
                 <dt class="col-sm-4 fw-bold">Appointment Date:</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.AppointmentDate)</dd>
 
-                <dt class="col-sm-4 fw-bold">Type:</dt>
-                <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.Type)</dd>
-
                 <dt class="col-sm-4 fw-bold">Total Price:</dt>
                 <dd class="col-sm-8 text-success fw-bold">$@Html.DisplayFor(model => model.Appointment.TotalPrice)</dd>
 
@@ -42,7 +39,6 @@
             <dl class="row">
                 <dt class="col-sm-4 fw-bold">Full Name:</dt>
                 <dd class="col-sm-8">@Html.DisplayFor(model => model.Appointment.Child.FullName)</dd>
-
                 <dt class="col-sm-4 fw-bold">Gender:</dt>
                 <dd class="col-sm-8">
                     @(Model.Appointment.Child.Gender == "F" ? "Female" : Model.Appointment.Child.Gender == "M" ? "Male" : "Other")
