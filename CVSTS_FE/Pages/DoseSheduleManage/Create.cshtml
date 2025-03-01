@@ -1,0 +1,54 @@
+﻿@page
+@model CVSTS_FE.Pages.DoseSheduleManage.CreateModel
+
+@{
+    ViewData["Title"] = "Create Dose Schedule";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">Create Dose Schedule</h2>
+        <hr />
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DoseSchedule.NextDoseDate" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" />
+                        <span asp-validation-for="DoseSchedule.NextDoseDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DoseSchedule.DoseNumber" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedule.DoseNumber" class="form-control" />
+                        <span asp-validation-for="DoseSchedule.DoseNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label asp-for="DoseSchedule.Status" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedule.Status" class="form-control" />
+                        <span asp-validation-for="DoseSchedule.Status" class="text-danger"></span>
+                    </div>
+                </div>
+               
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-4">Create</button>
+                <a asp-page="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

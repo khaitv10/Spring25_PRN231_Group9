@@ -35,7 +35,7 @@ namespace CVSTSystem.Controllers
 
         [HttpGet]
         [Route("info/{id}")]
-        [Authorize(Roles = "Staff")]
+        
         public async Task<ActionResult<DoseScheduleResponseModel>> GetDoseScheduleById(int id)
         {
             var doseSchedule = await _doseScheduleService.GetDoseScheduleById(id);

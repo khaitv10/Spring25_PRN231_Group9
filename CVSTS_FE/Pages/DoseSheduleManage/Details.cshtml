@@ -1,0 +1,33 @@
+﻿@page
+@model CVSTS_FE.Pages.DoseSheduleManage.DetailsModel
+
+@{
+    ViewData["Title"] = "Dose Schedule Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">Dose Schedule Details</h2>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DoseSchedule.NextDoseDate)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseSchedule.NextDoseDate)</dd>
+
+            <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DoseSchedule.DoseNumber)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseSchedule.DoseNumber)</dd>
+
+            <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DoseSchedule.Status)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseSchedule.Status)</dd>
+
+            <dt class="col-sm-4 fw-bold">@Html.DisplayNameFor(model => model.DoseSchedule.CreateAt)</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseSchedule.CreateAt)</dd>
+
+          
+        </dl>
+
+        <div class="text-center mt-4">
+            <a asp-page="./Edit" asp-route-id="@Model.DoseSchedule.Id" class="btn btn-warning px-4">Edit</a>
+            <a asp-page="./Index" class="btn btn-secondary ms-3">Back to List</a>
+        </div>
+    </div>
+</div>
