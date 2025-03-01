@@ -38,10 +38,10 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
                 return Page();
             }
             var client = CreateAuthorizedClient();
-            var response = await client.PostAsJsonAsync<DoseScheduleCreateModel>($"/api/dose-shedule", DoseSchedule);
+            var response = await client.PostAsJsonAsync<DoseScheduleCreateModel>($"/api/dose-schedule", DoseSchedule);
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error create shedule");
+                ModelState.AddModelError(string.Empty, "Error create schedule");
             }
 
             return RedirectToPage("./Index");

@@ -27,7 +27,7 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
         public async Task<IActionResult> OnGetAsync()
         {
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.GetAsJsonAsync<List<DoseScheduleResponseModel>>(client, "/api/dose-shedule");
+            var response = await APIHelper.GetAsJsonAsync<List<DoseScheduleResponseModel>>(client, "/api/dose-schedule");
 
             if (response != null)
             {

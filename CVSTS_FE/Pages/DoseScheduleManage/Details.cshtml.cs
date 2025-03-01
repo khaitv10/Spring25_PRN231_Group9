@@ -12,52 +12,41 @@ using System.Net.Http.Headers;
 
 namespace CVSTS_FE.Pages.DoseSheduleManage
 {
-    public class DeleteModel : PageModel
+    public class DetailsModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public DeleteModel(IHttpClientFactory httpClientFactory)
+        public DetailsModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        [BindProperty]
         public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
+                return BadRequest("Invalid dose schedule ID.");
+            }
+
+            var client = CreateAuthorizedClient();
+            var response = await client.GetAsync($"/api/dose-schedule/info/{id}");
+            if (response != null)
+                if (!response.IsSuccessStatusCode)
+                {
+                    return NotFound();
+                }
+
+            DoseSchedule = await response.Content.ReadFromJsonAsync<DoseScheduleResponseModel>();
+
+
+            if (DoseSchedule == null)
+            {
                 return NotFound();
             }
 
-            var client = CreateAuthorizedClient();
-            var response = await client.GetAsJsonAsync<DoseScheduleResponseModel>($"/api/dose-shedule/info/{id}");
-
-            if (response != null)
-            {
-                DoseSchedule = response;
-            }
-
             return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
-            {
-                return RedirectToPage("/403Page");
-            }
-            var client = CreateAuthorizedClient();
-            var response = await client.DeleteAsync($"/api/dose-shedule/{id}");
-            if (!response.IsSuccessStatusCode)
-            {
-                ModelState.AddModelError(string.Empty, "Error deleting record.");
-                return Page();
-            }
-
-            return RedirectToPage("./Index");
         }
 
         private HttpClient CreateAuthorizedClient()
@@ -72,7 +61,5 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
             return client;
         }
-
     }
 }
-
