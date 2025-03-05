@@ -7,6 +7,22 @@
 }
 
 <div class="container mt-4">
+    @if (ViewData.ModelState.ContainsKey("DeleteError") && ViewData.ModelState["DeleteError"].Errors.Count > 0)
+    {
+        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <div>
+                @foreach (var error in ViewData.ModelState["DeleteError"].Errors)
+                {
+                    <p class="mb-0"><strong>⚠ Error:</strong> @error.ErrorMessage</p>
+                }
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+
+
     <div class="card border-danger shadow-lg">
         <div class="card-header bg-danger text-white d-flex align-items-center">
             <i class="fas fa-exclamation-triangle me-2"></i>
@@ -31,7 +47,6 @@
 
                 <div class="col-md-6 fw-bold">Note:</div>
                 <div class="col-md-6">@Html.DisplayFor(model => model.Child.Note)</div>
-
             </div>
 
             <form method="post" class="mt-4">
