@@ -73,10 +73,17 @@ namespace Service.Mapper
 
 
             // DoseSchedule 
-            CreateMap<DoseSchedule, DoseScheduleResponseModel>();
-            CreateMap<DoseScheduleCreateModel, DoseSchedule>();
-            CreateMap<DoseScheduleUpdateModel, DoseSchedule>();
-            CreateMap<DoseSchedule, DoseSchedulesRes>()
+            
+            CreateMap<DoseScheduleCreateModel, DoseSchedule>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.NextDoseDate)));
+
+            CreateMap<DoseScheduleUpdateModel, DoseSchedule>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.NextDoseDate)));
+
+            CreateMap<DoseSchedule, DoseScheduleResponseModel>()
+            .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => src.NextDoseDate))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? ""))
+            .ForMember(dest => dest.DoseNumber, opt => opt.MapFrom(src => src.DoseNumber))
             .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
 
@@ -133,8 +140,32 @@ namespace Service.Mapper
 
             CreateMap<ServiceCreateModel, BOs.Models.Service>();
 
-
-
+            //Service
+            CreateMap<BOs.Models.Service, ServiceResponseModel>()
+        .ForMember(dest => dest.Vaccine, opt => opt.MapFrom(src => src.ServiceVaccines
+            .Select(sv => new ServiceVaccineResponseModel
+            {
+                NumberOfDose = sv.NumberOfDose,
+                VaccineInfo = new VaccineInfoResponseModel
+                {
+                    Id = sv.Vaccine.Id,
+                    Name = sv.Vaccine.Name,
+                    Description = sv.Vaccine.Description,
+                    Origin = sv.Vaccine.Origin,
+                    MinAge = sv.Vaccine.MinAge,
+                    MaxAge = sv.Vaccine.MaxAge,
+                    Status = sv.Vaccine.Status
+                }
+            }).ToList()));
+            CreateMap<ServiceCreateModel, BOs.Models.Service>();
+            //Vaccine
+            CreateMap<VaccineStock, VaccineStockResponseModel>();
+            CreateMap<VaccineStockCreateModel, Vaccine>();
+            CreateMap<VaccineStockUpdateModel, Vaccine>();
+            CreateMap<Vaccine, VaccineInfoResponseModel>();
+            CreateMap<VaccineCreateModel, Vaccine>();
+            CreateMap<VaccineInfoResponseModel, Vaccine>();
+            CreateMap<Vaccine, VaccineShortInfoResponseModel>();
 
         }
 

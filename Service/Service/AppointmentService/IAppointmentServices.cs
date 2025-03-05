@@ -20,7 +20,9 @@ namespace Service.Service.AppointmentServices
         Task CreateAppointment(AppointCreateModel request, int userId);
         //Task UpdateAppointment(int id, ChildUpdateModel request);
         //Task DeleteAppointment(int id);
-
+        Task<Result<AppointmentResModel>> UpdateAppointment(AppointUpdateModel request, int userId, int appointId);
+        Task<Result<Task>> UpdateAppointmentStatus(int appointId, string status);
+        Task<Result<Task>> DeleteAppointment(int appointId, int userId);
     }
 
 }

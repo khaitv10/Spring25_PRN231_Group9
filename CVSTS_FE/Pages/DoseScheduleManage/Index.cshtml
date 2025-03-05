@@ -1,0 +1,45 @@
+﻿@page
+@model CVSTS_FE.Pages.DoseSheduleManage.IndexModel
+
+@{
+    ViewData["Title"] = "Dose Schedule List";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">Dose Schedule List</h2>
+        <div class="d-flex justify-content-between my-3">
+            <a asp-page="Create" class="btn btn-success">Create New</a>
+        </div>
+
+        <table class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.DoseSchedule[0].NextDoseDate)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseSchedule[0].DoseNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseSchedule[0].Status)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseSchedule[0].CreateAt)</th>
+                    
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DoseSchedule)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.NextDoseDate)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DoseNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreateAt)</td>
+                        
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

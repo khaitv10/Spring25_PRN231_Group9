@@ -51,6 +51,10 @@
                             <a class="btn btn-outline-primary btn-sm" asp-page="./Details" asp-route-id="@item.Id">
                                 <i class="fas fa-info-circle"></i> Details
                             </a>
+                            <a class="btn btn-outline-danger btn-sm @(item.Status == "Completed" || item.Status == "Canceled" ? "disabled" : "")"
+                               asp-page="./Delete" asp-route-id="@item.Id">
+                                <i class="fas fa-trash-alt"></i> Cancel
+                            </a>
                         </td>
                     </tr>
                 }

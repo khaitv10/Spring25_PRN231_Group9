@@ -1,0 +1,109 @@
+﻿@page
+@model CVSTS_FE.Pages.Staff.ServiceManage.IndexModel
+
+@{
+    ViewData["Title"] = "Service Management";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+}
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<div class="container mt-4">
+    <form method="get" asp-page="./Index" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="Name" class="form-label">Service Name</label>
+                <input type="text" class="form-control" id="Name" name="Name" value="@Request.Query["Name"]" />
+            </div>
+            <div class="col-md-3">
+                <label for="Status" class="form-label">Status</label>
+               <select class="form-control" id="Status" name="Status">
+                    <option value="">All</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+
+            </div>
+            <div class="col-md-2">
+                <label for="FromPrice" class="form-label">From Price</label>
+                <input type="number" class="form-control" id="FromPrice" name="FromPrice" value="@Request.Query["FromPrice"]" step="0.01" />
+            </div>
+            <div class="col-md-2">
+                <label for="ToPrice" class="form-label">To Price</label>
+                <input type="number" class="form-control" id="ToPrice" name="ToPrice" value="@Request.Query["ToPrice"]" step="0.01" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label" style="visibility: hidden;">Search</label>
+                <button type="submit" class="btn btn-primary form-control">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container mt-">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary"><i class="fas fa-concierge-bell"></i> Service Management</h2>
+        <a asp-page="Create" class="btn btn-success">
+            <i class="fas fa-plus-circle"></i> Add New Service
+        </a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle ">
+                    <thead class="table-dark h-100">
+                        <tr >
+                            <th>@Html.DisplayNameFor(model => model.Service[0].Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].TotalDoses)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].CreateAt)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].UpdateAt)</th>
+                            <th>@Html.DisplayNameFor(model => model.Service[0].Status)</th>
+                            <th class="text-center w-25 ">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Service)
+                        {
+                            <tr class="h-100">
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                                <td>@Html.DisplayFor(modelItem => item.TotalDoses)</td>
+                                <td>@Html.DisplayFor(modelItem => item.CreateAt)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UpdateAt)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                                <td class="text-center">
+                                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i> Details
+                                    </a>
+                                    @if(item.Status == true){
+                                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Deactive
+                                        </a>
+                                    }
+                                    @if (item.Status == false)
+                                    {
+                                        <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Active
+                                        </a>
+                                    }
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

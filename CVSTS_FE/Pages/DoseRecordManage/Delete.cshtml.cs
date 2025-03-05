@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using System.Net.Http.Headers;
+using BOs.ResponseModels.DoseRecord;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
@@ -21,43 +22,39 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
 
         [BindProperty]
-        public DoseRecord DoseRecord { get; set; } = default!;
+        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
-                return BadRequest("Invalid dose record id");
+                return NotFound();
             }
 
             var client = CreateAuthorizedClient();
-            var response =await client.GetAsync($"/info/{id}");
+            var response =await client.GetAsJsonAsync<DoseRecordResponseModel>($"/api/dose-record/info/{id}");
 
-            if (!response.IsSuccessStatusCode)
+            if (response != null)
             {
-                return NotFound();
+                DoseRecord = response;
             }
 
-            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecord>();
-
-            if (DoseRecord == null) { return NotFound(); };
-           
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (DoseRecord == null)
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
-                return NotFound();
+                return RedirectToPage("/403Page");
             }
-
-            var id = DoseRecord.Id;
             var client = CreateAuthorizedClient();
             var response = await client.DeleteAsync($"/api/dose-record/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error deleting dose record");
+                ModelState.AddModelError(string.Empty, "Error deleting record.");
+                return Page();
             }
 
             return RedirectToPage("./Index");

@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
-using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.Service;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.Child;
 
-namespace CVSTS_FE.Pages.DoseRecordManage
+namespace CVSTS_FE.Pages.Staff.ServiceManage
 {
     public class DetailsModel : PageModel
     {
@@ -21,38 +21,38 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             _httpClientFactory = httpClientFactory;
         }
 
-        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
+        public ServiceResponseModel Service { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int? id) 
         {
             if (id == null)
             {
-                return BadRequest("Invalid dose record ID.");
+                return NotFound();
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/api/dose-record/info/{id}"); 
-            if (response != null)
-                if (!response.IsSuccessStatusCode)
-                {
-                    return NotFound();
-                }
+            var response = await client.GetAsync($"/api/Service/{id}");
 
-            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecordResponseModel>();
+            if (!response.IsSuccessStatusCode)
+            {
+                return NotFound();
+            }
+
+            Service = await response.Content.ReadFromJsonAsync<ServiceResponseModel>();
 
 
-            if (DoseRecord == null)
+            if (Service == null)
             {
                 return NotFound();
             }
 
             return Page();
         }
-
         private HttpClient CreateAuthorizedClient()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
             var token = HttpContext.Session.GetString("JWToken");
+
 
             if (!string.IsNullOrEmpty(token))
             {

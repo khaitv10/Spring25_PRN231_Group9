@@ -34,7 +34,7 @@ namespace Repository.Repositories.DoseScheduleRepositories
             return await GetSingle(b => b.Id == id);
         }
 
-        public async Task UpdateDoseSchedule(DoseSchedule doseSchedule)
+        public async Task UpdateDoseSchedule( int id, DoseSchedule doseSchedule)
         {
             await Update(doseSchedule);
         }

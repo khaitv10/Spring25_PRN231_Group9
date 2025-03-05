@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Repository.Repositories.AppointmentRepositories;
+using Repository.Repositories.AppointmentServiceRepository;
 using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
 using Repository.Repositories.DoseRecordRepositories;
@@ -133,6 +134,7 @@ builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
 builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentServiceRepository, AppointmentServiceRepository>();
 
 
 

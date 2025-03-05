@@ -1,0 +1,126 @@
+﻿@page
+@model CVSTS_FE.Pages.Staff.ServiceManage.EditModel
+@{
+    ViewData["Title"] = "Edit Service";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+}
+@if (ViewData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Edit Service</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Service.Name" class="form-label fw-bold">Service Name</label>
+                    <input asp-for="Service.Name" class="form-control" placeholder="Enter service name" />
+                    <span asp-validation-for="Service.Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Service.Description" class="form-label fw-bold">Description</label>
+                    <textarea asp-for="Service.Description" class="form-control" rows="3" placeholder="Enter service description"></textarea>
+                    <span asp-validation-for="Service.Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Service.Price" class="form-label fw-bold">Price (VND)</label>
+                    <input asp-for="Service.Price" type="number" class="form-control" placeholder="Enter price" />
+                    <span asp-validation-for="Service.Price" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Vaccines</label>
+                    <div id="vaccineContainer" class="mb-2">
+                        @for (int i = 0; i < Model.VaccineList.Count; i++)
+                        {
+                            <div class="input-group mb-2">
+                                <select class="form-select" name="VaccineList[@i].VaccineId">
+                                    @foreach (var v in Model.AllVaccines)
+                                    {
+                                        <option value="@v.Id" selected="@(v.Id == Model.VaccineList[i].VaccineId ? "selected" : null)">@v.Name</option>
+                                    }
+                                </select>
+                                <input type="number" class="form-control" name="VaccineList[@i].DoseCount" value="@Model.VaccineList[i].DoseCount" placeholder="Doses" />
+                                <button type="button" class="btn btn-danger" onclick="removeVaccine(this)">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                    <button type="button" class="btn btn-outline-primary" onclick="addVaccine()">
+                        <i class="bi bi-plus-circle"></i> Add Vaccine
+                    </button>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Save</button>
+                    <a asp-page="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to List</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let vaccineOptions = @Html.Raw(Json.Serialize(Model.AllVaccines.Select(v => new { Value = v.Id, Text = v.Name })));
+        let vaccineCount = @Model.VaccineList.Count;
+
+        function addVaccine() {
+            let container = document.getElementById("vaccineContainer");
+
+            let div = document.createElement("div");
+            div.classList.add("input-group", "mb-2");
+
+            // Dropdown for vaccine selection
+            let select = document.createElement("select");
+            select.classList.add("form-select");
+            select.name = `VaccineList[${vaccineCount}].VaccineId`;
+
+            vaccineOptions.forEach(v => {
+                let option = document.createElement("option");
+                option.value = v.value;
+                option.text = v.text;
+                select.appendChild(option);
+            });
+
+            // Input for doses
+            let input = document.createElement("input");
+            input.type = "number";
+            input.classList.add("form-control");
+            input.name = `VaccineList[${vaccineCount}].DoseCount`;
+            input.placeholder = "Doses";
+
+            // Remove button
+            let removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.classList.add("btn", "btn-danger");
+            removeBtn.innerHTML = '<i class="bi bi-trash"></i>';
+            removeBtn.onclick = function () {
+                container.removeChild(div);
+            };
+
+            div.appendChild(select);
+            div.appendChild(input);
+            div.appendChild(removeBtn);
+            container.appendChild(div);
+
+            vaccineCount++;
+        }
+
+        function removeVaccine(button) {
+            let container = document.getElementById("vaccineContainer");
+            container.removeChild(button.closest(".input-group"));
+        }
+    </script>
+}
