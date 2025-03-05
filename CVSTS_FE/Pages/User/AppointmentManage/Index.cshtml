@@ -34,23 +34,39 @@
                         <td>@(item.Child != null ? item.Child.FullName : "No Name")</td>
                         <td>@item.AppointmentDate.ToString("dd/MM/yyyy")</td>
                         <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+
+                        <!-- Status -->
                         <td>
-                            <span class="badge @(item.Status == "Confirmed" ? "bg-success" : "bg-warning")">
+                            <span class="badge
+                                @(item.Status == "Confirmed" ? "bg-success" :
+                                  item.Status == "Pending" ? "bg-warning text-dark" :
+                                  item.Status == "Completed" ? "bg-primary" :
+                                  item.Status == "Canceled" ? "bg-danger" : "bg-secondary")">
                                 @Html.DisplayFor(modelItem => item.Status)
                             </span>
                         </td>
+
+                        <!-- Payment Status -->
                         <td>
-                            <span class="badge @(item.PaymentStatus == "Paid" ? "bg-primary" : "bg-danger")">
+                            <span class="badge
+                                @(item.PaymentStatus == "Paid" ? "bg-success" :
+                                  item.PaymentStatus == "Unpaid" ? "bg-danger" :
+                                  "bg-secondary")">
                                 @Html.DisplayFor(modelItem => item.PaymentStatus)
                             </span>
                         </td>
+
                         <td>
                             <a class="btn btn-outline-info btn-sm  @(item.Status == "Completed" || item.Status == "Canceled" ? "disabled" : "")" asp-page="./Edit" asp-route-id="@item.Id">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
+
+                            <!-- Details Button -->
                             <a class="btn btn-outline-primary btn-sm" asp-page="./Details" asp-route-id="@item.Id">
                                 <i class="fas fa-info-circle"></i> Details
                             </a>
+
+                            <!-- Cancel Button -->
                             <a class="btn btn-outline-danger btn-sm @(item.Status == "Completed" || item.Status == "Canceled" ? "disabled" : "")"
                                asp-page="./Delete" asp-route-id="@item.Id">
                                 <i class="fas fa-trash-alt"></i> Cancel

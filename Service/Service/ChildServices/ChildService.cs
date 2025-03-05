@@ -33,8 +33,20 @@ namespace Service.Service.ChildServices
         public async Task DeleteChild(int id)
         {
             var child = await _childRepository.GetById(id);
+
+            if (child == null)
+            {
+                throw new InvalidOperationException("Child not found");
+            }
+
+            if (child.Appointments.Any() || child.DoseRecords.Any() || child.DoseSchedules.Any())
+            {
+                throw new InvalidOperationException("Can not delete: Child has Appointments, DoseRecords or DoseSchedules");
+            }
+
             await _childRepository.Delete(child);
         }
+
 
         public async Task<List<ChildResponseModel>> GetAllChilds()
         {

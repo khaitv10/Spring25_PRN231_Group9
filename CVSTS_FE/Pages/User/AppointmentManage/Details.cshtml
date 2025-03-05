@@ -22,14 +22,21 @@
 
                 <dt class="col-sm-4 fw-bold">Status:</dt>
                 <dd class="col-sm-8">
-                    <span class="badge @(Model.Appointment.Status == "Confirmed" ? "bg-success" : "bg-warning")">
+                    <span class="badge
+                        @(Model.Appointment.Status == "Confirmed" ? "bg-success" :
+                          Model.Appointment.Status == "Pending" ? "bg-warning text-dark" :
+                          Model.Appointment.Status == "Completed" ? "bg-primary" :
+                          Model.Appointment.Status == "Canceled" ? "bg-danger" : "bg-secondary")">
                         @Html.DisplayFor(model => model.Appointment.Status)
                     </span>
                 </dd>
 
                 <dt class="col-sm-4 fw-bold">Payment Status:</dt>
                 <dd class="col-sm-8">
-                    <span class="badge @(Model.Appointment.PaymentStatus == "Paid" ? "bg-primary" : "bg-danger")">
+                    <span class="badge
+                        @(Model.Appointment.PaymentStatus == "Paid" ? "bg-success" :
+                          Model.Appointment.PaymentStatus == "Unpaid" ? "bg-danger" :
+                          "bg-secondary")">
                         @Html.DisplayFor(model => model.Appointment.PaymentStatus)
                     </span>
                 </dd>
@@ -72,9 +79,13 @@
         </div>
 
         <div class="card-footer text-center">
-            <a class="btn btn-outline-warning btn-lg me-3" asp-page="./Edit" asp-route-id="@Model.Appointment.Id">
+            <!-- Disable Edit button if status is "Canceled" or "Paid" -->
+            <a class="btn btn-outline-warning btn-lg me-3
+                     @(Model.Appointment.Status == "Canceled" || Model.Appointment.PaymentStatus == "Paid" ? "disabled" : "")"
+               asp-page="./Edit" asp-route-id="@Model.Appointment.Id">
                 <i class="fas fa-edit"></i> Edit
             </a>
+
             <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>

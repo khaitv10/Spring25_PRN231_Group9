@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
-using System.Net.Http.Headers;
 using BOs.ResponseModels.DoseRecord;
+using System.Net.Http.Headers;
+using Repository.Repositories.DoseScheduleRepositories;
+using BOs.ResponseModels.DoseSchedule;
 
-namespace CVSTS_FE.Pages.DoseRecordManage
+namespace CVSTS_FE.Pages.DoseSheduleManage
 {
-
     public class EditModel : PageModel
     {
+      
+
         [BindProperty]
-        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
+        public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
+
+
         private readonly IHttpClientFactory _httpClientFactory;
 
         public EditModel(IHttpClientFactory httpClientFactory)
@@ -33,11 +38,11 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             }
 
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.GetAsJsonAsync<DoseRecordResponseModel>(client, $"/api/dose-record/info/{id}");
+            var response = await APIHelper.GetAsJsonAsync<DoseScheduleResponseModel>(client, $"/api/dose-schedule/info/{id}");
 
             if (response != null)
             {
-                DoseRecord = response;
+                DoseSchedule = response;
                 return Page();
 
             }
@@ -46,10 +51,10 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
         public async Task<IActionResult> OnPostAsync()
         {
-           //if (!ModelState.IsValid)
-           // {
-           //     return Page();
-           // }
+            //if (!ModelState.IsValid)
+            // {
+            //     return Page();
+            // }
 
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
@@ -57,21 +62,21 @@ namespace CVSTS_FE.Pages.DoseRecordManage
                 return RedirectToPage("/403Page");
             }
 
-              
-            var id = DoseRecord.Id;
+
+            var id = DoseSchedule.Id;
             var client = CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync($"/api/dose-record/{id}", DoseRecord);
+            var response = await client.PutAsJsonAsync($"/api/dose-schedule/{id}", DoseSchedule);
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error updating record.");
+                ModelState.AddModelError(string.Empty, "Error updating schedule.");
                 return Page();
             }
 
             return RedirectToPage("./Index");
         }
 
-        
+
 
         private HttpClient CreateAuthorizedClient()
         {

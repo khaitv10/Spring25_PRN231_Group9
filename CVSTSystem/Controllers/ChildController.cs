@@ -64,8 +64,19 @@ namespace CVSTSystem.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteChild(int id)
         {
-            await _childService.DeleteChild(id);
-            return Ok("Delete child successfully");
+            try
+            {
+                await _childService.DeleteChild(id);
+                return Ok(new { message = "Delete child successfully" });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Can not delete: Child has appointments or dose schedules", error = ex.Message });
+            }
         }
 
         [HttpPost]
