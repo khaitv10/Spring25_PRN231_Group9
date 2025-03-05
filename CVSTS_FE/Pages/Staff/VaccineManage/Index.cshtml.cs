@@ -41,7 +41,7 @@ namespace CVSTS_FE.Pages.VaccineManage
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(client, "/api/Vaccine");
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(client, "/api/Vaccine/active");
 
             if (response != null)
             {

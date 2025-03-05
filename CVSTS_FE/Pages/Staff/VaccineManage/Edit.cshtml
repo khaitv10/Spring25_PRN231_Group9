@@ -2,59 +2,69 @@
 @model CVSTS_FE.Pages.VaccineManage.EditModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Vaccine";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Edit Vaccine</h1>
+        <p class="lead text-muted">Modify vaccine details.</p>
+    </div>
 
-<h4>Vaccine</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Vaccine.Id" />
-            <div class="form-group">
-                <label asp-for="Vaccine.Name" class="control-label"></label>
-                <input asp-for="Vaccine.Name" class="form-control" />
-                <span asp-validation-for="Vaccine.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vaccine.Description" class="control-label"></label>
-                <input asp-for="Vaccine.Description" class="form-control" />
-                <span asp-validation-for="Vaccine.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vaccine.Origin" class="control-label"></label>
-                <input asp-for="Vaccine.Origin" class="form-control" />
-                <span asp-validation-for="Vaccine.Origin" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vaccine.MinAge" class="control-label"></label>
-                <input asp-for="Vaccine.MinAge" class="form-control" />
-                <span asp-validation-for="Vaccine.MinAge" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vaccine.MaxAge" class="control-label"></label>
-                <input asp-for="Vaccine.MaxAge" class="form-control" />
-                <span asp-validation-for="Vaccine.MaxAge" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Vaccine.Status" class="control-label"></label>
-                <input asp-for="Vaccine.Status" class="form-control" />
-                <span asp-validation-for="Vaccine.Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Vaccine.Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.Name" class="form-label"></label>
+                    <input asp-for="Vaccine.Name" class="form-control" />
+                    <span asp-validation-for="Vaccine.Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.Description" class="form-label"></label>
+                    <input asp-for="Vaccine.Description" class="form-control" />
+                    <span asp-validation-for="Vaccine.Description" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.Origin" class="form-label"></label>
+                    <input asp-for="Vaccine.Origin" class="form-control" />
+                    <span asp-validation-for="Vaccine.Origin" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.MinAge" class="form-label"></label>
+                    <input asp-for="Vaccine.MinAge" class="form-control" />
+                    <span asp-validation-for="Vaccine.MinAge" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.MaxAge" class="form-label"></label>
+                    <input asp-for="Vaccine.MaxAge" class="form-control" />
+                    <span asp-validation-for="Vaccine.MaxAge" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Vaccine.Status" class="form-label"></label>
+                    <input asp-for="Vaccine.Status" class="form-control" />
+                    <span asp-validation-for="Vaccine.Status" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-page="./Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -20,6 +20,6 @@ namespace BOs.ResponseModels.Vaccine
 
         public int? MaxAge { get; set; }
 
-        public bool? Status { get; set; }
+        public bool Status { get; set; }
     }
 }

@@ -17,7 +17,7 @@ public partial class Vaccine
 
     public int? MaxAge { get; set; }
 
-    public bool? Status { get; set; }
+    public bool Status { get; set; } = true;
 
     public virtual ICollection<DoseRecord> DoseRecords { get; set; } = new List<DoseRecord>();
 

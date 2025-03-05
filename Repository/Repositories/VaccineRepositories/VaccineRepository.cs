@@ -47,7 +47,10 @@ namespace Repository.Repositories.VaccineRepositories
         {
             var vaccine = await GetVaccineById(id);
             if(vaccine != null)
-            await Delete(vaccine);
+            {
+                vaccine.Status = false;
+                await Update(vaccine);
+            }       
         }
 
         public async Task<bool> IsVaccineNameExists(string name)
