@@ -38,6 +38,9 @@
                     <div id="vaccineContainer" class="mb-2">
                         <!-- Vaccine selection will be added dynamically here -->
                     </div>
+
+                    
+
                     <button type="button" class="btn btn-outline-primary" onclick="addVaccine()">
                         <i class="bi bi-plus-circle"></i> Add Vaccine
                     </button>
@@ -79,12 +82,29 @@
                 select.appendChild(option);
             });
 
+            // Validation message placeholder (above the input)
+            let validationMessage = document.createElement("span");
+            validationMessage.classList.add("text-danger", "d-block", "mb-1"); // Add Bootstrap classes for spacing
+            validationMessage.setAttribute("data-valmsg-for", `Service.Vaccines[${vaccineCount}].Value`);
+            validationMessage.setAttribute("data-valmsg-replace", "true");
+
             // Input for doses
             let input = document.createElement("input");
             input.type = "number";
             input.classList.add("form-control");
             input.name = `Service.Vaccines[${vaccineCount}].Value`;
             input.placeholder = "Doses";
+            input.required = true; // Client-side validation
+            input.min = 1; // Ensure dose must be positive
+
+            // Custom validation message
+            input.oninput = function () {
+                if (input.value < 1) {
+                    input.setCustomValidity("Number of doses must be positive.");
+                } else {
+                    input.setCustomValidity(""); // Clear validation message
+                }
+            };
 
             // Remove button
             let removeBtn = document.createElement("button");
@@ -95,10 +115,17 @@
                 container.removeChild(div);
             };
 
+            // Append elements in the desired order
             div.appendChild(select);
             div.appendChild(input);
             div.appendChild(removeBtn);
+            div.appendChild(validationMessage);
+
             container.appendChild(div);
+
+            // Reinitialize validation for the form
+            let form = document.querySelector("form");
+            $.validator.unobtrusive.parse(form);
 
             vaccineCount++;
         }
