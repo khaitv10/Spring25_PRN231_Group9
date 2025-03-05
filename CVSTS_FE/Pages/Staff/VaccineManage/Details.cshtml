@@ -49,14 +49,6 @@
                         <dd class="col-sm-8">
                             @Html.DisplayFor(model => model.Vaccine.MaxAge)
                         </dd>
-                        <dt class="col-sm-4">
-                            @Html.DisplayNameFor(model => model.Vaccine.Status)
-                        </dt>
-                        <dd class="col-sm-8">
-                            <span class="badge @(Model.Vaccine.Status? "bg-success" : "bg-secondary")">
-                                @Html.DisplayFor(model => model.Vaccine.Status)
-                            </span>
-                        </dd>
                     </dl>
                 </div>
             </div>

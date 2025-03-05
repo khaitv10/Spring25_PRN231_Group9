@@ -66,7 +66,7 @@ namespace Repository.Repositories.VaccineRepositories
 
         public async Task<List<Vaccine>> GetActiveVaccines()
         {
-            var list = await Get(x => x.Status.Equals("Active"));
+            var list = await Get(x => x.Status == true);
             return list.ToList();
         }
 
