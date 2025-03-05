@@ -57,9 +57,7 @@
                         </td>
 
                         <td>
-                            <!-- Edit Button -->
-                            <a class="btn btn-outline-info btn-sm @(item.Status == "Canceled" || item.PaymentStatus == "Paid" ? "disabled" : "")"
-                               asp-page="./Edit" asp-route-id="@item.Id">
+                            <a class="btn btn-outline-info btn-sm  @(item.Status == "Completed" || item.Status == "Canceled" ? "disabled" : "")" asp-page="./Edit" asp-route-id="@item.Id">
                                 <i class="fas fa-edit"></i> Edit
                             </a>
 
