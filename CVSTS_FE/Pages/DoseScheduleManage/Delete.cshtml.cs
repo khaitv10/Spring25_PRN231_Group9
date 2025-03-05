@@ -4,26 +4,25 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
-using System.Net.Http.Headers;
+using BOs.ResponseModels.DoseSchedule;
 using BOs.ResponseModels.DoseRecord;
+using System.Net.Http.Headers;
 
-namespace CVSTS_FE.Pages.DoseRecordManage
+namespace CVSTS_FE.Pages.DoseSheduleManage
 {
-
-    public class EditModel : PageModel
+    public class DeleteModel : PageModel
     {
-        [BindProperty]
-        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public EditModel(IHttpClientFactory httpClientFactory)
+        public DeleteModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
+        [BindProperty]
+        public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -33,45 +32,33 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             }
 
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.GetAsJsonAsync<DoseRecordResponseModel>(client, $"/api/dose-record/info/{id}");
+            var response = await client.GetAsJsonAsync<DoseScheduleResponseModel>($"/api/dose-schedule/info/{id}");
 
             if (response != null)
             {
-                DoseRecord = response;
-                return Page();
-
+                DoseSchedule = response;
             }
-            return Redirect("./Index");
+
+            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int? id)
         {
-           //if (!ModelState.IsValid)
-           // {
-           //     return Page();
-           // }
-
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
             {
                 return RedirectToPage("/403Page");
             }
-
-              
-            var id = DoseRecord.Id;
             var client = CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync($"/api/dose-record/{id}", DoseRecord);
-
+            var response = await client.DeleteAsync($"/api/dose-schedule/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error updating record.");
+                ModelState.AddModelError(string.Empty, "Error deleting schedule.");
                 return Page();
             }
 
             return RedirectToPage("./Index");
         }
-
-        
 
         private HttpClient CreateAuthorizedClient()
         {
@@ -85,5 +72,7 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
             return client;
         }
+
     }
 }
+

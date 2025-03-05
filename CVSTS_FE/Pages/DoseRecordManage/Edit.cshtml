@@ -39,24 +39,6 @@
                         <span asp-validation-for="DoseRecord.CreateAt" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.ServiceId" class="form-label fw-bold"></label>
-                        <select asp-for="DoseRecord.ServiceId" class="form-control" asp-items="ViewBag.ServiceId"></select>
-                        <span asp-validation-for="DoseRecord.ServiceId" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.ChildId" class="form-label fw-bold"></label>
-                        <select asp-for="DoseRecord.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
-                        <span asp-validation-for="DoseRecord.ChildId" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.VaccineId" class="form-label fw-bold"></label>
-                        <select asp-for="DoseRecord.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
-                        <span asp-validation-for="DoseRecord.VaccineId" class="text-danger"></span>
-                    </div>
-
                     <div class="d-flex justify-content-between mt-3">
                         <button type="submit" class="btn btn-success">
                             <i class="bi bi-save"></i> Save

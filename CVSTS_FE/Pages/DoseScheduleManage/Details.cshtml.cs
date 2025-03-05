@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using BOs.ResponseModels.DoseSchedule;
 using BOs.ResponseModels.DoseRecord;
 using System.Net.Http.Headers;
-using BOs.ResponseModels.Child;
 
-namespace CVSTS_FE.Pages.DoseRecordManage
+namespace CVSTS_FE.Pages.DoseSheduleManage
 {
     public class DetailsModel : PageModel
     {
@@ -21,27 +21,27 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             _httpClientFactory = httpClientFactory;
         }
 
-        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
+        public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
-                return BadRequest("Invalid dose record ID.");
+                return BadRequest("Invalid dose schedule ID.");
             }
 
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/api/dose-record/info/{id}"); 
+            var response = await client.GetAsync($"/api/dose-schedule/info/{id}");
             if (response != null)
                 if (!response.IsSuccessStatusCode)
                 {
                     return NotFound();
                 }
 
-            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecordResponseModel>();
+            DoseSchedule = await response.Content.ReadFromJsonAsync<DoseScheduleResponseModel>();
 
 
-            if (DoseRecord == null)
+            if (DoseSchedule == null)
             {
                 return NotFound();
             }

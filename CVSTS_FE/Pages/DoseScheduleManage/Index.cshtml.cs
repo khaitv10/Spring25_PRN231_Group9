@@ -6,53 +6,46 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using BOs.Models;
+using BOs.ResponseModels.Child;
 using BOs.ResponseModels.DoseRecord;
 using System.Net.Http.Headers;
-using BOs.ResponseModels.Child;
+using BOs.ResponseModels.DoseSchedule;
 
-namespace CVSTS_FE.Pages.DoseRecordManage
+namespace CVSTS_FE.Pages.DoseSheduleManage
 {
-    public class DetailsModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public DetailsModel(IHttpClientFactory httpClientFactory)
+        public IndexModel(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
 
-        public DoseRecordResponseModel DoseRecord { get; set; } = default!;
+        public IList<DoseScheduleResponseModel> DoseSchedule { get;set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync()
         {
-            if (id == null)
-            {
-                return BadRequest("Invalid dose record ID.");
-            }
-
             var client = CreateAuthorizedClient();
-            var response = await client.GetAsync($"/api/dose-record/info/{id}"); 
+            var response = await APIHelper.GetAsJsonAsync<List<DoseScheduleResponseModel>>(client, "/api/dose-schedule");
+
             if (response != null)
-                if (!response.IsSuccessStatusCode)
-                {
-                    return NotFound();
-                }
-
-            DoseRecord = await response.Content.ReadFromJsonAsync<DoseRecordResponseModel>();
-
-
-            if (DoseRecord == null)
             {
-                return NotFound();
+                DoseSchedule = response;
+                return Page();
             }
-
-            return Page();
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error occurred while logging in");
+                return Redirect("/Login");
+            }
         }
 
         private HttpClient CreateAuthorizedClient()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
             var token = HttpContext.Session.GetString("JWToken");
+
 
             if (!string.IsNullOrEmpty(token))
             {

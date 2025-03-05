@@ -12,14 +12,26 @@ namespace BOs.RequestModels.DoseRecord
     {
     [Required(ErrorMessage = "Date of record is required.")]
     [DataType(DataType.Date)]
+    [CustomValidation(typeof(DoseRecordCreateModel), nameof(ValidateDoseDate))]
     public DateTime DoseDate { get; set; }
 
+    [Required(ErrorMessage = "DoseNumber is required")]
     [Range(1, 10, ErrorMessage = "DoseNumber must be between 1 and 10.")]
     public int? DoseNumber { get; set; }
+
 
     [Required(ErrorMessage = "Status is required.")]
     public string? Status { get; set; }
 
 
+
+    public static ValidationResult ValidateDoseDate(DateTime date, ValidationContext context)
+    {
+        if (date < DateTime.Today)
+        {
+            return new ValidationResult("DoseDate must be today or the next day.");
+        }
+        return ValidationResult.Success;
     }
+ }
 }
