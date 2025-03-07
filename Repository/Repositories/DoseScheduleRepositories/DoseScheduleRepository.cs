@@ -33,7 +33,10 @@ namespace Repository.Repositories.DoseScheduleRepositories
 
         public async Task<DoseSchedule> GetDoseScheduleById(int id)
         {
-            return await GetSingle(b => b.Id == id);
+            return await GetSingle(
+        x => x.Id == id,
+        includeProperties: "Vaccine,Service,Child"
+   );
         }
 
         public async Task UpdateDoseSchedule( int id, DoseSchedule doseSchedule)

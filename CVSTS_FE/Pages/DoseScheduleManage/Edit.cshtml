@@ -17,7 +17,7 @@
 
                     <div class="mb-3">
                         <label asp-for="DoseSchedule.NextDoseDate" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" />
+                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" type="date" />
                         <span asp-validation-for="DoseSchedule.NextDoseDate" class="text-danger"></span>
                     </div>
 
@@ -37,6 +37,18 @@
                         <label asp-for="DoseSchedule.CreateAt" class="form-label fw-bold"></label>
                         <input asp-for="DoseSchedule.CreateAt" class="form-control" />
                         <span asp-validation-for="DoseSchedule.CreateAt" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DoseSchedules.VaccineId" class="form-label fw-bold"></label>
+                        <select asp-for="DoseSchedules.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
+                        <span asp-validation-for="DoseSchedules.VaccineId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DoseSchedules.ChildId" class="form-label fw-bold"></label>
+                        <select asp-for="DoseSchedules.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
+                        <span asp-validation-for="DoseSchedules.ChildId" class="text-danger"></span>
                     </div>
 
                    

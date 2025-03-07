@@ -11,6 +11,10 @@ using BOs.ResponseModels.DoseRecord;
 using System.Net.Http.Headers;
 using Repository.Repositories.DoseScheduleRepositories;
 using BOs.ResponseModels.DoseSchedule;
+using BOs.RequestModels.DoseRecord;
+using BOs.RequestModels.DoseSchedule;
+using BOs.ResponseModels.Child;
+using BOs.ResponseModels.Vaccine;
 
 namespace CVSTS_FE.Pages.DoseSheduleManage
 {
@@ -20,6 +24,9 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         [BindProperty]
         public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
+
+        [BindProperty]
+        public DoseScheduleCreateModel DoseSchedules { get; set; } = default!;
 
 
         private readonly IHttpClientFactory _httpClientFactory;
@@ -32,6 +39,18 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            if (vaccineId != null)
+            {
+                ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                    return Page();
+                }
+            }
+
             if (id == null)
             {
                 return NotFound();
