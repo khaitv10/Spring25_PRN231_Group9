@@ -16,7 +16,7 @@
                 <div class="col-md-6">
                     <div class="form-group mb-3">
                         <label asp-for="DoseSchedule.NextDoseDate" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" />
+                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" type="date" />
                         <span asp-validation-for="DoseSchedule.NextDoseDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -37,7 +37,22 @@
                         <span asp-validation-for="DoseSchedule.Status" class="text-danger"></span>
                     </div>
                 </div>
-               
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="DoseSchedule.VaccineId" class="form-label fw-bold"></label>
+                            <select asp-for="DoseSchedule.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
+                            <span asp-validation-for="DoseSchedule.VaccineId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="DoseSchedule.ChildId" class="form-label fw-bold"></label>
+                                <select asp-for="DoseSchedule.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
+                                <span asp-validation-for="DoseSchedule.ChildId" class="text-danger"></span>
+                            </div>
+                        </div>
 
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary px-4">Create</button>

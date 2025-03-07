@@ -9,6 +9,8 @@ using BOs.Models;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.DoseSchedule;
 using BOs.RequestModels.DoseSchedule;
+using BOs.ResponseModels.Child;
+using BOs.ResponseModels.Vaccine;
 
 namespace CVSTS_FE.Pages.DoseSheduleManage
 {
@@ -21,9 +23,22 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
             _httpClientFactory = httpClientFactory;
         }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            return Page();
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            if (response != null)
+            {
+                ViewData["VaccineId"] = new SelectList(response, "Id", "Name");
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                    return Page();
+                }
+
+            }
+
+            return RedirectToPage("./Index");
         }
 
         [BindProperty]
@@ -33,6 +48,7 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
                 return Page();
