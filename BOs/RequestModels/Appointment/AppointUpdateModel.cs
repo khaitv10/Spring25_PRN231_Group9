@@ -16,12 +16,8 @@ namespace BOs.RequestModels.Appointment
         [Required(ErrorMessage = "Child selection is required.")]
         public int?  ChildId { get; set; }
         [JsonIgnore]
-        public string PaymentStatus { get; set; }
+        public string? PaymentStatus { get; set; }
         public List<int>? SelectedServiceIds { get; set; } = new List<int>();
-
-        
-
-      
 
     }
 }

@@ -2,45 +2,60 @@
 @model CVSTS_FE.Pages.Staff.StockManage.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Vaccine Stock";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Delete Vaccine Stock</h1>
+        <p class="lead text-muted">Are you sure you want to delete this vaccine stock?</p>
+    </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>VaccineStock</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.Quantity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.Quantity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.ExpiryDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.ExpiryDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.UpdateAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.UpdateAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.Vaccine)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.Vaccine.Name)
-        </dd>
-    </dl>
-    
-    <form method="post">
-        <input type="hidden" asp-for="VaccineStock.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Stock Details</h4>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.Vaccine.Name)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.VaccineStock.Vaccine.Name)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.Quantity)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.VaccineStock.Quantity)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.ExpiryDate)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Model.VaccineStock.ExpiryDate.ToString("dd/MM/yyyy")
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <form method="post">
+                    <input type="hidden" asp-for="VaccineStock.Id" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <a asp-page="./Index" class="btn btn-secondary">
+                        <i class="fas fa-list"></i> Back to List
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+}

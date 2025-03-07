@@ -46,6 +46,11 @@ namespace Service.Service.VaccineServices
 
         public async Task AddVaccine(VaccineCreateModel vaccine)
         {
+            var exists = await _vaccineRepo.GetVaccineByName(vaccine.Name);
+            if (exists != null)
+            {
+                throw new ArgumentException("A vaccine with this name already exists.");
+            }
             Vaccine newVaccine = _mapper.Map<Vaccine>(vaccine);
             await _vaccineRepo.AddVaccine(newVaccine);
 

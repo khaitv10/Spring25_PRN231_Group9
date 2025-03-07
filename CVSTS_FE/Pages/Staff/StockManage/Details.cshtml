@@ -2,42 +2,63 @@
 @model CVSTS_FE.Pages.Staff.StockManage.DetailsModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Vaccine Stock Details";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Vaccine Stock Details</h1>
+        <p class="lead text-muted">View detailed information about the vaccine stock.</p>
+    </div>
 
-<div>
-    <h4>VaccineStock</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.Quantity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.Quantity)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.ExpiryDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.ExpiryDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.UpdateAt)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.UpdateAt)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.VaccineStock.Vaccine)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.VaccineStock.Vaccine.Name)
-        </dd>
-    </dl>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Stock Information</h4>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.Vaccine.Name)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.VaccineStock.Vaccine.Name)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.Quantity)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Html.DisplayFor(model => model.VaccineStock.Quantity)
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.ExpiryDate)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Model.VaccineStock.ExpiryDate.ToString("dd/MM/yyyy")
+                        </dd>
+                        <dt class="col-sm-4">
+                            @Html.DisplayNameFor(model => model.VaccineStock.UpdateAt)
+                        </dt>
+                        <dd class="col-sm-8">
+                            @Model.VaccineStock.UpdateAt?.ToString("dd/MM/yyyy HH:mm:ss") ?? "N/A"
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a asp-page="./Edit" asp-route-id="@Model.VaccineStock.Id" class="btn btn-outline-info">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a asp-page="./Index" class="btn btn-secondary">
+                    <i class="fas fa-list"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.VaccineStock.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
-</div>
+
+@section Scripts {
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+}

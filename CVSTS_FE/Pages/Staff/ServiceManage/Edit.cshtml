@@ -4,6 +4,7 @@
     ViewData["Title"] = "Edit Service";
     Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
+
 @if (ViewData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -11,6 +12,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
+
 <div class="container mt-4">
     <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
@@ -20,24 +22,28 @@
             <form method="post">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
+                <!-- Service Name -->
                 <div class="mb-3">
                     <label asp-for="Service.Name" class="form-label fw-bold">Service Name</label>
                     <input asp-for="Service.Name" class="form-control" placeholder="Enter service name" />
                     <span asp-validation-for="Service.Name" class="text-danger"></span>
                 </div>
 
+                <!-- Description -->
                 <div class="mb-3">
                     <label asp-for="Service.Description" class="form-label fw-bold">Description</label>
                     <textarea asp-for="Service.Description" class="form-control" rows="3" placeholder="Enter service description"></textarea>
                     <span asp-validation-for="Service.Description" class="text-danger"></span>
                 </div>
 
+                <!-- Price -->
                 <div class="mb-3">
                     <label asp-for="Service.Price" class="form-label fw-bold">Price (VND)</label>
                     <input asp-for="Service.Price" type="number" class="form-control" placeholder="Enter price" />
                     <span asp-validation-for="Service.Price" class="text-danger"></span>
                 </div>
 
+                <!-- Vaccines Section -->
                 <div class="mb-3">
                     <label class="form-label fw-bold">Vaccines</label>
                     <div id="vaccineContainer" class="mb-2">
@@ -50,7 +56,8 @@
                                         <option value="@v.Id" selected="@(v.Id == Model.VaccineList[i].VaccineId ? "selected" : null)">@v.Name</option>
                                     }
                                 </select>
-                                <input type="number" class="form-control" name="VaccineList[@i].DoseCount" value="@Model.VaccineList[i].DoseCount" placeholder="Doses" />
+                                <span class="text-danger d-block mb-1" data-valmsg-for="VaccineList[@i].DoseCount" data-valmsg-replace="true"></span>
+                                <input type="number" class="form-control" name="VaccineList[@i].DoseCount" value="@Model.VaccineList[i].DoseCount" placeholder="Doses" min="1" required />
                                 <button type="button" class="btn btn-danger" onclick="removeVaccine(this)">
                                     <i class="bi bi-trash"></i>
                                 </button>
@@ -62,6 +69,7 @@
                     </button>
                 </div>
 
+                <!-- Form Actions -->
                 <div class="mt-4">
                     <button type="submit" class="btn btn-success"><i class="bi bi-check-lg"></i> Save</button>
                     <a asp-page="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to List</a>
@@ -100,6 +108,25 @@
             input.classList.add("form-control");
             input.name = `VaccineList[${vaccineCount}].DoseCount`;
             input.placeholder = "Doses";
+            input.required = true; // Ensure the field is required
+            input.min = 1; // Ensure the minimum value is 1
+
+            // Validation message placeholder
+            let validationMessage = document.createElement("span");
+            validationMessage.classList.add("text-danger", "d-block", "mb-1");
+            validationMessage.setAttribute("data-valmsg-for", `VaccineList[${vaccineCount}].DoseCount`);
+            validationMessage.setAttribute("data-valmsg-replace", "true");
+
+            // Custom validation logic
+            input.oninput = function () {
+                if (input.value < 1) {
+                    input.setCustomValidity("Number of doses must be positive.");
+                    validationMessage.textContent = "Number of doses must be positive.";
+                } else {
+                    input.setCustomValidity("");
+                    validationMessage.textContent = "";
+                }
+            };
 
             // Remove button
             let removeBtn = document.createElement("button");
@@ -110,7 +137,9 @@
                 container.removeChild(div);
             };
 
+            // Append elements
             div.appendChild(select);
+            div.appendChild(validationMessage); // Validation message above the input
             div.appendChild(input);
             div.appendChild(removeBtn);
             container.appendChild(div);
