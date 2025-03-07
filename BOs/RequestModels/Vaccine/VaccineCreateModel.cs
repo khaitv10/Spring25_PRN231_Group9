@@ -17,5 +17,6 @@ namespace BOs.RequestModels.Vaccine
         public int? MinAge { get; set; }
 
         public int? MaxAge { get; set; }
+        public bool Status { get; set; } = true;
     }
 }

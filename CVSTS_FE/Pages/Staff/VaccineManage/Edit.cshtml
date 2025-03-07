@@ -47,7 +47,7 @@
                     <input asp-for="Vaccine.MaxAge" class="form-control" />
                     <span asp-validation-for="Vaccine.MaxAge" class="text-danger"></span>
                 </div>
-
+                <input type="hidden" asp-for="Vaccine.Status" />
                 <div class="text-center">
                     <input type="submit" value="Save" class="btn btn-primary" />
                     <a asp-page="./Index" class="btn btn-secondary">Back to List</a>
