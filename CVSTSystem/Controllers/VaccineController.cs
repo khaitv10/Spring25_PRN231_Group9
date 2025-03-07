@@ -28,16 +28,23 @@ namespace CVSTSystem.Controllers
             _vaccineStockService = vaccineStockService;
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Staff")]
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<VaccineInfoResponseModel>>> GetAllVaccines()
         {
             var vaccines = await _vaccineService.GetAllVaccines();
             return Ok(vaccines);
         }
+        [HttpGet("active")]
+        [Authorize(Roles = "Staff, User")]
+        public async Task<ActionResult<List<VaccineInfoResponseModel>>> GetActiveVaccines()
+        {
+            var vaccines = await _vaccineService.GetActiveVaccines();
+            return Ok(vaccines);
+        }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, User")]
         public async Task<ActionResult<VaccineInfoResponseModel>> GetVaccineById(int id)
         {
             var vaccine = await _vaccineService.GetVaccineById(id);
@@ -49,7 +56,7 @@ namespace CVSTSystem.Controllers
         }
 
         [HttpGet("name/{name}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, User")]
         public async Task<ActionResult<Vaccine>> GetVaccineByName(string name)
         {
             var vaccine = await _vaccineService.GetVaccineByName(name);
@@ -127,7 +134,7 @@ namespace CVSTSystem.Controllers
 
 
         [HttpGet("canvaccinate/{patientAge}/{vaccineId}")]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "Staff, User")]
         public async Task<ActionResult<bool>> CanVaccinate(int patientAge, int vaccineId)
         {
             var canVaccinate = await _vaccineService.CanVaccinate(patientAge, vaccineId);
