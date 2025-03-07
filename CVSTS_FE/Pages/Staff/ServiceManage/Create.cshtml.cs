@@ -39,6 +39,17 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+
+            // Debugging: Check if Vaccines are being populated
+            foreach (var vaccine in Service.Vaccines)
+            {
+                if (vaccine.Value <= 0)
+                {
+                    ModelState.AddModelError("", "Number of doses must be positive.");
+                    return Page();
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -49,21 +60,15 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
             if (response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    ViewData["SuccessMessage"] = $"Service created successfully!";
-                    return Page();
-                }
-                return RedirectToPage("Index");
+                ViewData["SuccessMessage"] = "Service created successfully!";
+                return Page();
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "An error occurred while creating the service.");
                 return Page();
             }
-
         }
-
 
         private HttpClient CreateAuthorizedClient()
         {
