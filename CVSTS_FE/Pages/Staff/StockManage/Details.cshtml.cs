@@ -29,7 +29,7 @@ namespace CVSTS_FE.Pages.Staff.StockManage
                 return NotFound();
             }
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.GetAsJsonAsync<VaccineStockResponseModel>(client,$"api/vaccine/stock/{id}");
+            var response = await APIHelper.GetAsJsonAsync<VaccineStockResponseModel>(client,$"/api/vaccine/stock/{id}");
             if(response != null)
             {
                 VaccineStock = response;

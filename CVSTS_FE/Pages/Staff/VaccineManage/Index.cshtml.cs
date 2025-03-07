@@ -29,19 +29,25 @@ namespace CVSTS_FE.Pages.VaccineManage
         }
 
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string? odataQuery)
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
             string jwt = HttpContext.Session.GetString("JWToken");
+
             if (string.IsNullOrEmpty(jwt))
             {
-
                 return Redirect("/Login");
             }
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
-            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(client, "/api/Vaccine/active");
+            string requestUri = "/api/vaccines";
+            if (!string.IsNullOrEmpty(odataQuery))
+            {
+                requestUri += "?" + odataQuery;
+            }
+
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(client, requestUri);
 
             if (response != null)
             {
@@ -50,8 +56,8 @@ namespace CVSTS_FE.Pages.VaccineManage
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Error occurred while logging in");
-                return Redirect("/Login");
+                ModelState.AddModelError(string.Empty, "Error occurred while fetching vaccines.");
+                return Page();
             }
         }
     }
