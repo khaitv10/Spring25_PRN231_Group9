@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.DoseRecord;
+using BOs.RequestModels.DoseRecord;
+using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.Child;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
@@ -17,6 +20,9 @@ namespace CVSTS_FE.Pages.DoseRecordManage
     {
         [BindProperty]
         public DoseRecordResponseModel DoseRecord { get; set; } = default!;
+
+        [BindProperty]
+        public DoseRecordCreateModel DoseRecords { get; set; } = default!;
         private readonly IHttpClientFactory _httpClientFactory;
 
         public EditModel(IHttpClientFactory httpClientFactory)
@@ -27,6 +33,20 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            if (vaccineId != null)
+            {
+                ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                    return Page();
+                }
+            }
+           
+
+
             if (id == null)
             {
                 return NotFound();

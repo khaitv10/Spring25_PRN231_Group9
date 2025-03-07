@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
 using BOs.RequestModels.DoseRecord;
 using System.Net.Http.Headers;
+using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.Child;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
@@ -20,9 +23,22 @@ namespace CVSTS_FE.Pages.DoseRecordManage
             _httpClientFactory = httpClientFactory;
         }
 
-        public IActionResult OnGet()
+        public async  Task<IActionResult> OnGet()
         {
-            return Page();
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            if (response != null)
+            {
+                ViewData["VaccineId"] = new SelectList(response, "Id", "Name");
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                    return Page();
+                }
+
+            }
+           
+            return RedirectToPage("./Index");
         }
 
         [BindProperty]

@@ -66,10 +66,10 @@ namespace Service.Mapper
 
             CreateMap<DoseRecord, DoseRecordResponseModel>()
                 .ForMember(dest => dest.DoseDate, opt => opt.MapFrom(src => src.DoseDate))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? ""))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? "Scheduled"))
                 .ForMember(dest => dest.DoseNumber, opt => opt.MapFrom(src => src.DoseNumber))
                 .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
-                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
+                .ForMember(dest => dest.ChillName, opt => opt.MapFrom(src => src.Child != null ? src.Child.FullName : "Unknown"));
 
 
             // DoseSchedule 
@@ -82,10 +82,10 @@ namespace Service.Mapper
 
             CreateMap<DoseSchedule, DoseScheduleResponseModel>()
             .ForMember(dest => dest.NextDoseDate, opt => opt.MapFrom(src => src.NextDoseDate))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? ""))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status ?? "Scheduled"))
             .ForMember(dest => dest.DoseNumber, opt => opt.MapFrom(src => src.DoseNumber))
             .ForMember(dest => dest.VaccineName, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Name : "Unknown"))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Vaccine != null ? src.Vaccine.Description : "Unknown"));
+            .ForMember(dest => dest.ChillName, opt => opt.MapFrom(src => src.Child != null ? src.Child.FullName : "Unknown"));
 
             // Appointment
             CreateMap<Appointment, AppointmentResModel>()

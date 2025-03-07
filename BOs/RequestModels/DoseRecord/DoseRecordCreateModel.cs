@@ -23,9 +23,13 @@ namespace BOs.RequestModels.DoseRecord
     [Required(ErrorMessage = "Status is required.")]
     public string? Status { get; set; }
 
+    public int VaccineId { get; set; }
+
+    public int ChildId { get; set; }
 
 
-    public static ValidationResult ValidateDoseDate(DateTime date, ValidationContext context)
+
+        public static ValidationResult ValidateDoseDate(DateTime date, ValidationContext context)
     {
         if (date < DateTime.Today)
         {
