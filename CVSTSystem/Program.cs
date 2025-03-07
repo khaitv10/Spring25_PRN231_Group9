@@ -128,7 +128,7 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IDoseScheduleRepository, DoseScheduleRepository>();
-builder.Services.AddScoped<IDoseRecordRepository, DoseReordRepository>();
+builder.Services.AddScoped<IDoseRecordRepository, DoseRecordRepository>();
 builder.Services.AddScoped<IVaccineRepository, VaccineRepository>();
 builder.Services.AddScoped<IVaccineStockRepository, VaccineStockRepository>();
 builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
