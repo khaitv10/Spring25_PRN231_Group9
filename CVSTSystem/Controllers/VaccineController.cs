@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace CVSTSystem.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/vaccine")]
     [ApiController]
     public class VaccineController : ControllerBase
     {
