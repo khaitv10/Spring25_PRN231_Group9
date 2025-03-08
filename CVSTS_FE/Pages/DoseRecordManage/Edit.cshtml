@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Edit Dose Record";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+
 }
 
 <div class="container mt-4">
@@ -33,20 +35,15 @@
                         <span asp-validation-for="DoseRecord.Status" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.CreateAt" class="form-label fw-bold"></label>
-                        <input asp-for="DoseRecord.CreateAt" class="form-control" />
-                        <span asp-validation-for="DoseRecord.CreateAt" class="text-danger"></span>
-                    </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseRecords.VaccineId" class="form-label fw-bold"></label>
+                        <label asp-for="DoseRecord.VaccineName" class="form-label fw-bold"></label>
                         <select asp-for="DoseRecords.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
                         <span asp-validation-for="DoseRecords.VaccineId" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseRecords.ChildId" class="form-label fw-bold"></label>
+                        <label asp-for="DoseRecord.ChillName" class="form-label fw-bold"></label>
                         <select asp-for="DoseRecords.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
                         <span asp-validation-for="DoseRecords.ChildId" class="text-danger"></span>
                     </div>

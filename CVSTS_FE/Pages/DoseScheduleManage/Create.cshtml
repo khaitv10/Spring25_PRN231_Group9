@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Create Dose Schedule";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+
 }
 
 <div class="container mt-4">
@@ -40,7 +42,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label asp-for="DoseSchedule.VaccineId" class="form-label fw-bold"></label>
+                            <label asp-for="DoseSchedules.VaccineName" class="form-label fw-bold"></label>
                             <select asp-for="DoseSchedule.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
                             <span asp-validation-for="DoseSchedule.VaccineId" class="text-danger"></span>
                         </div>
@@ -48,7 +50,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="DoseSchedule.ChildId" class="form-label fw-bold"></label>
+                                <label asp-for="DoseSchedules.ChillName" class="form-label fw-bold"></label>
                                 <select asp-for="DoseSchedule.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
                                 <span asp-validation-for="DoseSchedule.ChildId" class="text-danger"></span>
                             </div>
