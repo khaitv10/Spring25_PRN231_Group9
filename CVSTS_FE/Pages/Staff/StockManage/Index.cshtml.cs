@@ -21,7 +21,7 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         }
         public IList<VaccineStockResponseModel> VaccineStock { get;set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(string? odataQuery)
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
             string jwt = HttpContext.Session.GetString("JWToken");
@@ -32,8 +32,13 @@ namespace CVSTS_FE.Pages.Staff.StockManage
             }
 
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+            string requestUri = "/api/vaccine-stock";
+            if (!string.IsNullOrEmpty(odataQuery))
+            {
+                requestUri += "?" + odataQuery;
+            }
 
-            var response = await APIHelper.GetAsJsonAsync<List<VaccineStockResponseModel>>(client, "/api/Vaccine/stock");
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineStockResponseModel>>(client, requestUri);
             if(response != null)
             {
                 VaccineStock = response;

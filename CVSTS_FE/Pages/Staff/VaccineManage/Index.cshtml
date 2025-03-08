@@ -1,9 +1,10 @@
 ﻿@page
+
 @model CVSTS_FE.Pages.VaccineManage.IndexModel
 
 @{
     ViewData["Title"] = "Vaccine List";
-    Layout = "~/Pages/Shared/_LayoutStaff.cshtml"; // Assuming you want a similar layout
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
 <div class="container mt-4">
@@ -18,28 +19,19 @@
         <input type="hidden" id="odataQuery" name="odataQuery" value="">
 
         <div class="row g-3 align-items-center">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label for="nameFilter" class="form-label">Vaccine Name</label>
                 <input type="text" class="form-control" id="nameFilter" name="nameFilter" placeholder="Enter name...">
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label for="minAgeFilter" class="form-label">Min Age</label>
                 <input type="number" class="form-control" id="minAgeFilter" name="minAgeFilter" placeholder="Min age">
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label for="maxAgeFilter" class="form-label">Max Age</label>
                 <input type="number" class="form-control" id="maxAgeFilter" name="maxAgeFilter" placeholder="Max age">
-            </div>
-
-            <div class="col-md-3">
-                <label for="statusFilter" class="form-label">Status</label>
-                <select class="form-select" id="statusFilter" name="statusFilter">
-                    <option value="">All</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                </select>
             </div>
 
             <div class="col-md-12 text-center mt-3">
@@ -57,7 +49,6 @@
                     <th>@Html.DisplayNameFor(model => model.Vaccine[0].Origin)</th>
                     <th>@Html.DisplayNameFor(model => model.Vaccine[0].MinAge)</th>
                     <th>@Html.DisplayNameFor(model => model.Vaccine[0].MaxAge)</th>
-                    @*                     <th>@Html.DisplayNameFor(model => model.Vaccine[0].Status)</th> *@
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -70,11 +61,6 @@
                         <td>@Html.DisplayFor(modelItem => item.Origin)</td>
                         <td>@Html.DisplayFor(modelItem => item.MinAge)</td>
                         <td>@Html.DisplayFor(modelItem => item.MaxAge)</td>
-                        @*                         <td>
-                            <span class="badge @(item.Status ? "bg-success" : "bg-secondary")">
-                                @Html.DisplayFor(modelItem => item.Status)
-                            </span>
-                        </td> *@
                         <td>
                             <a class="btn btn-outline-info btn-sm" asp-page="./Edit" asp-route-id="@item.Id">
                                 <i class="fas fa-edit"></i> Edit
@@ -92,7 +78,6 @@
         </table>
     </div>
 </div>
-
 @section Scripts {
     <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
     <script src="~/js/vaccineFilter.js"></script>

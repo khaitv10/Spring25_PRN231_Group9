@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Vaccine Stock";
-    Layout = "~/Pages/Shared/_LayoutStaff.cshtml"; 
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
 <div class="container mt-4">
@@ -14,6 +14,45 @@
             <i class="fas fa-plus"></i> Add New Stock
         </a>
     </div>
+
+    <form id="filterForm" method="get">
+        <input type="hidden" id="odataQuery" name="odataQuery" value="">
+
+        <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+                <label for="vaccineNameFilter" class="form-label">Vaccine Name</label>
+                <input type="text" class="form-control" id="vaccineNameFilter" name="vaccineNameFilter" placeholder="Enter vaccine name...">
+            </div>
+
+            <div class="col-md-3">
+                <label for="minQuantityFilter" class="form-label">Min Quantity</label>
+                <input type="number" class="form-control" id="minQuantityFilter" name="minQuantityFilter" placeholder="Min quantity">
+            </div>
+
+            <div class="col-md-3">
+                <label for="maxQuantityFilter" class="form-label">Max Quantity</label>
+                <input type="number" class="form-control" id="maxQuantityFilter" name="maxQuantityFilter" placeholder="Max quantity">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Expiry Date Range</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" id="expiryStartDateFilter" name="expiryStartDateFilter" placeholder="Start Date">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="date" class="form-control" id="expiryEndDateFilter" name="expiryEndDateFilter" placeholder="End Date">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-12 text-center mt-3">
+                <button type="button" id="applyFiltersBtn" class="btn btn-primary">Apply Filters</button>
+                <button type="button" id="resetFiltersBtn" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+    </form>
 
     <div class="table-responsive">
         <table class="table table-hover table-striped align-middle shadow-lg rounded overflow-hidden">
@@ -54,4 +93,5 @@
 
 @section Scripts {
     <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+    <script src="~/js/vaccineStockFilter.js"></script>
 }

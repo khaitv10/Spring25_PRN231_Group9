@@ -21,7 +21,7 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         }
         public async Task<IActionResult> OnGet()
         {
-            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccines");
             if (response != null)
             {
                 ViewData["VaccineId"] = new SelectList(response, "Id", "Name");
