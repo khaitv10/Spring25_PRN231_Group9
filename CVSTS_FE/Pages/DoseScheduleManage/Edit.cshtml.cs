@@ -39,7 +39,7 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine/active");
             if (vaccineId != null)
             {
                 ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
@@ -47,7 +47,7 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
                 if (childId != null)
                 {
                     ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
-                    return Page();
+                    
                 }
             }
 
