@@ -27,7 +27,7 @@ namespace BOs.ResponseModels.Vaccine
         [Range(0, 100, ErrorMessage = "MaxAge must be between 0 and 150.")]
         public int? MaxAge { get; set; }
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (MinAge.HasValue && MaxAge.HasValue && MinAge > MaxAge)
