@@ -25,7 +25,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
         public async Task<IActionResult> OnGetAsync()
         {
             var client = CreateAuthorizedClient();
-            var vaccineResponse = await client.GetAsync($"/api/Vaccine");
+            var vaccineResponse = await client.GetAsync($"/api/Vaccine/active");
             var vaccine = await vaccineResponse.Content.ReadFromJsonAsync<List<VaccineInfoResponseModel>>();
 
             ViewData["Vaccine"] = new SelectList(vaccine, "Id", "Name");
@@ -61,7 +61,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
             if (response.IsSuccessStatusCode)
             {
                 ViewData["SuccessMessage"] = "Service created successfully!";
-                return Page();
+                return RedirectToPage("./Index");
             }
             else
             {
