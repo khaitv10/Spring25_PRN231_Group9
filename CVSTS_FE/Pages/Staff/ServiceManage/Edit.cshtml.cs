@@ -68,7 +68,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
             }
 
             // Fetch all available vaccines
-            var vaccineResponse = await client.GetAsync("/api/Vaccine");
+            var vaccineResponse = await client.GetAsync("/api/Vaccine/active");
             if (vaccineResponse.IsSuccessStatusCode)
             {
                 AllVaccines = await vaccineResponse.Content.ReadFromJsonAsync<List<VaccineInfoResponseModel>>() ?? new();

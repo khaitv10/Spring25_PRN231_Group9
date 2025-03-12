@@ -85,7 +85,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
             ViewData["SuccessMessage"] = $"Service {id} updated successfully!";
 
-            return Page();
+            return RedirectToPage("./Index");
         }
         private HttpClient CreateAuthorizedClient()
         {
