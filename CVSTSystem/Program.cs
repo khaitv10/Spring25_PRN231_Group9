@@ -16,6 +16,7 @@ using Repository.Repositories.AuthRepositories;
 using Repository.Repositories.ChildRepositories;
 using Repository.Repositories.DoseRecordRepositories;
 using Repository.Repositories.DoseScheduleRepositories;
+using Repository.Repositories.PaymentRepositories;
 using Repository.Repositories.ServiceRepository;
 using Repository.Repositories.UserRepositories;
 using Repository.Repositories.VaccineRepositories;
@@ -28,6 +29,7 @@ using Service.Service.AppointmentServices;
 using Service.Service.ChildServices;
 using Service.Service.DoseRecordServices;
 using Service.Service.DoseScheduleServices;
+using Service.Service.PaymentServices;
 using Service.Service.ServiceService;
 using Service.Service.VaccineServices;
 using Service.Service.VaccineStockServices;
@@ -135,6 +137,7 @@ builder.Services.AddScoped<IServiceRepository, ServiceRepsitory>();
 builder.Services.AddScoped<IServiceVaccineRepository, ServiceVaccineRepository>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentServiceRepository, AppointmentServiceRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 
 
 
@@ -150,6 +153,7 @@ builder.Services.AddScoped<IVaccineStockService, VaccineStockService>();
 builder.Services.AddScoped<IVaccineService, VaccineService>();
 builder.Services.AddScoped<IServiceService, ServiceService>();
 builder.Services.AddScoped<IAppointmentServices, AppointmentServices>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 // Cấu hình CORS
 builder.Services.AddCors(options =>
