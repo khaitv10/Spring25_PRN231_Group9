@@ -43,10 +43,10 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return Page();
+            //}
             var id = VaccineStock.Id;
             var client = CreateAuthorizedClient();
             var response = await client.PutAsJsonAsync<VaccineStockResponseModel>($"/api/vaccine/stock/{id}", VaccineStock);

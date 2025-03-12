@@ -172,10 +172,10 @@ namespace CVSTSystem.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<ActionResult<VaccineStockCreateModel>> CreateVaccineStock(VaccineStockCreateModel vaccineStock)
         {
-            if (!ModelState.IsValid)
+/*            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
-            }
+            }*/
 
             await _vaccineStockService.AddVaccineStock(vaccineStock);
             return Ok(new { Message = "Vaccine stock has been created", VaccineStock = vaccineStock });
