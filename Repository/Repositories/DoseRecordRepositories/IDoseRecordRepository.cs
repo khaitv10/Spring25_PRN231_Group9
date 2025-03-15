@@ -13,7 +13,7 @@ namespace Repository.Repositories.DoseRecordRepositories
         Task<List<DoseRecord>> GetAllDoseRecord();
         Task<DoseRecord> GetByDoseRecordId(int id);
         Task AddDoseRecord(DoseRecord doseRecord);
-        Task UpdateDoseRecord(int id,DoseRecord doseRecord);
+        Task UpdateDoseRecord(DoseRecord doseRecord);
         Task DeleteDoseRecord(int id);
     }
 }
