@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.Vaccine;
+using BOs.ResponseModels.VaccineStock;
 
 namespace CVSTS_FE.Pages.VaccineManage
 {
@@ -21,6 +22,7 @@ namespace CVSTS_FE.Pages.VaccineManage
         }
 
         public VaccineInfoResponseModel Vaccine { get; set; } = default!;
+        public List<VaccineStockResponseModel> VaccineStocks { get; set; } = new List<VaccineStockResponseModel>();
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,14 +32,21 @@ namespace CVSTS_FE.Pages.VaccineManage
             }
             var client = CreateAuthorizedClient();
             var response = await client.GetAsJsonAsync<VaccineInfoResponseModel>($"/api/vaccine/{id}");
-            if(response != null)
+            if (response != null)
             {
                 Vaccine = response;
+
+                // Fetch Vaccine Stocks
+                var stockResponse = await client.GetAsJsonAsync<List<VaccineStockResponseModel>>($"/api/vaccine/stock/vaccine/{id}");
+                if (stockResponse != null)
+                {
+                    VaccineStocks = stockResponse;
+                }
             }
             return Page();
-        
         }
-            private HttpClient CreateAuthorizedClient()
+
+        private HttpClient CreateAuthorizedClient()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");
             var token = HttpContext.Session.GetString("JWToken");
@@ -49,6 +58,5 @@ namespace CVSTS_FE.Pages.VaccineManage
 
             return client;
         }
-
     }
 }

@@ -12,7 +12,7 @@ namespace Service.Service.VaccineStockServices
         Task<VaccineStockResponseModel> GetVaccineStockById(int id);
         Task<List<VaccineStockResponseModel>> GetVaccineStocksByVaccineId(int vaccineId);
         Task AddVaccineStock(VaccineStockCreateModel create);
-        Task UpdateVaccineStock(VaccineStockUpdateModel update);
+        Task UpdateVaccineStock(int id, VaccineStockUpdateModel update);
         Task DeleteVaccineStock(int id);
     }
 }

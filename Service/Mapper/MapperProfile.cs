@@ -160,8 +160,11 @@ namespace Service.Mapper
             CreateMap<ServiceCreateModel, BOs.Models.Service>();
             //Vaccine
             CreateMap<VaccineStock, VaccineStockResponseModel>();
-            CreateMap<VaccineStockCreateModel, Vaccine>();
-            CreateMap<VaccineStockUpdateModel, Vaccine>();
+
+            CreateMap<VaccineStockCreateModel, VaccineStock>()
+            .ForMember(dest => dest.ExpiryDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.ExpiryDate)));
+            CreateMap<VaccineStockUpdateModel, VaccineStock>()
+            .ForMember(dest => dest.ExpiryDate, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.ExpiryDate)));
             CreateMap<Vaccine, VaccineInfoResponseModel>();
             CreateMap<VaccineCreateModel, Vaccine>();
             CreateMap<VaccineInfoResponseModel, Vaccine>();
