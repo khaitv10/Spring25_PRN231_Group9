@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using BOs.ResponseModels.VaccineStock;
 using System.Net.Http.Headers;
+using BOs.RequestModels.VaccineStock;
 
 namespace CVSTS_FE.Pages.Staff.StockManage
 {
@@ -22,7 +23,9 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         }
 
         [BindProperty]
-        public VaccineStockResponseModel VaccineStock { get; set; } = default!;
+        public VaccineStockUpdateModel VaccineStock { get; set; } = default!;
+        [BindProperty]
+        public int? Id { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -34,7 +37,12 @@ namespace CVSTS_FE.Pages.Staff.StockManage
             var response = await APIHelper.GetAsJsonAsync<VaccineStockResponseModel>(client, $"/api/vaccine/stock/{id}");
             if(response != null)
             {
-                VaccineStock = response;
+                Id = id;
+                var date = response.ExpiryDate;
+                VaccineStock = new VaccineStockUpdateModel();
+                VaccineStock.ExpiryDate = DateTime.Parse(date.ToString());
+                VaccineStock.Quantity = response.Quantity;
+
             }
             return Page();
         }
@@ -47,9 +55,9 @@ namespace CVSTS_FE.Pages.Staff.StockManage
             //{
             //    return Page();
             //}
-            var id = VaccineStock.Id;
+            var id = Id;
             var client = CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync<VaccineStockResponseModel>($"/api/vaccine/stock/{id}", VaccineStock);
+            var response = await client.PutAsJsonAsync<VaccineStockUpdateModel>($"/api/vaccine/stock/{id}", VaccineStock);
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Stock cannot Updated");

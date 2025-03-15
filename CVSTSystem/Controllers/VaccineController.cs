@@ -89,11 +89,6 @@ namespace CVSTSystem.Controllers
                 return BadRequest();
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             try
             {
                 await _vaccineService.UpdateVaccine(vaccine);
@@ -185,11 +180,6 @@ namespace CVSTSystem.Controllers
         [Authorize(Roles = "Staff")]
         public async Task<IActionResult> UpdateVaccineStock(int id, VaccineStockUpdateModel vaccineStock)
         {
-            if (id != vaccineStock.Id)
-            {
-                return BadRequest();
-            }
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -197,7 +187,7 @@ namespace CVSTSystem.Controllers
 
             try
             {
-                await _vaccineStockService.UpdateVaccineStock(vaccineStock);
+                await _vaccineStockService.UpdateVaccineStock(id, vaccineStock);
             }
             catch (DbUpdateConcurrencyException)
             {

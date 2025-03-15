@@ -51,11 +51,16 @@ namespace Service.Service.VaccineStockServices
             await _vaccineStockRepository.AddVaccineStock(newVaccineStock);
         }
 
-        public async Task UpdateVaccineStock(VaccineStockUpdateModel update)
+        public async Task UpdateVaccineStock(int id, VaccineStockUpdateModel update)
         {
-            VaccineStock updateVaccineStock = _mapper.Map<VaccineStock>(update);
-            await _vaccineStockRepository.UpdateVaccineStock(updateVaccineStock);
-        }
+            var vaccineStock = await _vaccineStockRepository.GetVaccineStockById(id);
+            if (vaccineStock != null)
+            {
+                vaccineStock.Quantity = update.Quantity;
+                vaccineStock.ExpiryDate = new DateOnly(update.ExpiryDate.Year, update.ExpiryDate.Month, update.ExpiryDate.Day);
+                await _vaccineStockRepository.UpdateVaccineStock(vaccineStock);
+            }
+            }
 
         public async Task DeleteVaccineStock(int id)
         {
