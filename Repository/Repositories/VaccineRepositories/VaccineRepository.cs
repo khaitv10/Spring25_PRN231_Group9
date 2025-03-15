@@ -47,7 +47,10 @@ namespace Repository.Repositories.VaccineRepositories
         {
             var vaccine = await GetVaccineById(id);
             if(vaccine != null)
-            await Delete(vaccine);
+            {
+                vaccine.Status = false;
+                await Update(vaccine);
+            }       
         }
 
         public async Task<bool> IsVaccineNameExists(string name)
@@ -63,7 +66,7 @@ namespace Repository.Repositories.VaccineRepositories
 
         public async Task<List<Vaccine>> GetActiveVaccines()
         {
-            var list = await Get(x => x.Status.Equals("Active"));
+            var list = await Get(x => x.Status == true);
             return list.ToList();
         }
 

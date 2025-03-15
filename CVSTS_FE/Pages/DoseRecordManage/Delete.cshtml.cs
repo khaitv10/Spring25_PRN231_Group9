@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using BOs.Models;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.DoseRecord;
+using BOs.ResponseModels.Child;
+using BOs.ResponseModels.Vaccine;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CVSTS_FE.Pages.DoseRecordManage
 {
@@ -26,6 +29,9 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+
+           
+            
             if (id == null)
             {
                 return NotFound();

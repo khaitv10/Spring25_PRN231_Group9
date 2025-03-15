@@ -13,7 +13,7 @@ namespace CVSTSystem.Controllers.Odata
     {
         private readonly IVaccineService _vaccineService;
 
-        public VaccineOdataController(VaccineService vaccineService)
+        public VaccineOdataController(IVaccineService vaccineService)
         {
             _vaccineService = vaccineService;
         }
@@ -21,9 +21,9 @@ namespace CVSTSystem.Controllers.Odata
         [HttpGet]
         [EnableQuery]
         //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAllVaccines()
+        public async Task<IActionResult> GetActiveVaccines()
         {
-            var response = await _vaccineService.GetAllVaccines();
+            var response = await _vaccineService.GetActiveVaccines();
             return Ok(response);
         }
     }

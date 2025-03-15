@@ -68,7 +68,7 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
             }
 
             // Fetch all available vaccines
-            var vaccineResponse = await client.GetAsync("/api/Vaccine");
+            var vaccineResponse = await client.GetAsync("/api/Vaccine/active");
             if (vaccineResponse.IsSuccessStatusCode)
             {
                 AllVaccines = await vaccineResponse.Content.ReadFromJsonAsync<List<VaccineInfoResponseModel>>() ?? new();
@@ -83,11 +83,27 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid) return Page();
+            if (!ModelState.IsValid)
+            {
+                // Re-fetch vaccine data if validation fails
+                await LoadVaccineData();
+                return Page();
+            }
+
+            // Validate DoseCount for each vaccine
+            foreach (var vaccine in VaccineList)
+            {
+                if (vaccine.DoseCount <= 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Number of doses must be positive.");
+                    await LoadVaccineData(); // Re-fetch vaccine data
+                    return Page();
+                }
+            }
 
             // Convert VaccineList to a dictionary
             Service.Vaccines = VaccineList.ToDictionary(v => v.VaccineId, v => v.DoseCount);
-            
+
             var client = CreateAuthorizedClient();
             var response = await client.PutAsJsonAsync($"/api/Service/{id}", Service);
 
@@ -98,13 +114,25 @@ namespace CVSTS_FE.Pages.Staff.ServiceManage
             }
             else
             {
-                
                 ModelState.AddModelError(string.Empty, "An error occurred while updating the service.");
-
+                await LoadVaccineData(); // Re-fetch vaccine data
                 return Page();
             }
         }
 
+        private async Task LoadVaccineData()
+        {
+            var client = CreateAuthorizedClient();
+            var vaccineResponse = await client.GetAsync("/api/Vaccine");
+            if (vaccineResponse.IsSuccessStatusCode)
+            {
+                AllVaccines = await vaccineResponse.Content.ReadFromJsonAsync<List<VaccineInfoResponseModel>>() ?? new();
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Failed to load available vaccines.");
+            }
+        }
         private HttpClient CreateAuthorizedClient()
         {
             var client = _httpClientFactory.CreateClient("ApiClient");

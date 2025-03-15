@@ -25,13 +25,18 @@ namespace Repository.Repositories.DoseScheduleRepositories
 
         public async Task<List<DoseSchedule>> GetAllDoseSchedule()
         {
-            var list = await Get();
+            var list = await Get(
+                includeProperties: "Vaccine,Service,Child"
+                );
             return list.ToList();
         }
 
         public async Task<DoseSchedule> GetDoseScheduleById(int id)
         {
-            return await GetSingle(b => b.Id == id);
+            return await GetSingle(
+        x => x.Id == id,
+        includeProperties: "Vaccine,Service,Child"
+   );
         }
 
         public async Task UpdateDoseSchedule( int id, DoseSchedule doseSchedule)

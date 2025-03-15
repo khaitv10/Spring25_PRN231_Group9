@@ -58,6 +58,7 @@ namespace CVSTS_FE.Pages.VaccineManage
             }
             
             var id = Vaccine.Id;
+            var status = Vaccine.Status;
             var client = CreateAuthorizedClient();
             var response = await client.PutAsJsonAsync($"/api/vaccine/{id}", Vaccine);
 

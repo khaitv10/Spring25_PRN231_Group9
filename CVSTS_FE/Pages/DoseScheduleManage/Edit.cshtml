@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Edit Dose Schedule";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+
 }
 
 <div class="container mt-4">
@@ -13,31 +15,29 @@
             <div class="col-md-6">
                 <form method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="DoseSchedule.Id" />
+                    <input type="hidden" asp-for="Id" />
 
                     <div class="mb-3">
-                        <label asp-for="DoseSchedule.NextDoseDate" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.NextDoseDate" class="form-control" />
-                        <span asp-validation-for="DoseSchedule.NextDoseDate" class="text-danger"></span>
+                        <label asp-for="DoseSchedules.NextDoseDate" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedules.NextDoseDate" class="form-control" type="date" />
+                        <span asp-validation-for="DoseSchedules.NextDoseDate" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseSchedule.DoseNumber" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.DoseNumber" class="form-control" />
-                        <span asp-validation-for="DoseSchedule.DoseNumber" class="text-danger"></span>
+                        <label asp-for="DoseSchedules.DoseNumber" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedules.DoseNumber" class="form-control" />
+                        <span asp-validation-for="DoseSchedules.DoseNumber" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseSchedule.Status" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.Status" class="form-control" />
-                        <span asp-validation-for="DoseSchedule.Status" class="text-danger"></span>
+                        <label asp-for="DoseSchedules.Status" class="form-label fw-bold"></label>
+                        <input asp-for="DoseSchedules.Status" class="form-control" />
+                        <span asp-validation-for="DoseSchedules.Status" class="text-danger"></span>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="DoseSchedule.CreateAt" class="form-label fw-bold"></label>
-                        <input asp-for="DoseSchedule.CreateAt" class="form-control" />
-                        <span asp-validation-for="DoseSchedule.CreateAt" class="text-danger"></span>
-                    </div>
+                    
+
+                    
 
                    
 

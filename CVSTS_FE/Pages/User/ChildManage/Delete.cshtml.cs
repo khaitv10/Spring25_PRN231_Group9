@@ -45,7 +45,6 @@ namespace CVSTS_FE.Pages.User.ChildManage
             return Page();
         }
 
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (Child == null || Child.Id == 0)
@@ -59,12 +58,32 @@ namespace CVSTS_FE.Pages.User.ChildManage
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(string.Empty, "Error deleting child.");
-                return Page();
+                var errorContent = await response.Content.ReadAsStringAsync();
+
+                if (errorContent.Contains("Can not delete"))
+                {
+                    ModelState.AddModelError("DeleteError", "Cannot delete: Child has appointments or dose schedules.");
+                }
+                else
+                {
+                    ModelState.AddModelError("DeleteError", "An error occurred while deleting the child.");
+                }
+
+                var existingChild = await client.GetFromJsonAsync<Child>($"/info/{id}");
+                if (existingChild != null)
+                {
+                    Child = existingChild;
+                }
+
+                return Page(); 
             }
 
-            return RedirectToPage("./Index");   
+            return RedirectToPage("./Index");
         }
+
+
+
+
 
 
         private HttpClient CreateAuthorizedClient()

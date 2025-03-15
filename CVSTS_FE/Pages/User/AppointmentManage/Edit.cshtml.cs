@@ -39,11 +39,11 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            if (!ModelState.IsValid)
-            {
-                await LoadChildrenAndServices(id);
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    await LoadChildrenAndServices(id);
+            //    return Page();
+            //}
 
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
@@ -57,7 +57,6 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
             {
                 client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
-
             var jsonContent = new StringContent(JsonSerializer.Serialize(Appointment), Encoding.UTF8, "application/json");
             var response = await client.PutAsync($"/api/appointment/info/{id}", jsonContent);
 
