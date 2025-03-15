@@ -22,11 +22,15 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
     {
       
 
-        [BindProperty]
-        public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
+        //[BindProperty]
+        //public DoseScheduleResponseModel DoseSchedule { get; set; } = default!;
 
         [BindProperty]
-        public DoseScheduleCreateModel DoseSchedules { get; set; } = default!;
+        public DoseScheduleUpdateModel DoseSchedules { get; set; } = default!;
+
+        [BindProperty]
+        public int? Id { get; set; } 
+
 
 
         private readonly IHttpClientFactory _httpClientFactory;
@@ -39,17 +43,7 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine/active");
-            if (vaccineId != null)
-            {
-                ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
-                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
-                if (childId != null)
-                {
-                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
-                    
-                }
-            }
+            
 
             if (id == null)
             {
@@ -57,11 +51,12 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
             }
 
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.GetAsJsonAsync<DoseScheduleResponseModel>(client, $"/api/dose-schedule/info/{id}");
+            var response = await APIHelper.GetAsJsonAsync<DoseScheduleUpdateModel>(client, $"/api/dose-schedule/info/{id}");
 
             if (response != null)
             {
-                DoseSchedule = response;
+                DoseSchedules = response;
+                id = id;
                 return Page();
 
             }
@@ -81,10 +76,14 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
                 return RedirectToPage("/403Page");
             }
 
-
-            var id = DoseSchedule.Id;
+            var id = Id;
+            if (id <= 0)
+            {
+                ModelState.AddModelError(string.Empty, "Error Id ");
+                return Page();
+            }
             var client = CreateAuthorizedClient();
-            var response = await client.PutAsJsonAsync($"/api/dose-schedule/{id}", DoseSchedule);
+            var response = await client.PutAsJsonAsync($"/api/dose-schedule/{id}", DoseSchedules);
 
             if (!response.IsSuccessStatusCode)
             {

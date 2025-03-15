@@ -15,38 +15,28 @@
             <div class="col-md-6">
                 <form method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="DoseRecord.Id" />
+                    <input type="hidden" asp-for="Id" />
 
                     <div class="mb-3">
-                        <label asp-for="DoseRecord.DoseDate" class="form-label fw-bold"></label>
-                        <input asp-for="DoseRecord.DoseDate" class="form-control" type="date" />
-                        <span asp-validation-for="DoseRecord.DoseDate" class="text-danger"></span>
+                        <label asp-for="DoseRecords.DoseDate" class="form-label fw-bold"></label>
+                        <input asp-for="DoseRecords.DoseDate" class="form-control" type="date" />
+                        <span asp-validation-for="DoseRecords.DoseDate" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseRecord.DoseNumber" class="form-label fw-bold"></label>
-                        <input asp-for="DoseRecord.DoseNumber" class="form-control" />
-                        <span asp-validation-for="DoseRecord.DoseNumber" class="text-danger"></span>
+                        <label asp-for="DoseRecords.DoseNumber" class="form-label fw-bold"></label>
+                        <input asp-for="DoseRecords.DoseNumber" class="form-control" />
+                        <span asp-validation-for="DoseRecords.DoseNumber" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="DoseRecord.Status" class="form-label fw-bold"></label>
-                        <input asp-for="DoseRecord.Status" class="form-control" />
-                        <span asp-validation-for="DoseRecord.Status" class="text-danger"></span>
+                        <label asp-for="DoseRecords.Status" class="form-label fw-bold"></label>
+                        <input asp-for="DoseRecords.Status" class="form-control" />
+                        <span asp-validation-for="DoseRecords.Status" class="text-danger"></span>
                     </div>
 
 
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.VaccineName" class="form-label fw-bold"></label>
-                        <select asp-for="DoseRecords.VaccineId" class="form-control" asp-items="ViewBag.VaccineId"></select>
-                        <span asp-validation-for="DoseRecords.VaccineId" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="DoseRecord.ChillName" class="form-label fw-bold"></label>
-                        <select asp-for="DoseRecords.ChildId" class="form-control" asp-items="ViewBag.ChildId"></select>
-                        <span asp-validation-for="DoseRecords.ChildId" class="text-danger"></span>
-                    </div>
+                    
 
 
                     <div class="d-flex justify-content-between mt-3">

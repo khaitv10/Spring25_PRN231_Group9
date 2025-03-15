@@ -38,7 +38,7 @@ namespace Repository.Repositories.DoseRecordRepositories
    );
         }
 
-        public async Task UpdateDoseRecord(int id, DoseRecord doseRecord)
+        public async Task UpdateDoseRecord(DoseRecord doseRecord)
         {
             await Update(doseRecord);
         }
