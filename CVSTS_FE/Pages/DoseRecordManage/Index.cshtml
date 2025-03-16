@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = "Dose Records";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
 <div class="container mt-4">
@@ -20,7 +21,7 @@
                     <th>@Html.DisplayNameFor(model => model.DoseRecords[0].DoseDate)</th>
                     <th>@Html.DisplayNameFor(model => model.DoseRecords[0].DoseNumber)</th>
                     <th>@Html.DisplayNameFor(model => model.DoseRecords[0].Status)</th>
-                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].CreateAt)</th>
+                    <th>@Html.DisplayNameFor(model => model.DoseRecords[0].ChillName)</th>
                     
                     <th>Actions</th>
                 </tr>
@@ -32,7 +33,7 @@
                         <td>@Html.DisplayFor(modelItem => item.DoseDate)</td>
                         <td>@Html.DisplayFor(modelItem => item.DoseNumber)</td>
                         <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CreateAt)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ChillName)</td>
                         
                         <td>
                             <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">

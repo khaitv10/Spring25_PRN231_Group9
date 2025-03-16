@@ -1,66 +1,85 @@
 ﻿@page
+
 @model CVSTS_FE.Pages.VaccineManage.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vaccine List";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold text-primary">Vaccine Management</h1>
+        <p class="lead text-muted">Manage available vaccines.</p>
+        <a class="btn btn-success btn-lg shadow" asp-page="Create">
+            <i class="fas fa-plus"></i> Create New Vaccine
+        </a>
+    </div>
+    <form id="filterForm" method="get">
+        <input type="hidden" id="odataQuery" name="odataQuery" value="">
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].Origin)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].MinAge)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].MaxAge)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Vaccine[0].Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Vaccine) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Origin)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MinAge)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxAge)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+        <div class="row g-3 align-items-center">
+            <div class="col-md-4">
+                <label for="nameFilter" class="form-label">Vaccine Name</label>
+                <input type="text" class="form-control" id="nameFilter" name="nameFilter" placeholder="Enter name...">
+            </div>
+
+            <div class="col-md-4">
+                <label for="minAgeFilter" class="form-label">Min Age</label>
+                <input type="number" class="form-control" id="minAgeFilter" name="minAgeFilter" placeholder="Min age">
+            </div>
+
+            <div class="col-md-4">
+                <label for="maxAgeFilter" class="form-label">Max Age</label>
+                <input type="number" class="form-control" id="maxAgeFilter" name="maxAgeFilter" placeholder="Max age">
+            </div>
+
+            <div class="col-md-12 text-center mt-3">
+                <button type="button" id="applyFiltersBtn" class="btn btn-primary">Apply Filters</button>
+                <button type="button" id="resetFiltersBtn" class="btn btn-secondary">Reset</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle shadow-lg rounded overflow-hidden">
+            <thead class="table-dark">
+                <tr class="text-center">
+                    <th>@Html.DisplayNameFor(model => model.Vaccine[0].Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Vaccine[0].Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Vaccine[0].Origin)</th>
+                    <th>@Html.DisplayNameFor(model => model.Vaccine[0].MinAge)</th>
+                    <th>@Html.DisplayNameFor(model => model.Vaccine[0].MaxAge)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Vaccine)
+                {
+                    <tr id="vaccineRow-@item.Id" class="text-center" style="cursor: pointer;">
+                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Origin)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MinAge)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MaxAge)</td>
+                        <td>
+                            <a class="btn btn-outline-info btn-sm" asp-page="./Edit" asp-route-id="@item.Id">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a class="btn btn-outline-primary btn-sm" asp-page="./Details" asp-route-id="@item.Id">
+                                <i class="fas fa-info-circle"></i> Details
+                            </a>
+                            <a class="btn btn-outline-danger btn-sm" asp-page="./Delete" asp-route-id="@item.Id">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://kit.fontawesome.com/YOUR_KIT_ID.js" crossorigin="anonymous"></script>
+    <script src="~/js/vaccineFilter.js"></script>
+    <script src="~/js/vaccineRowClick.js"></script>
 }
-    </tbody>
-</table>

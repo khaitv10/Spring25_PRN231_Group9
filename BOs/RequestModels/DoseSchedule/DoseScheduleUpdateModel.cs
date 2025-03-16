@@ -21,7 +21,9 @@ namespace BOs.RequestModels.DoseSchedule
         [Required(ErrorMessage = "Status is required.")]
         [StringLength(50, ErrorMessage = "Status cannot exceed 50 characters.")]
         public string? Status { get; set; }
+        //public int VaccineId { get; set; }
 
+        //public int ChildId { get; set; }
 
         public class FutureDateAttribute : ValidationAttribute
         {

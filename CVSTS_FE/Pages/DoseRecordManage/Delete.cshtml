@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Delete Dose Record";
+    Layout = "~/Pages/Shared/_LayoutStaff.cshtml";
+
 }
 
 <div class="container mt-4">
@@ -24,6 +26,16 @@
 
                     <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DoseRecord.CreateAt)</dt>
                     <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseRecord.CreateAt)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DoseRecord.VaccineName)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseRecord.VaccineName)</dd>
+
+                    <dt class="col-sm-4">@Html.DisplayNameFor(model => model.DoseRecord.ChillName)</dt>
+                    <dd class="col-sm-8">@Html.DisplayFor(model => model.DoseRecord.ChillName)</dd>
+
+                    
+
+                    
                 </dl>
 
                 <form method="post" class="text-center mt-3">

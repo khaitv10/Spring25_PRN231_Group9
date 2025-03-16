@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using BOs.Models;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.Vaccine;
+using BOs.RequestModels.VaccineStock;
 
 namespace CVSTS_FE.Pages.Staff.StockManage
 {
@@ -21,7 +22,7 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         }
         public async Task<IActionResult> OnGet()
         {
-            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine");
+            var response = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccines");
             if (response != null)
             {
                 ViewData["VaccineId"] = new SelectList(response, "Id", "Name");
@@ -31,14 +32,14 @@ namespace CVSTS_FE.Pages.Staff.StockManage
         }
 
         [BindProperty]
-        public VaccineStock VaccineStock { get; set; } = default!;
+        public VaccineStockCreateModel VaccineStock { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
 
             var client = CreateAuthorizedClient();
-            var response = await APIHelper.PostAsJson<VaccineStock>(client, "/api/vaccine/stock", VaccineStock);
+            var response = await client.PostAsJson<VaccineStockCreateModel>("/api/vaccine/stock", VaccineStock);
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Stock couldn't be added");
