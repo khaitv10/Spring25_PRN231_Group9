@@ -22,6 +22,7 @@
         }
         <div class="card-body">
             <form method="post">
+                <input type="hidden" id="appointmentId" value="@ViewData["AppointmentId"]" />
                 <div class="mb-3">
                     <label class="form-label fw-bold">Select Child</label>
                     <select asp-for="Appointment.ChildId" class="form-select" required>
@@ -62,21 +63,35 @@
                         }
                     </div>
                     <span asp-validation-for="Appointment.SelectedServiceIds" class="text-danger"></span>
-                </div>                <div class="mb-3">
+                </div>
+                <div class="mb-3">
                     <label class="form-label fw-bold">Total Price</label>
                     <input type="text" id="totalPrice" class="form-control" readonly />
-                    <input type="hidden"  id="totalPriceHidden" />
+                    <input type="hidden" id="totalPriceHidden" />
                 </div>
 
                 <div class="text-center mt-4">
+                    <a class="btn btn-outline-secondary btn-lg me-3" asp-page="./Index">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+
                     <button type="submit" class="btn btn-success btn-lg">
                         <i class="fas fa-check"></i> Confirm Appointment
                     </button>
-                    <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
-                        <i class="fas fa-arrow-left"></i> Cancel
-                    </a>
                 </div>
             </form>
+
+            @* @if (Model.Appointment.PaymentStatus != "Paid") *@
+            @* { *@
+            @*     <div class="text-center mt-3"> *@
+            @*         <form method="post"> *@
+            @*             <input type="hidden" name="id" value="@ViewData["AppointmentId"]" /> *@
+            @*             <button type="submit" class="btn btn-primary btn-lg"> *@
+            @*                 <i class="fas fa-credit-card"></i> Make Payment *@
+            @*             </button> *@
+            @*         </form> *@
+            @*     </div> *@
+            @* } *@
         </div>
     </div>
 </div>
@@ -102,7 +117,8 @@
         checkboxes.forEach(cb => {
             cb.addEventListener("change", updateTotalPrice);
         });
-
         updateTotalPrice();
+
+       
     });
 </script>

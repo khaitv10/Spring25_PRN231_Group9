@@ -9,6 +9,9 @@ using BOs.Models;
 using BOs.ResponseModels.Child;
 using System.Net.Http.Headers;
 using BOs.ResponseModels.Appointment;
+using Net.payOS.Types;
+using System.Text.Json;
+using System.Text;
 
 namespace CVSTS_FE.Pages.User.AppointmentManage
 {
@@ -62,5 +65,35 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
 
             return client;
         }
+        public async Task<IActionResult> OnPostUpdateAsync(int id)
+        {
+            var client = CreateAuthorizedClient();
+            var responseAppointment = await client.GetAsync($"/getDetail/{id}");
+            Appointment = await responseAppointment.Content.ReadFromJsonAsync<AppointmentResModel>();
+            var token = HttpContext.Session.GetString("JWToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+
+            var paymentRequest = id;
+            var paymentJson = new StringContent(JsonSerializer.Serialize(paymentRequest), Encoding.UTF8, "application/json");
+            var paymentResponse = await client.PostAsync("/api/Payment/create-payment-link", paymentJson);
+
+            if (paymentResponse.IsSuccessStatusCode)
+            {
+                var paymentJsonResponse = await paymentResponse.Content.ReadAsStringAsync();
+                var paymentResult = JsonSerializer.Deserialize<CreatePaymentResult>(paymentJsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (paymentResult != null && !string.IsNullOrEmpty(paymentResult.checkoutUrl))
+                {
+                    return Redirect(paymentResult.checkoutUrl);
+                }
+            }
+
+            ModelState.AddModelError("", "Failed to create payment link.");
+            return Page();
+        }
+
     }
 }
