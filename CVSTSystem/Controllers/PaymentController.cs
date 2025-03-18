@@ -3,6 +3,7 @@ using BOs.RequestModels.Payment;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.PaymentRepositories;
+using Service.Service.DoseScheduleServices;
 using Service.Service.PaymentServices;
 using Service.Services.EmailServices;
 
@@ -17,15 +18,16 @@ namespace CVSTSystem.Controllers
         private readonly IAppointmentRepository _appointmentRepository;
         private readonly HttpClient _httpClient;
         private readonly IPaymentRepository _paymentRepository;
+        private readonly IDoseScheduleService _doseScheduleService;
        
 
-        public PaymentController(IPaymentService paymentService, IAppointmentRepository appointmentRepository, HttpClient httpClient, IPaymentRepository paymentRepository, IEmailService emailService)
+        public PaymentController(IPaymentService paymentService, IAppointmentRepository appointmentRepository, HttpClient httpClient, IPaymentRepository paymentRepository, IEmailService emailService, IDoseScheduleService doseScheduleService)
         {
             _paymentService = paymentService;
             _appointmentRepository = appointmentRepository;
             _httpClient = httpClient;
             _paymentRepository = paymentRepository;
-            
+            _doseScheduleService = doseScheduleService;
         }
 
         [HttpPost("create-payment-link")]
@@ -36,7 +38,7 @@ namespace CVSTSystem.Controllers
                 var paymentResult = await _paymentService.CreatPaymentLink(appointmentId);
 
                 // Trả về `paymentLinkId` và `checkoutUrl`
-                return Ok(new { paymentLink = paymentResult.checkoutUrl, paymentLinkId = paymentResult.paymentLinkId, orderCode = paymentResult.orderCode });
+                return Ok(paymentResult);
             }
             catch (Exception ex)
             {
@@ -55,14 +57,14 @@ namespace CVSTSystem.Controllers
             {
                 AppointmentId = appointmentId,
                 PaymentMethod = "PayOs",
-                TransactionCode = paymentInfor.transactions[0].reference,
+                TransactionCode = paymentInfor.orderCode.ToString(),
                 PaidAt = DateTime.UtcNow,
                 PaymentStatus = paymentInfor.status,
                 Amount = paymentInfor.amount,
                 
             };
             await _paymentService.CreatePayment(payment);
-            if (paymentInfor.status == "success")
+            if (paymentInfor.status == "PAID")
             {
                 var appointment = await _appointmentRepository.GetByID(appointmentId);
                 if (appointment == null)
@@ -71,8 +73,13 @@ namespace CVSTSystem.Controllers
                 }
                 appointment.Status = "Paid";
                 await _appointmentRepository.Update(appointment);
+                await _doseScheduleService.CreateScheduleOfAppoint(appointmentId);
 
                 return Ok("Payment successfully");
+            }
+            if (paymentInfor.status != "PAID")
+            {
+                return Ok("Cancel Payment");
             }
 
             return BadRequest("Payment failed");

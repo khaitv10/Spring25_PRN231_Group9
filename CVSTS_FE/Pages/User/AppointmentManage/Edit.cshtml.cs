@@ -11,6 +11,7 @@ using BOs.ResponseModels.Appointment;
 using BOs.RequestModels.Appointment;
 using System.Text.Json;
 using System.Text;
+using Net.payOS.Types;
 
 namespace CVSTS_FE.Pages.User.AppointmentManage
 {
@@ -31,6 +32,7 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            ViewData["AppointmentId"] = id;
             await LoadChildrenAndServices(id);
             return Page();
         }
@@ -38,7 +40,7 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync(int id)
-        {
+         {
             //if (!ModelState.IsValid)
             //{
             //    await LoadChildrenAndServices(id);
@@ -71,7 +73,6 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
                 return Page();
             }
         }
-
         private async Task LoadChildrenAndServices(int id)
         {
             var userIdString = HttpContext.Session.GetString("UserId");
@@ -115,6 +116,33 @@ namespace CVSTS_FE.Pages.User.AppointmentManage
                 
 
             }
+        }
+        public  async Task<IActionResult> OnPostCreatePaymentAsync(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ApiClient");
+            var token = HttpContext.Session.GetString("JWToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            }
+
+            var paymentRequest = id;
+            var paymentJson = new StringContent(JsonSerializer.Serialize(paymentRequest), Encoding.UTF8, "application/json");
+            var paymentResponse = await client.PostAsync("/api/Payment/create-payment-link", paymentJson);
+
+            if (paymentResponse.IsSuccessStatusCode)
+            {
+                var paymentJsonResponse = await paymentResponse.Content.ReadAsStringAsync();
+                var paymentResult = JsonSerializer.Deserialize<CreatePaymentResult>(paymentJsonResponse, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                if (paymentResult != null && !string.IsNullOrEmpty(paymentResult.checkoutUrl))
+                {
+                    return Redirect(paymentResult.checkoutUrl);
+                }
+            }
+
+            ModelState.AddModelError("", "Failed to create payment link.");
+            return Page();
         }
 
     }

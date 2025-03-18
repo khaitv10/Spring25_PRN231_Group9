@@ -18,5 +18,6 @@ namespace Service.Service.DoseScheduleServices
         Task AddDoseSchedule(DoseScheduleCreateModel doseSchedule);
         Task UpdateDoseSchedule(int id,DoseScheduleUpdateModel doseSchedule);
         Task DeleteDoseSchedule(int id);
+        Task CreateScheduleOfAppoint(int appointId);
     }
 }
