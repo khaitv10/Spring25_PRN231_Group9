@@ -79,17 +79,33 @@
         </div>
 
         <div class="card-footer text-center">
-            <!-- Disable Edit button if status is "Canceled" or "Paid" -->
-            <a class="btn btn-outline-warning btn-lg me-3
-                     @(Model.Appointment.Status == "Canceled" || Model.Appointment.PaymentStatus == "Paid" ? "disabled" : "")"
-               asp-page="./Edit" asp-route-id="@Model.Appointment.Id">
-                <i class="fas fa-edit"></i> Edit
-            </a>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <!-- Edit Button (Disabled if necessary) -->
+                <a class="btn btn-outline-warning btn-lg
+                 @(Model.Appointment.Status == "Canceled" || Model.Appointment.PaymentStatus == "Paid" ? "disabled" : "")"
+                   asp-page="./Edit" asp-route-id="@Model.Appointment.Id">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
 
-            <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
-                <i class="fas fa-arrow-left"></i> Back to List
-            </a>
+                <!-- Back to List Button -->
+                <a class="btn btn-outline-secondary btn-lg" asp-page="./Index">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+
+                <!-- Make Payment Button (Visible only if applicable) -->
+                @if (Model.Appointment.PaymentStatus != "Paid" && Model.Appointment.Status != "Canceled" && Model.Appointment.Status != "Completed")
+                {
+                    <form method="post" asp-page-handler="Update">
+                        <input type="hidden" name="id" value="@Model.Appointment.Id" />
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-credit-card"></i> Make Payment
+                        </button>
+                    </form>
+                }
+            </div>
         </div>
+
+        
     </div>
 </div>
 
