@@ -72,7 +72,8 @@ namespace CVSTSystem.Controllers
                     return NotFound($"Appointment does not exist");
                 }
                 appointment.Status = "Paid";
-                await _appointmentRepository.Update(appointment);
+                payment.PaymentStatus = paymentInfor.status;
+                await _paymentRepository.Update(payment);
                 await _doseScheduleService.CreateScheduleOfAppoint(appointmentId);
 
                 return Ok("Payment successfully");
@@ -158,8 +159,7 @@ namespace CVSTSystem.Controllers
 
             // Update the appointment status to 1 if payment was cancelled
             if (status == "CANCELLED")
-            {
-               
+            {               
                 // Send email notification
                 var appointment = await _appointmentRepository.GetByID((int)payment.AppointmentId);
                 payment.PaymentStatus = "canceled";

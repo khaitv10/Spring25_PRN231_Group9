@@ -68,9 +68,9 @@ namespace Service.Service.DoseScheduleServices
                 foreach (var item in serviceList.ServiceVaccines)
                     
                 {
-                    for (int j = 1; j<= item.NumberOfDose; i++)
+                    for (int j = 1; j<= item.NumberOfDose; j++)
                     {
-                        appointDate = appointDate.AddMonths(i);
+                        appointDate = appointDate.AddMonths(j);
                         doseNumber++;
                         var doseSchedule = new DoseSchedule()
                         {
