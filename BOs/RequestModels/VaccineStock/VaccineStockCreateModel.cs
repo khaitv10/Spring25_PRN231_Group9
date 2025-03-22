@@ -15,22 +15,11 @@ namespace BOs.RequestModels.VaccineStock
 
         [Required(ErrorMessage = "ExpiryDate is required.")]
         [FutureDate(ErrorMessage = "ExpiryDate must be a future date.")]
+
         public DateTime ExpiryDate { get; set; }
 
         [Required(ErrorMessage = "VaccineId is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "VaccineId must be a positive integer.")]
         public int VaccineId { get; set; }
     }
-    public class FutureDateAttribute : ValidationAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            if (value is DateTime date)
-            {
-                return date > DateTime.Now;
-            }
-            return false;
-        }
-    }
-
 }
