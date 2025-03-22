@@ -71,9 +71,10 @@ namespace CVSTSystem.Controllers
                 {
                     return NotFound($"Appointment does not exist");
                 }
-                appointment.Status = "Paid";
+                appointment.PaymentStatus = "Paid";
                 payment.PaymentStatus = paymentInfor.status;
                 await _paymentRepository.Update(payment);
+                await _appointmentRepository.Update(appointment);
                 await _doseScheduleService.CreateScheduleOfAppoint(appointmentId);
 
                 return Ok("Payment successfully");
