@@ -16,7 +16,7 @@ namespace BOs.RequestModels.DoseRecord
             public DateTime DoseDate { get; set; }
 
             [Required(ErrorMessage = "DoseNumber is required")]
-            [Range(0, 10, ErrorMessage = "DoseNumber must be between 0 and 10.")]
+            [Range(0, 10, ErrorMessage = "DoseNumber must be at least 1")]
             public int? DoseNumber { get; set; }
 
             [Required(ErrorMessage = "Status is required.")]

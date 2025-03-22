@@ -65,10 +65,10 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid)
-            // {
-            //     return Page();
-            // }
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             var userIdString = HttpContext.Session.GetString("UserId");
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))

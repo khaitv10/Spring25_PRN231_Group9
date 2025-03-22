@@ -46,14 +46,25 @@ namespace CVSTS_FE.Pages.DoseRecordManage
         [BindProperty]
         public DoseRecordCreateModel DoseRecord { get; set; } = default!;
 
-        [BindProperty]
-        public DoseRecordResponseModel DoseRecords { get; set; } = default!;
+     
         public async Task<IActionResult> OnPostAsync()
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            if (!ModelState.IsValid)
+            {
+                var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine/active");
+                if (vaccineId != null)
+                {
+                    ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
+                }
+
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                }
+
+                return Page();
+            }
             var client = CreateAuthorizedClient();
             var response = await client.PostAsJsonAsync<DoseRecordCreateModel>($"/api/dose-record", DoseRecord);
             if (!response.IsSuccessStatusCode)
