@@ -59,7 +59,7 @@ namespace Service.Service.DoseScheduleServices
         public async Task CreateScheduleOfAppoint(int appointId)
         {
             var appointment = await _appointmentRepository.GetDetailAppointment(appointId);
-            var appointDate = DateOnly.FromDateTime(DateTime.UtcNow);
+            var appointDate = appointment.AppointmentDate;
             var doseScheduleList = new List<DoseSchedule>();
             var doseNumber = 0;
             for (int i = 0; i < appointment.AppointmentServices.Count; i++)
@@ -74,7 +74,7 @@ namespace Service.Service.DoseScheduleServices
                         doseNumber++;
                         var doseSchedule = new DoseSchedule()
                         {
-                            NextDoseDate = appointDate,
+                            NextDoseDate = DateOnly.FromDateTime(appointDate),
                             DoseNumber = doseNumber,
                             Status = "Scheduled",
                             CreateAt = DateTime.UtcNow,
