@@ -68,7 +68,11 @@ namespace CVSTS_FE.Pages.DoseRecordManage
 
         public async Task<IActionResult> OnPostAsync()
 {
-    var userIdString = HttpContext.Session.GetString("UserId");
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            var userIdString = HttpContext.Session.GetString("UserId");
     if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
     {
         return RedirectToPage("/403Page");

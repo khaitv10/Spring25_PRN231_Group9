@@ -45,16 +45,27 @@ namespace CVSTS_FE.Pages.DoseSheduleManage
         public DoseScheduleCreateModel DoseSchedule { get; set; } = default!;
 
 
-        [BindProperty]
-        public DoseScheduleResponseModel DoseSchedules { get; set; } = default!;
+     
 
         public async Task<IActionResult> OnPostAsync()
         {
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
+            if (!ModelState.IsValid)
+            {
+                var vaccineId = await APIHelper.GetAsJsonAsync<List<VaccineInfoResponseModel>>(CreateAuthorizedClient(), "/api/vaccine/active");
+                if (vaccineId != null)
+                {
+                    ViewData["VaccineId"] = new SelectList(vaccineId, "Id", "Name");
+                }
+
+                var childId = await APIHelper.GetAsJsonAsync<List<ChildResponseModel>>(CreateAuthorizedClient(), "/api/child/getAllChild");
+                if (childId != null)
+                {
+                    ViewData["ChildId"] = new SelectList(childId, "Id", "FullName");
+                }
+
+                return Page();
+            }
             var client = CreateAuthorizedClient();
             var response = await client.PostAsJsonAsync<DoseScheduleCreateModel>($"/api/dose-schedule", DoseSchedule);
             if (!response.IsSuccessStatusCode)
