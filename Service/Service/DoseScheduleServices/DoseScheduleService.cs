@@ -2,7 +2,9 @@
 using BOs.Models;
 using BOs.RequestModels.DoseSchedule;
 using BOs.ResponseModels.DoseSchedule;
+using Repository.Repositories.AppointmentRepositories;
 using Repository.Repositories.DoseScheduleRepositories;
+using Repository.Repositories.ServiceRepository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,14 @@ namespace Service.Service.DoseScheduleServices
     {
         private readonly IDoseScheduleRepository _doseScheduleRepository;
         private readonly IMapper _mapper;
-
-        public DoseScheduleService(IDoseScheduleRepository doseScheduleRepository, IMapper mapper)
+        private readonly IAppointmentRepository _appointmentRepository;
+        private readonly IServiceRepository _serviceRepository;
+        public DoseScheduleService(IDoseScheduleRepository doseScheduleRepository, IMapper mapper, IAppointmentRepository appointmentRepository, IServiceRepository serviceRepository)
         {
             _doseScheduleRepository = doseScheduleRepository;
             _mapper = mapper;
+            _appointmentRepository = appointmentRepository;
+            _serviceRepository = serviceRepository;
         }
 
         public async Task AddDoseSchedule(DoseScheduleCreateModel doseSchedule)
@@ -50,6 +55,42 @@ namespace Service.Service.DoseScheduleServices
             var dose = await _doseScheduleRepository.GetDoseScheduleById(id);
             _mapper.Map(doseSchedule, dose);
             await _doseScheduleRepository.Update(dose);
+        }
+        public async Task CreateScheduleOfAppoint(int appointId)
+        {
+            var appointment = await _appointmentRepository.GetDetailAppointment(appointId);
+            var appointDate = appointment.AppointmentDate;
+            var doseScheduleList = new List<DoseSchedule>();
+            var doseNumber = 0;
+            for (int i = 0; i < appointment.AppointmentServices.Count; i++)
+            {
+                var serviceList = await _serviceRepository.GetServiceById((int)appointment.AppointmentServices.ToList()[i].ServiceId);
+                foreach (var item in serviceList.ServiceVaccines)
+                    
+                {
+                    for (int j = 1; j<= item.NumberOfDose; j++)
+                    {
+                        appointDate = appointDate.AddMonths(j);
+                        doseNumber++;
+                        var doseSchedule = new DoseSchedule()
+                        {
+                            NextDoseDate = DateOnly.FromDateTime(appointDate),
+                            DoseNumber = doseNumber,
+                            Status = "Scheduled",
+                            CreateAt = DateTime.UtcNow,
+                            ServiceId = item.ServiceId,
+                            ChildId = appointment.ChildId,
+                            VaccineId = item.VaccineId,
+
+                        };
+                        doseScheduleList.Add(doseSchedule);
+                    }
+                   
+                }
+                
+            }
+            await _doseScheduleRepository.InsertRange(doseScheduleList);
+
         }
     }
 }

@@ -16,15 +16,15 @@ namespace BOs.RequestModels.DoseRecord
     public DateTime DoseDate { get; set; }
 
     [Required(ErrorMessage = "DoseNumber is required")]
-    [Range(1, 10, ErrorMessage = "DoseNumber must be between 1 and 10.")]
+    [Range(1, 10, ErrorMessage = "DoseNumber must be at least 1.")]
     public int? DoseNumber { get; set; }
 
 
     [Required(ErrorMessage = "Status is required.")]
     public string? Status { get; set; }
-
+        [Required]
     public int VaccineId { get; set; }
-
+        [Required]
     public int ChildId { get; set; }
 
 

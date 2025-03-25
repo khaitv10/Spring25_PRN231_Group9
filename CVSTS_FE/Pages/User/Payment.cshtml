@@ -1,0 +1,103 @@
+﻿@page "{appointId:int}/{status}/{orderCode:long}"
+@model CVSTS_FE.Pages.User.PaymentModel
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Pages/Shared/_LayoutUser.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .page-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 100px); /* Adjust height to account for navbar */
+            padding-top: 50px; /* Adds spacing to push the card below the navbar */
+        }
+
+        .status-container {
+            max-width: 500px;
+            text-align: center;
+            padding: 30px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .details {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .failed {
+            color: #dc3545;
+        }
+
+        .pending {
+            color: #ffc107;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container page-container">
+        <div class="status-container">
+            @if (Model.Status == "PAID")
+            {
+                <div class="icon success">&#10004;</div>
+                <div class="message">Payment Successful</div>
+                <p class="details">Your appointment (#@Model.AppointId) has been paid successfully.</p>
+            }
+            else if (Model.Status == "CANCELLED")
+            {
+                <div class="icon failed">&#10008;</div>
+                <div class="message">Payment Canceled</div>
+                <p class="details">Your payment for appointment (#@Model.AppointId) was canceled.</p>
+            }
+            else
+            {
+                <div class="icon pending">&#9888;</div>
+                <div class="message">Payment Failed</div>
+                <p class="details">Something went wrong with your payment. Please try again.</p>
+            }
+
+            <div class="btn-group">
+                <a href="/" class="btn btn-primary">Go to Homepage</a>
+                <a href="/User/AppointmentManage/Details?id=@Model.AppointId" class="btn btn-secondary">Back to Appointment</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

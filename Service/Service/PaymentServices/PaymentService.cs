@@ -54,8 +54,8 @@ namespace Service.Service.PaymentServices
                  (int)appointment.TotalPrice,
                  description,
                  items,
-                 "https://www.nyan.cat/",
-                 "https://asoftmurmur.com/"
+                 $"https://localhost:7222/User/Payment/{appointId}/CANCELED/{orderCode}",
+                 $"https://localhost:7222/User/Payment/{appointId}/PAID/{orderCode}"
             );
 
             // Gửi yêu cầu tạo liên kết thanh toán
@@ -73,7 +73,7 @@ namespace Service.Service.PaymentServices
             await _paymentRepository.Insert(paymentRecord);
 
             // Tạo một đối tượng mới với `paymentLinkId` được khởi tạo
-            var updatedPaymentResult = paymentResult with { orderCode = paymentResult.orderCode, paymentLinkId = paymentResult.paymentLinkId,  };
+            var updatedPaymentResult = paymentResult with { orderCode = paymentResult.orderCode, paymentLinkId = paymentResult.paymentLinkId  };
 
             return updatedPaymentResult;
 
