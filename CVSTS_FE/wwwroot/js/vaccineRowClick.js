@@ -4,7 +4,7 @@
     rows.forEach(row => {
         row.addEventListener('click', function () {
             const id = this.id.split('-')[1];
-            window.location.href = `/VaccineManage/Details?id=${id}`;
+            window.location.href = `/Staff/VaccineManage/Details?id=${id}`;
         });
     });
 });
